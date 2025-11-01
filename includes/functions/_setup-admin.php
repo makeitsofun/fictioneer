@@ -118,7 +118,9 @@ function fictioneer_dynamic_editor_css() {
     --green-400: " . fictioneer_get_theme_color( $mode . '_green_400' ) . ";
     --green-500: " . fictioneer_get_theme_color( $mode . '_green_500' ) . ";
     --green-600: " . fictioneer_get_theme_color( $mode . '_green_600' ) . ";
+    ";
 
+  $css .= ( $mode === 'dark' ) ? "
     --heading-link-color-hover: var(--fg-200);
 
     --inline-link-color-hover: var(--primary-400);
@@ -182,7 +184,7 @@ function fictioneer_dynamic_editor_css() {
     --input-range-thumb-hover: var(--fg-300);
     --input-token-background: var(--bg-500);
     --input-token-color: var(--fg-400);
-  }";
+  }" : "}";
 
   $css .= "body.editor-styles-wrapper{
     background: {$editor_bg};
@@ -191,9 +193,11 @@ function fictioneer_dynamic_editor_css() {
 
   $css .= ':where(h1, h2, h3, h4, h5, h6){color: var(--fg-400);}';
 
-  $css .= ".components-placeholder.components-placeholder{background-color: {$editor_bg};color: var(--fg-500);box-shadow: inset 0 0 0 1px var(--fg-700)}";
+  if ( $mode === 'dark' ) {
+    $css .= ".components-placeholder.components-placeholder{background-color: {$editor_bg};color: var(--fg-500);box-shadow: inset 0 0 0 1px var(--fg-700)}";
 
-  $css .= ".components-button.is-secondary{background: rgb(255 255 255 / 90%);}.components-button.is-secondary:hover:not(:disabled,[aria-disabled=true],.is-pressed){background: color-mix(in srgb,var(--wp-components-color-accent,var(--wp-admin-theme-color,#3858e9)) 4%, rgb(255 255 255 / 95%))}";
+    $css .= ".components-button.is-secondary{background: rgb(255 255 255 / 90%);}.components-button.is-secondary:hover:not(:disabled,[aria-disabled=true],.is-pressed){background: color-mix(in srgb,var(--wp-components-color-accent,var(--wp-admin-theme-color,#3858e9)) 4%, rgb(255 255 255 / 95%))}";
+  }
 
   wp_add_inline_style( 'wp-edit-blocks', fictioneer_minify_css( $css ) );
 };
