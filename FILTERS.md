@@ -1535,6 +1535,18 @@ Filters the CSS compiled from settings and theme options before it is minified a
 
 ---
 
+### `apply_filters( 'fictioneer_filter_pre_get_icon', $html, $icon, $classes, $id, $inserts )`
+Filters and short-circuits the building of an SVG icon before it is returned. Allows you to efficiently replace the icon HTML. Return a falsy value to keep the regular icon.
+
+**Parameters:**
+* $html (string) – The icon HTML, empty by default.
+* $icon (string) – Name of the icon that matches the SVG.
+* $classes (string) – Optional. String of CSS classes.
+* $id (string) – Optional. An element ID.
+* $inserts (string) – Optional. Additional attributes.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_profile_fields_support', $fields, $profile_user )`
 Filters the intermediate output array of support profile fields in `includes/functions/users/_admin-profile.php` before it is imploded with `'<br>'` and rendered. You can use the filter to remove or add fields, but be aware that they will not be saved without further custom code. See `fictioneer_update_my_user_profile()` in the same file.
 

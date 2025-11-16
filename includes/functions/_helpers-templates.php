@@ -239,6 +239,7 @@ if ( ! function_exists( 'fictioneer_get_icon' ) ) {
    * @since 4.7.0
    * @since 5.9.4 - Removed output buffer.
    * @since 5.25.0 - Use cache bust string instead of version.
+   * @since 5.33.0 - Add fictioneer_filter_pre_get_icon filter.
    *
    * @param string $icon     Name of the icon that matches the svg.
    * @param string $classes  Optional. String of CSS classes.
@@ -256,7 +257,13 @@ if ( ! function_exists( 'fictioneer_get_icon' ) ) {
         . 'img/icon-sprite.svg?ver=' . fictioneer_get_cache_bust() . '#icon-';
     }
 
-    return '<svg id="' . $id . '" ' . $inserts . ' class="icon _' . $icon . ' ' . $classes . '">' . '<use xlink:href="' . esc_url( $base_url . $icon ) . '"></use></svg>';
+    $html = apply_filters( 'fictioneer_filter_pre_get_icon', '', $icon, $classes, $id, $inserts );
+
+    if ( ! $html ) {
+      $html = '<svg id="' . $id . '" ' . $inserts . ' class="icon _' . $icon . ' ' . $classes . '">' . '<use xlink:href="' . esc_url( $base_url . $icon ) . '"></use></svg>';
+    }
+
+    return $html;
   }
 }
 
