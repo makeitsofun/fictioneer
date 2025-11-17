@@ -78,45 +78,55 @@ body:not(.is-editor):not(.is-admin) {
 
 .truncate {
   display: -webkit-box;
+  line-clamp: 1;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
   // Desktop-Mobile
   &._1-1 {
+    line-clamp: 1;
     -webkit-line-clamp: 1;
     word-break: break-all;
   }
 
   &._2-2 {
+    line-clamp: 2;
     -webkit-line-clamp: 2;
   }
 
   &._2-3 {
+    line-clamp: 3;
     -webkit-line-clamp: 3;
 
     @include bp(640px) {
+      line-clamp: 2;
       -webkit-line-clamp: 2;
     }
   }
 
   &._3-3 {
+    line-clamp: 3;
     -webkit-line-clamp: 3;
   }
 
   &._3-4 {
+    line-clamp: 4;
     -webkit-line-clamp: 4;
 
     @include bp(640px) {
+      line-clamp: 3;
       -webkit-line-clamp: 3;
     }
   }
 
   &._4-4 {
+    line-clamp: 4;
     -webkit-line-clamp: 4;
   }
 
   &._5-5 {
+    line-clamp: 5;
     -webkit-line-clamp: 5;
   }
 }
