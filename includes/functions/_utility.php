@@ -285,6 +285,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
   // Restore order
   $chapter_positions = array_flip( $chapter_ids );
 
+  /** @var WP_Post[] $chapter_posts */
   usort( $chapter_posts, function( $a, $b ) use ( $chapter_positions ) {
     return $chapter_positions[ $a->ID ] <=> $chapter_positions[ $b->ID ];
   });
