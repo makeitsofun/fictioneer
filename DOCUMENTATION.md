@@ -1449,7 +1449,7 @@ If you do not want to initialize a slider on page load, you can add the `no-auto
 
 #### Custom HTML Sliders
 
-If you enable Splide globally (or have a slider shortcode on the same page), you can use the HTML block to create your own Slider. Just copy the base [structure](https://splidejs.com/guides/structure/) and add any slides you like, although you will need to style them yourself using custom CSS. Initialize the slider with the [data attribute JSON](https://splidejs.com/guides/options/#by-data-attribute), but this time with double quotes as shown in the example. Unlike with shortcodes, navigation arrows are enabled by default but can be turned off with `"arrows:" false`.
+If you enable Splide globally (or have a slider shortcode on the same page), you can use the HTML block to create your own Slider. Just copy the base [structure](https://splidejs.com/guides/structure/) and add any slides you like, although you will need to style them yourself using custom CSS. Initialize the slider with the [data attribute JSON](https://splidejs.com/guides/options/#by-data-attribute), but this time with double quotes as shown in the example. Unlike with shortcodes, navigation arrows are enabled by default but can be turned off with `"arrows": false`.
 
 ```html
 <section class="splide" data-splide='{"type": "loop", "interval": 3000, "gap": "1.5rem", "autoplay": true, "perPage": 3, "breakpoints": {"767": {"perPage": 2, "arrows": false}, "479": {"perPage": 1}}}'>
