@@ -813,7 +813,7 @@ function fictioneer_shortcode_latest_story_updates( $attr ) {
 
   // Extra classes
   if ( $args['splide'] ?? 0 ) {
-    $args['classes'] .= ' splide _splide-placeholder ';
+    $args['classes'] .= ' splide _splide-placeholder';
   }
 
   // Transient?
