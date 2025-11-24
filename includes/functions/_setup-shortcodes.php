@@ -1071,7 +1071,7 @@ function fictioneer_shortcode_cookie_buttons( $attr ) {
   ob_start();
 
   // Start HTML ---> ?>
-  <div class="cookies spacing-top spacing-bottom ">
+  <div class="cookies spacing-top spacing-bottom">
     <button type="button" data-action="click->fictioneer#clearConsent" class="button"><?php _e( 'Reset Consent', 'fictioneer' ); ?></button>
     <button type="button" data-action="click->fictioneer#clearCookies" data-message="<?php _e( 'Cookies and local storage have been cleared. To keep it that way, you should leave the site.', 'fictioneer' ); ?>" class="button"><?php _e( 'Clear Cookies', 'fictioneer' ); ?></button>
   </div>

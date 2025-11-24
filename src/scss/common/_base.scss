@@ -1085,3 +1085,8 @@ html:not(.logged-in) body:not(.logged-in) {
   width: get_clamp(280, 500, 320, 550);
   box-shadow: var(--embed-box-shadow);
 }
+
+.cookies {
+  display: flex;
+  gap: 8px;
+}
