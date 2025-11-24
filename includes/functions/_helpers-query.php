@@ -999,6 +999,7 @@ function fictioneer_sql_update_comment_count( $post_id, $count ) {
  * @param int|null    $args['new_days']    Optional. How many days a post is considered new. Default 14.
  * @param int|null    $args['new_weight']  Optional. How much weight new posts have. Default calculated.
  * @param array|null  $args['query_args']  Optional. Additional query args for internal WP_Query.
+ * @param string|null $args['pool']        Optional. Change the pool with a custom string. Default empty.
  * @param string|null $args['return']      Optional. Either 'query' or 'args'. Default 'query'.
  *
  * @return WP_Query|array Query result or query arguments for later use.
@@ -1012,7 +1013,7 @@ function fictioneer_random_spotlight_query( $post_type = 'fcn_story', $args = []
 
   // Setup
   $post_type = fictioneer_sanitize_post_type( $post_type );
-  $option_key = 'fictioneer_spotlight_' . $post_type;
+  $option_key = 'fictioneer_spotlight_' . ( $args['pool'] ?? '' ) . '_' . $post_type;
   $count = max( 1, (int) ( $args['count'] ?? 6 ) );
   $all_post_ids = [];
   $selected_ids = [];

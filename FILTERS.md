@@ -2453,11 +2453,12 @@ Filters the arguments passed to the `fictioneer_random_spotlight_query()` helper
 **Note:** The filter is applied before the arguments are sanitized and defaults are set.
 
 **$args:**
-* $count (int|null) – How many posts to query. Default 6. Unsafe.
-* $new_days (int|null) – How many days a story counts as new. Default 14. Unsafe.
-* $new_weight (int|null) – Weight of new stories. Default calculated (total/count). Unsafe.
-* $query_args (array|null) – Additional query arguments for the WP_Query later. Unsafe.
-* $return (string|null) – Either 'query' or 'args'. Default 'query'. Unsafe.
+* 'count' (int|null) – How many posts to query. Default 6. Unsafe.
+* 'new_days' (int|null) – How many days a story counts as new. Default 14. Unsafe.
+* 'new_weight' (int|null) – Weight of new stories. Default calculated (total/count). Unsafe.
+* 'query_args' (array|null) – Additional query arguments for the WP_Query later. Unsafe.
+* 'pool' (string|null) – Change the pool with a custom string. Default empty. Unsafe.
+* 'return' (string|null) – Either 'query' or 'args'. Default 'query'. Unsafe.
 
 **Parameters:**
 * $post_type (string) – The post type to query. Default `'fcn_story'`.
