@@ -6,16 +6,27 @@
   position: fixed;
   inset: 0;
   z-index: 2147483647;
-  display: grid;
+  display: none;
   place-content: center;
   background: rgb(0 0 0 / 85%);
   color: #ccc;
   padding: 3rem 1rem 1rem;
-  transition: opacity var(--transition-duration);
+  opacity: 0;
+  transition:
+    display var(--lightbox-transition-duration, .15s) allow-discrete,
+    opacity var(--lightbox-transition-duration, .15s) ease-in-out;
 
-  &:not(.show) {
-    pointer-events: none;
-    opacity: 0;
+  @starting-style {
+    opacity: 1;
+  }
+
+  &.show {
+    display: grid;
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
   }
 
   &__close {
