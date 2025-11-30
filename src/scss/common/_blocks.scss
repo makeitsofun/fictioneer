@@ -1221,8 +1221,8 @@ figcaption {
 }
 
 .wp-block-latest-posts:where(:not(.no-theme-style)) {
-  --this-row-gap: calc(var(--grid-columns-row-gap, 1.5rem) * var(--grid-columns-row-gap-multiplier, 1) * var(--grid-sidebar-row-gap-multiplier, 1));
-  --this-col-gap: calc(var(--grid-columns-col-gap, 1.5rem) * var(--grid-columns-col-gap-multiplier, 1) * var(--grid-sidebar-col-gap-multiplier, 1));
+  --this-row-gap: calc(var(--grid-columns-row-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-row-gap-multiplier, 1) * var(--grid-sidebar-row-gap-multiplier, 1));
+  --this-col-gap: calc(var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-col-gap-multiplier, 1) * var(--grid-sidebar-col-gap-multiplier, 1));
   gap: var(--this-row-gap) var(--this-col-gap);
   display: flex;
   flex-direction: column;
