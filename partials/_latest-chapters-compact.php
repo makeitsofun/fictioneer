@@ -275,7 +275,7 @@ if ( $args['count'] < 2 || count( $args['post_ids'] ?? [] ) === 1 ) {
                 ?></a></h3>
 
                 <div class="card__content _small cell-desc">
-                  <div class="text-overflow-ellipsis _bottom-spacer-xs">
+                  <div class="text-overflow-ellipsis">
                     <?php if ( get_option( 'fictioneer_show_authors' ) && $args['source'] && $args['footer_author'] ) : ?>
                       <span class="card__by-author"><?php
                         printf( _x( 'by %s', 'Small card: by {Author}.', 'fictioneer' ), fictioneer_get_author_node() );

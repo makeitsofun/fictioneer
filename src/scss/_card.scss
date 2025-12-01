@@ -663,16 +663,22 @@
     }
   }
 
-  &._compact._chapter._no-footer-words._no-footer-date {
-    .card__title {
-      margin-bottom: 0;
+  &._compact._chapter {
+    .card__words-on-date {
+      margin-top: .4em;
     }
 
-    .card__content {
-      margin-bottom: var(--this-spacing);
+    &._no-footer-words._no-footer-date {
+      .card__title {
+        margin-bottom: 0;
+      }
 
-      > div {
-        display: none;
+      .card__content {
+        margin-bottom: var(--this-spacing);
+
+        .card__words-on-date {
+          display: none;
+        }
       }
     }
   }
@@ -814,10 +820,6 @@
     .cell-list {
       margin-top: var(--small-card-list-margin-top, 0.6em);
     }
-  }
-
-  ._bottom-spacer-xs {
-    margin-bottom: .4em;
   }
 
   ._obfuscated {
