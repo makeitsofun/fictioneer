@@ -118,7 +118,7 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
               </div>
 
               <div class="fictioneer-card__row">
-                <textarea name="fictioneer_critical_font_css" id="fictioneer_critical_font_css" rows="4" placeholder="<?php echo esc_attr( '@font-face{font-display:swap;font-family:"Crimson Text";font-style:normal;font-weight:400;size-adjust:115%;src:url("../fonts/crimson-text/crimson-text-v19-regular.woff2") format("woff2")} ...' ); ?>"><?php echo get_option( 'fictioneer_critical_font_css' ); ?></textarea>
+                <textarea name="fictioneer_critical_font_css" id="fictioneer_critical_font_css" rows="4" placeholder="<?php echo esc_attr( '@font-face{font-display:swap;font-family:"Crimson Text";font-style:normal;font-weight:400;size-adjust:115%;src:url("wp-content/themes/{theme-folder}/fonts/crimson-text/crimson-text-v19-regular.woff2") format("woff2")} ...' ); ?>"><?php echo get_option( 'fictioneer_critical_font_css' ); ?></textarea>
               </div>
 
               <div class="fictioneer-card__row">
@@ -156,6 +156,18 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
                       if ( empty( $css ) ) {
                         continue;
                       }
+
+                      if ( $data['in_child_theme'] ) {
+                        $folder = wp_get_theme()->get_template();
+                      } else {
+                        $folder = wp_get_theme()->get_stylesheet();
+                      }
+
+                      $css = str_replace(
+                        'url("../',
+                        'url(/wp-content/themes/' . $folder . '/',
+                        $css
+                      );
 
                       printf(
                         '<details style="margin: 12px 0 0 12px;"><summary>%s</summary><div><code><pre>%s</pre></code></div></details>',
