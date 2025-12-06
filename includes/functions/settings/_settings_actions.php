@@ -80,7 +80,13 @@ if ( ! function_exists( 'fictioneer_get_default_genres' ) ) {
    */
 
   function fictioneer_get_default_genres() {
-    return json_decode( file_get_contents( get_template_directory_uri() . '/json/genres.json' ) );
+    $path = get_template_directory() . '/json/genres.json';
+
+    if ( file_exists( $path ) ) {
+      return json_decode( file_get_contents( $path ) );
+    }
+
+    return [];
   }
 }
 
@@ -94,7 +100,13 @@ if ( ! function_exists( 'fictioneer_get_default_tags' ) ) {
    */
 
   function fictioneer_get_default_tags() {
-    return json_decode( file_get_contents( get_template_directory_uri() . '/json/tags.json' ) );
+    $path = get_template_directory() . '/json/tags.json';
+
+    if ( file_exists( $path ) ) {
+      return json_decode( file_get_contents( $path ) );
+    }
+
+    return [];
   }
 }
 
