@@ -427,7 +427,7 @@
   --block-fs-h3: #{get_relative_clamp(1.2, 1.4, 320, 768, 'vw', 'em')};
   --block-fs-h4: #{get_relative_clamp(1.1, 1.2, 320, 768, 'vw', 'em')};
   --block-fs-h5: #{get_relative_clamp(1.05, 1.125, 320, 768, 'vw', 'em')};
-  --block-fs-h6: var(var(--fs-s));
+  --block-fs-h6: var(--fs-s);
 
   // === LINKS =================================================================
 
