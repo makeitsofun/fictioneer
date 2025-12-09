@@ -273,7 +273,7 @@ function fictioneer_get_alerts( $args = [] ) {
     'story_ids' => [],
     'author' => null,
     'roles' => [],
-    'for_user_roles' => null,
+    'for_roles' => [],
     'user_ids' => [],
     'for_user_id' => null,
     'tags' => [],
@@ -419,6 +419,25 @@ function fictioneer_get_alerts( $args = [] ) {
     }
   }
 
+  if ( ! empty( $args['for_roles'] ) ) {
+    $roles = array_filter( array_map( 'sanitize_key', $args['for_roles'] ) );
+
+    if ( ! empty( $roles ) ) {
+      $role_clauses = [];
+      $role_params = [];
+
+      foreach ( $roles as $role ) {
+        $role_clauses[] = 'roles LIKE %s';
+        $role_params[]  = '%"' . $wpdb->esc_like( $role ) . '";%';
+      }
+
+      $sql .= " UNION ALL (SELECT {$fields}, date, date_gmt FROM $table WHERE (" . implode( ' OR ', $role_clauses ) . ") AND date_gmt <= %s)";
+
+      $role_params[] = gmdate( 'Y-m-d H:i:s' );
+      $params = array_merge( $params, $role_params );
+    }
+  }
+
   $sql .= ' ORDER BY date_gmt DESC LIMIT 69';
   $results = $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A );
 
@@ -518,7 +537,8 @@ function ffcnr_get_user_data() {
       array(
         'story_ids' => array_keys( $follows['data'] ?? [] ),
         'exclude_ids' => $show_read_alerts ? [] : $read_alerts,
-        'for_user_id' => $user->ID
+        'for_user_id' => $user->ID,
+        'for_roles' => $user->roles
       )
     );
 
