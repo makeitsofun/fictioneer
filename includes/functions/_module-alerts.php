@@ -106,18 +106,20 @@ if ( get_option( 'fictioneer_enable_alerts' ) ) {
  *
  * @global wpdb $wpdb  WordPress database object.
  *
- * @param string   $content           The content of the notice. Can be HTML.
- * @param string   $args              Optional arguments.
- * @param string   $args['type']      Type of the alert ('alert', 'info', 'warning',
- *                                    'new_chapter', 'new_story', 'new_*'). Default 'info'.
- * @param int      $args['post_id']   Post ID relating to the alert. Default null.
- * @param int      $args['story_id']  Story ID relating to the alert. Default null.
- * @param string   $args['date']      Local MYSQL datetime. Default `current_time()`.
- * @param int      $args['author']    Author ID required in the query. Default null.
- * @param string   $args['url']       Link URL for the alert. Default null.
- * @param string[] $args['tags']      Tags required in the query. Default null.
- * @param string[] $args['roles']     Roles required in the query. Default null.
- * @param int[]    $args['users']     User IDs required in the query. Default null.
+ * @param string   $content            The content of the notice. Can be HTML.
+ * @param string   $args               Optional arguments.
+ * @param string   $args['type']       Type of the alert ('alert', 'info', 'warning',
+ *                                     'new_chapter', 'new_story', 'new_*'). Default 'info'.
+ * @param int      $args['post_id']    Post ID relating to the alert. Default null.
+ * @param int      $args['story_id']   Story ID relating to the alert. Default null.
+ * @param int      $args['author']     Author ID required in the query. Default null.
+ * @param int      $args['author_id']  Alias for 'author' key if not set. Default null.
+ * @param string   $args['date']       Local MYSQL datetime. Default `current_time()`.
+ * @param string   $args['url']        Link URL for the alert. Default null.
+ * @param string[] $args['tags']       Tags required in the query. Default null.
+ * @param string[] $args['roles']      Roles required in the query. Default null.
+ * @param int[]    $args['users']      User IDs required in the query. Default null.
+ * @param int[]    $args['user_ids']   Alias for 'users' key if not set. Default null.
  */
 
 function fictioneer_add_alert( $content, $args = [] ) {
@@ -130,14 +132,30 @@ function fictioneer_add_alert( $content, $args = [] ) {
     'post_id' => null,
     'story_id' => null,
     'author' => null,
+    'author_id' => null,
     'url' => null,
     'roles' => null,
     'users' => null,
+    'user_ids' => null,
     'tags' => null,
     'date' => current_time( 'mysql' )
   );
 
   $args = wp_parse_args( $args, $defaults );
+
+  if ( ! $args['author'] ) {
+    $args['author'] = $args['author_id'];
+  }
+
+  if ( ! $args['users'] ) {
+    $args['users'] = $args['user_ids'];
+  }
+
+  if ( ! empty( $args['users'] ) && is_array( $args['users'] ) ) {
+    if ( reset( $args['users'] ) instanceof WP_User ) {
+      $args['users'] = wp_list_pluck( $args['users'], 'ID' );
+    }
+  }
 
   $data = array(
     'type' => sanitize_key( $args['type'] ?? 'info' ),
@@ -147,7 +165,7 @@ function fictioneer_add_alert( $content, $args = [] ) {
     'content' => wp_kses_post( $content ),
     'url' => isset( $args['url'] ) ? sanitize_url( $args['url'] ) : null,
     'roles' => isset( $args['roles'] ) ? maybe_serialize( array_map( 'sanitize_key', (array) $args['roles'] ) ) : null,
-    'users' => isset( $args['users'] ) ? maybe_serialize( array_map( 'sanitize_key', (array) $args['users'] ) ) : null,
+    'users' => isset( $args['users'] ) ? maybe_serialize( array_map( 'strval', (array) $args['users'] ) ) : null,
     'tags' => isset( $args['tags'] ) ? maybe_serialize( array_map( 'sanitize_key', (array) $args['tags'] ) ) : null,
     'date' => $args['date'],
     'date_gmt' => get_gmt_from_date( $args['date'] )
