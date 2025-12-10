@@ -460,6 +460,11 @@ if ( ! defined( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES' ) ) {
   define( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES', false );
 }
 
+// Boolean: Whether to query alerts for specific user or roles
+if ( ! defined( 'FICTIONEER_ENABLE_EXTENDED_ALERT_QUERIES' ) ) {
+  define( 'FICTIONEER_ENABLE_EXTENDED_ALERT_QUERIES', false );
+}
+
 // =============================================================================
 // GLOBAL
 // =============================================================================
