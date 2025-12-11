@@ -156,7 +156,7 @@ function fictioneer_get_shortcode_default_attribute_pairs() {
     'simple' => false,
     'single' => false,
     'spoiler' => false,
-    'spotlight' => true,
+    'spotlight' => false,
     'count' => -1,
     'offset' => 0,
     'order' => '',
@@ -275,7 +275,7 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
     'source' => filter_var( $attr['source'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
     'splide' => sanitize_text_field( $attr['splide'] ?? '' ),
     'cache' => filter_var( $attr['cache'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
-    'spotlight' => filter_var( $attr['spotlight'] ?? 1, FILTER_VALIDATE_BOOLEAN )
+    'spotlight' => filter_var( $attr['spotlight'] ?? 0, FILTER_VALIDATE_BOOLEAN )
   );
 
   $args = array_merge( $attr, $args ); // Preserve anything extra
