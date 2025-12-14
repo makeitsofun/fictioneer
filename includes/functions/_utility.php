@@ -1811,26 +1811,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SANITIZE IMAGE ID
-// =============================================================================
-
-/**
- * Return sanitized image ID that must exist.
- *
- * @since 5.30.0
- *
- * @param int|string $id  Image ID.
- *
- * @return int Image ID or 0 if not found.
- */
-
-function fictioneer_sanitize_image_id( $id ) {
-  $id = max( 0, (int) $id );
-
-  return wp_get_attachment_url( $id ) ? $id : 0;
-}
-
-// =============================================================================
 // SANITIZE ICON HTML
 // =============================================================================
 

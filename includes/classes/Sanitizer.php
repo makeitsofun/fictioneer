@@ -525,4 +525,21 @@ class Sanitizer {
 
     return $num . '/' . $den;
   }
+
+  /**
+   * Return sanitized and existing image ID or 0.
+   *
+   * @since 5.30.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $id  Image ID.
+   *
+   * @return int Image ID or 0 if not found.
+   */
+
+  public static function sanitize_image_id( mixed $id ) : int {
+    $id = max( 0, (int) $id );
+
+    return ( $id && wp_attachment_is_image( $id ) ) ? $id : 0;
+  }
 }

@@ -301,6 +301,21 @@ function fictioneer_sanitize_editor( $content ) {
   return Sanitizer::sanitize_meta_field_editor( $content );
 }
 
+/**
+ * [Deprecated] Return sanitized image ID that must exist.
+ *
+ * @since 5.30.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_image_id() instead.
+ *
+ * @param int|string $id  Image ID.
+ *
+ * @return int Image ID or 0 if not found.
+ */
+
+function fictioneer_sanitize_image_id( $id ) {
+  return Sanitizer::sanitize_image_id( $id );
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================
