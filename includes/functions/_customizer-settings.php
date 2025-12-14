@@ -2406,7 +2406,7 @@ function fictioneer_add_layout_customizer_settings( $manager ) {
     'nested_border_radius_multiplier',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_positive_float_def1',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float_zero_positive_def1' ],
       'default' => apply_filters( 'fictioneer_filter_customizer_nested_border_radius_multiplier_default', 1 )
     )
   );
@@ -2634,7 +2634,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_cover_width_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_positive_float_def1',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float_zero_positive_def1' ],
       'default' => '1'
     )
   );
@@ -2664,7 +2664,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_grid_row_gap_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_positive_float_def1',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float_zero_positive_def1' ],
       'default' => '1'
     )
   );
@@ -2694,7 +2694,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_grid_column_gap_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_positive_float_def1',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float_zero_positive_def1' ],
       'default' => '1'
     )
   );

@@ -1810,54 +1810,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
   }
 }
 
-// =============================================================================
-// SANITIZE POSITIVE FLOAT
-// =============================================================================
-
-/**
- * Sanitizes a float as positive number.
- *
- * @since 5.9.4
- *
- * @param mixed $value    The value to be sanitized.
- * @param int   $default  Default value if an invalid float is provided. Default 0.0.
- *
- * @return float The sanitized float.
- */
-
-function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
-  // Ensure $value is numeric in the first place
-  if ( ! is_numeric( $value ) ) {
-    return $default;
-  }
-
-  // Cast to float
-  $value = (float) $value;
-
-  // Return positive float
-  return $value < 0 ? $default : $value;
-}
-
-/**
- * Sanitize callback with positive float or default 1.0.
- *
- * @since 5.10.1
- *
- * @param mixed $value  The value to be sanitized.
- *
- * @return float The sanitized positive float.
- */
-
-function fictioneer_sanitize_positive_float_def1( $value ) {
-  // Ensure $value is numeric in the first place
-  if ( ! is_numeric( $value ) ) {
-    return 1.0;
-  }
-
-  // Call general sanitizer with params
-  return fictioneer_sanitize_positive_float( $value, 1.0 );
-}
-
 /**
  * Sanitize callback with float or default 0.
  *

@@ -54,6 +54,37 @@ function fictioneer_sanitize_words_per_minute( $input ) {
 }
 
 /**
+ * [Deprecated] Sanitizes a float as positive number.
+ *
+ * @since 5.9.4
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_positive() instead.
+ *
+ * @param mixed $value    The value to be sanitized.
+ * @param float $default  Default value if an invalid float is provided. Default 0.0.
+ *
+ * @return float The sanitized float.
+ */
+
+function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
+  return Sanitizer::sanitize_float_zero_positive( $value,  $default );
+}
+
+/**
+ * [Deprecated] Sanitize callback with positive float or default 1.0.
+ *
+ * @since 5.10.1
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive_def1() instead.
+ *
+ * @param mixed $value  The value to be sanitized.
+ *
+ * @return float The sanitized positive float.
+ */
+
+function fictioneer_sanitize_positive_float_def1( $value ) {
+  return Sanitizer::sanitize_float_zero_positive_def1( $value );
+}
+
+/**
  * [Deprecated] Sanitize a checkbox value into true or false.
  *
  * @since 4.7.0

@@ -67,32 +67,26 @@ class Sanitizer {
    */
 
   public static function sanitize_integer( mixed $value, mixed $default = 0, ?int $min = null, ?int $max = null ) : int {
-    // Catch customizer sanitizer second parameter
     if ( $default instanceof \WP_Customize_Setting ) {
       $default = $default->default;
     }
 
     $default = ( filter_var( $default, FILTER_VALIDATE_INT ) === false ) ? 0 : (int) $default;
 
-    // Remove leading/trailing spaces
     if ( is_string( $value ) ) {
       $value = trim( $value );
     }
 
-    // Validate as integer-like value
     if ( $value === '' || filter_var( $value, FILTER_VALIDATE_INT ) === false ) {
       return $default;
     }
 
-    // Cast to integer
     $value = (int) $value;
 
-    // Apply minimum limit if specified
     if ( $min !== null && $value < $min ) {
       return $min;
     }
 
-    // Apply maximum limit if specified
     if ( $max !== null && $value > $max ) {
       return $max;
     }
@@ -130,6 +124,58 @@ class Sanitizer {
 
   public static function sanitize_integer_words_per_minute( mixed $value ) : int {
     return self::sanitize_integer( $value, 200, 200 );
+  }
+
+  /**
+   * Sanitize a float as positive or zero number.
+   *
+   * @since 5.9.4
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value    Value to be sanitized.
+   * @param mixed $default  Optional. Default if invalid or negative. Default 0.0.
+   *
+   * @return float The sanitized float.
+   */
+
+  public static function sanitize_float_zero_positive( mixed $value, mixed $default = 0.0 ) : float {
+    if ( $default instanceof \WP_Customize_Setting ) {
+      $default = $default->default;
+    }
+
+    $default = filter_var( $default, FILTER_VALIDATE_FLOAT );
+    $default = ( $default === false || $default < 0 ) ? 0.0 : (float) $default;
+
+    if ( is_string( $value ) ) {
+      $value = trim( $value );
+    }
+
+    if ( $value === '' || filter_var( $value, FILTER_VALIDATE_FLOAT ) === false ) {
+      return $default;
+    }
+
+    $value = (float) $value;
+
+    if ( ! is_finite( $value ) || $value < 0 ) {
+      return $default;
+    }
+
+    return $value;
+  }
+
+  /**
+   * Sanitize a float as positive or zero number with default 1.0.
+   *
+   * @since 5.10.1
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value  Value to be sanitized.
+   *
+   * @return float The sanitized float.
+   */
+
+  public static function sanitize_float_zero_positive_def1( mixed $value ) : float {
+    return self::sanitize_float_zero_positive( $value, 1.0 );
   }
 
   /**
