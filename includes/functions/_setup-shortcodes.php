@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // GET SHORTCODE TRANSIENT
 // =============================================================================
@@ -260,8 +262,8 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
     'lightbox' => filter_var( $attr['lightbox'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
     'words' => filter_var( $attr['words'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
     'date' => filter_var( $attr['date'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
-    'date_format' => fictioneer_sanitize_date_format( $attr['date_format'] ?? '' ),
-    'nested_date_format' => fictioneer_sanitize_date_format( $attr['nested_date_format'] ?? '' ),
+    'date_format' => Utils::sanitize_date_format( $attr['date_format'] ?? '' ),
+    'nested_date_format' => Utils::sanitize_date_format( $attr['nested_date_format'] ?? '' ),
     'footer' => filter_var( $attr['footer'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
     'footer_author' => filter_var( $attr['footer_author'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
     'footer_chapters' => filter_var( $attr['footer_chapters'] ?? 1, FILTER_VALIDATE_BOOLEAN ),
