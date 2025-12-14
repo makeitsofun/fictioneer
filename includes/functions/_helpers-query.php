@@ -836,7 +836,7 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
 
     // Populate the stories array
     foreach ( $results as $story ) {
-      $title = fictioneer_sanitize_safe_title(
+      $title = Sanitizer::sanitize_safe_title(
         $story->post_title,
         mysql2date( get_option( 'date_format' ), $story->post_date ),
         mysql2date( get_option( 'time_format' ), $story->post_date )

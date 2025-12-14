@@ -497,4 +497,31 @@ class Sanitizer {
   public static function sanitize_icon_html( string $html ): string {
     return Sanitizer_Admin::sanitize_icon_html( $html );
   }
+
+  /**
+   * Return sanitized safe title.
+   *
+   * @since 5.7.1
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string $title  Post title.
+   * @param string $date   The date.
+   * @param string $time   The time.
+   *
+   * @return string The sanitized title.
+   */
+
+  public static function sanitize_safe_title( string $title, string $date, string $time ) : string {
+    $title = wp_strip_all_tags( $title );
+
+    if ( empty( $title ) ) {
+      $title = sprintf(
+        _x( '%1$s — %2$s', '[Date] — [Time] if post title is missing.', 'fictioneer' ),
+        $date,
+        $time
+      );
+    }
+
+    return $title;
+  }
 }

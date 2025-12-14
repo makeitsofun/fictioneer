@@ -1,5 +1,6 @@
 <?php
 
+use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
 
 // =============================================================================
@@ -325,7 +326,7 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
     $post_id = ( $post instanceof WP_Post ) ? $post->ID : $post;
 
     // Get title and sanitize
-    $title = fictioneer_sanitize_safe_title(
+    $title = Sanitizer::sanitize_safe_title(
       get_the_title( $post_id ),
       get_the_date( '', $post_id ),
       get_the_time( '', $post_id )
@@ -339,32 +340,6 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
     // Return final title
     return $title;
   }
-}
-
-/**
- * Return sanitized safe title.
- *
- * @since 5.7.1
- *
- * @param string $title  Post title.
- * @param string $date   The date.
- * @param string $time   The time.
- *
- * @return string The sanitized title.
- */
-
-function fictioneer_sanitize_safe_title( $title, $date, $time ) {
-  $title = wp_strip_all_tags( $title );
-
-  if ( empty( $title ) ) {
-    $title = sprintf(
-      _x( '%1$s — %2$s', '[Date] — [Time] if post title is missing.', 'fictioneer' ),
-      $date,
-      $time
-    );
-  }
-
-  return $title;
 }
 
 /**

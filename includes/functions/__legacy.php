@@ -331,6 +331,23 @@ function fictioneer_sanitize_icon_html( $html ) {
   return Sanitizer::sanitize_icon_html( $html );
 }
 
+/**
+ * Return sanitized safe title.
+ *
+ * @since 5.7.1
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
+ *
+ * @param string $title  Post title.
+ * @param string $date   The date.
+ * @param string $time   The time.
+ *
+ * @return string The sanitized title.
+ */
+
+function fictioneer_sanitize_safe_title( $title, $date, $time ) {
+  return Sanitizer::sanitize_safe_title( $title, $date, $time );
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================

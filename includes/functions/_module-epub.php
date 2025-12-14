@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // DOWNLOAD
 // =============================================================================
@@ -347,7 +349,7 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
     // Process chapters
     foreach ( $chapter_objects as $post ) {
       // Setup
-      $title = fictioneer_sanitize_safe_title(
+      $title = Sanitizer::sanitize_safe_title(
         $post->post_title,
         mysql2date( get_option( 'date_format' ), $post->post_date ),
         mysql2date( get_option( 'time_format' ), $post->post_date )

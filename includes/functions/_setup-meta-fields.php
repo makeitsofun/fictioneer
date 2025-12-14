@@ -1208,7 +1208,7 @@ function fictioneer_ajax_query_relationship_posts() {
 add_action( 'wp_ajax_fictioneer_ajax_query_relationship_posts', 'fictioneer_ajax_query_relationship_posts' );
 
 /**
- * Render HTML for selected story chapters
+ * Render HTML for selected story chapters.
  *
  * @since 5.8.0
  * @since 5.26.0 - Use custom chapter objects.
@@ -1221,7 +1221,7 @@ add_action( 'wp_ajax_fictioneer_ajax_query_relationship_posts', 'fictioneer_ajax
 function fictioneer_callback_relationship_chapters( $selected, $meta_key, $args = [] ) {
   // Build HTML
   foreach ( $selected as $chapter ) {
-    $title = fictioneer_sanitize_safe_title(
+    $title = Sanitizer::sanitize_safe_title(
       $chapter->post_title,
       get_date_from_gmt( $chapter->post_date_gmt, get_option( 'date_format' ) ),
       get_date_from_gmt( $chapter->post_date_gmt, get_option( 'time_format' ) )
