@@ -316,6 +316,21 @@ function fictioneer_sanitize_image_id( $id ) {
   return Sanitizer::sanitize_image_id( $id );
 }
 
+/**
+ * [Deprecated] Return sanitized icon HTML.
+ *
+ * @since 5.32.0
+ *
+ * @param string $html  Icon HTML.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_icon_html() instead.
+ *
+ * @return string Sanitized icon HTML.
+ */
+
+function fictioneer_sanitize_icon_html( $html ) {
+  return Sanitizer::sanitize_icon_html( $html );
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================

@@ -542,4 +542,133 @@ class Sanitizer {
 
     return ( $id && wp_attachment_is_image( $id ) ) ? $id : 0;
   }
+
+  /**
+   * Return sanitized icon HTML.
+   *
+   * @since 5.32.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string $html  Icon HTML.
+   *
+   * @return string Sanitized icon HTML.
+   */
+
+  public static function sanitize_icon_html( string $html ): string {
+    $html = trim( wp_unslash( $html ?? '' ) );
+
+    if ( $html === '' ) {
+      return '';
+    }
+
+    if ( strpos( $html, '<!--' ) !== false ) {
+      $html = preg_replace( '/<!--.*?-->/s', '', $html );
+    }
+
+    static $allowed = array(
+      'i' => array(
+        'class' => true,
+        'title' => true,
+        'role' => true,
+        'aria-hidden' => true,
+        'aria-label' => true,
+      ),
+      'span' => array(
+        'class' => true,
+        'role' => true,
+        'aria-hidden' => true,
+        'aria-label' => true,
+        'title' => true,
+      ),
+      'div' => array(
+        'class' => true,
+        'role' => true,
+        'aria-hidden' => true,
+        'aria-label' => true,
+        'title' => true,
+      ),
+      'svg' => array(
+        'class' => true,
+        'role' => true,
+        'aria-hidden' => true,
+        'aria-label' => true,
+        'aria-labelledby' => true,
+        'aria-describedby' => true,
+        'focusable' => true,
+        'width' => true,
+        'height' => true,
+        'viewBox' => true,
+        'preserveAspectRatio' => true,
+        'fill' => true,
+        'stroke' => true,
+        'stroke-width' => true,
+        'xmlns' => true,
+        'xmlns:xlink' => true,
+      ),
+      'g' => array(
+        'class' => true,
+        'fill' => true,
+        'stroke' => true,
+        'stroke-width' => true,
+        'transform' => true,
+      ),
+      'path' => array(
+        'class' => true,
+        'd' => true,
+        'fill' => true,
+        'stroke' => true,
+        'stroke-width' => true,
+        'transform' => true,
+        'vector-effect'=> true,
+      ),
+      'rect' => array(
+        'x' => true, 'y' => true, 'width' => true, 'height' => true,
+        'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true,
+        'transform' => true,
+      ),
+      'circle' => array(
+        'cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true,
+        'transform' => true,
+      ),
+      'line' => array(
+        'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true,
+        'stroke' => true, 'stroke-width' => true, 'transform' => true,
+      ),
+      'polyline' => array(
+        'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true,
+        'transform' => true,
+      ),
+      'polygon' => array(
+        'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true,
+        'transform' => true,
+      ),
+      'symbol' => array( 'id' => true, 'viewBox' => true ),
+      'defs' => [],
+      'use' => array(
+        'href' => true,
+        'xlink:href' => true,
+        'class' => true,
+      ),
+      'title' => [],
+      'desc' => [],
+    );
+
+    $html = wp_kses( $html, $allowed );
+
+    $html = preg_replace_callback(
+      '/\s(?:xlink:)?href=(["\'])(.*?)\1/i',
+      static function ( array $m ) : string {
+        $val = trim( html_entity_decode( $m[2], ENT_QUOTES, 'UTF-8' ) );
+
+        if ( $val !== '' && $val[0] === '#' ) {
+          return ' href="' . esc_attr( $val ) . '"';
+        }
+
+        return '';
+      },
+      $html
+    );
+
+    return preg_replace( '/\s{2,}/', ' ', trim( $html ) );
+  }
 }

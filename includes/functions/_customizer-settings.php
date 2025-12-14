@@ -2841,7 +2841,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_checkmark_chapter_list',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-check"></i>'
     )
   );
@@ -2865,7 +2865,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_checkmark_card_chapter',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-check"></i>'
     )
   );
@@ -2889,7 +2889,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_checkmark_story_complete',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-check"></i>'
     )
   );
@@ -2913,7 +2913,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_checkmark_card_story',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-check-double"></i>'
     )
   );
@@ -2937,7 +2937,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_words',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-font"></i>'
     )
   );
@@ -2961,7 +2961,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_follow',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-star"></i>'
     )
   );
@@ -2985,7 +2985,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_follow_off',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-regular fa-star"></i>'
     )
   );
@@ -3009,7 +3009,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_reminder',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-clock"></i>'
     )
   );
@@ -3033,7 +3033,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_reminder_off',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-regular fa-clock"></i>'
     )
   );
@@ -3057,7 +3057,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_story_status_ongoing',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-circle"></i>'
     )
   );
@@ -3081,7 +3081,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_story_status_completed',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-circle-check"></i>'
     )
   );
@@ -3105,7 +3105,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_story_status_oneshot',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-circle-check"></i>'
     )
   );
@@ -3129,7 +3129,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_story_status_hiatus',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-circle-pause"></i>'
     )
   );
@@ -3153,7 +3153,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
     'icon_story_status_canceled',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_icon_html',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_icon_html' ],
       'default' => '<i class="fa-solid fa-ban"></i>'
     )
   );
