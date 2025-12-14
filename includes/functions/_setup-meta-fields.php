@@ -2577,8 +2577,9 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Short description (required)
   if ( isset( $_POST['fictioneer_story_short_description'] ) ) {
-    $fields['fictioneer_story_short_description'] =
-      fictioneer_sanitize_editor( $_POST['fictioneer_story_short_description'] );
+    $fields['fictioneer_story_short_description'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_story_short_description'] )
+    );
 
     if ( empty( $fields['fictioneer_story_short_description'] ) ) {
       $fields['fictioneer_story_short_description'] = '';
@@ -2631,14 +2632,16 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Global note
   if ( isset( $_POST['fictioneer_story_global_note'] ) ) {
-    $fields['fictioneer_story_global_note'] =
-      fictioneer_sanitize_editor( $_POST['fictioneer_story_global_note'] );
+    $fields['fictioneer_story_global_note'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_story_global_note'] )
+    );
   }
 
   // Password note
   if ( isset( $_POST['fictioneer_story_password_note'] ) ) {
-    $fields['fictioneer_story_password_note'] =
-      fictioneer_sanitize_editor( $_POST['fictioneer_story_password_note'] );
+    $fields['fictioneer_story_password_note'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_story_password_note'] )
+    );
   }
 
   // ePUBs...
@@ -2656,12 +2659,16 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
     // ePUB preface
     if ( isset( $_POST['fictioneer_story_epub_preface'] ) ) {
-      $fields['fictioneer_story_epub_preface'] = fictioneer_sanitize_editor( $_POST['fictioneer_story_epub_preface'] );
+      $fields['fictioneer_story_epub_preface'] = Sanitizer::sanitize_meta_field_editor(
+        fictioneer_maybe_unslash( $_POST['fictioneer_story_epub_preface'] )
+      );
     }
 
     // ePUB afterword
     if ( isset( $_POST['fictioneer_story_epub_afterword'] ) ) {
-      $fields['fictioneer_story_epub_afterword'] = fictioneer_sanitize_editor( $_POST['fictioneer_story_epub_afterword'] );
+      $fields['fictioneer_story_epub_afterword'] = Sanitizer::sanitize_meta_field_editor(
+        fictioneer_maybe_unslash( $_POST['fictioneer_story_epub_afterword'] )
+      );
     }
 
     // Custom ePUB CSS
@@ -3299,17 +3306,23 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
 
   // Foreword
   if ( isset( $_POST['fictioneer_chapter_foreword'] ) ) {
-    $fields['fictioneer_chapter_foreword'] = fictioneer_sanitize_editor( $_POST['fictioneer_chapter_foreword'] );
+    $fields['fictioneer_chapter_foreword'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_chapter_foreword'] )
+    );
   }
 
   // Afterword
   if ( isset( $_POST['fictioneer_chapter_afterword'] ) ) {
-    $fields['fictioneer_chapter_afterword'] = fictioneer_sanitize_editor( $_POST['fictioneer_chapter_afterword'] );
+    $fields['fictioneer_chapter_afterword'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_chapter_afterword'] )
+    );
   }
 
   // Password note
   if ( isset( $_POST['fictioneer_chapter_password_note'] ) ) {
-    $fields['fictioneer_chapter_password_note'] = fictioneer_sanitize_editor( $_POST['fictioneer_chapter_password_note'] );
+    $fields['fictioneer_chapter_password_note'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_chapter_password_note'] )
+    );
   }
 
   // --- Filters ---------------------------------------------------------------
@@ -4331,7 +4344,9 @@ function fictioneer_save_collection_metaboxes( $post_id ) {
 
   // Short description
   if ( isset( $_POST['fictioneer_collection_description'] ) ) {
-    $fields['fictioneer_collection_description'] = fictioneer_sanitize_editor( $_POST['fictioneer_collection_description'] );
+    $fields['fictioneer_collection_description'] = Sanitizer::sanitize_meta_field_editor(
+      fictioneer_maybe_unslash( $_POST['fictioneer_collection_description'] )
+    );
 
     if ( empty( $fields['fictioneer_collection_description'] ) ) {
       $fields['fictioneer_collection_description'] = '';

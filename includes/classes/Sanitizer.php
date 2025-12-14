@@ -445,4 +445,41 @@ class Sanitizer {
 
     return $types[ $post_type ] ?? $post_type;
   }
+
+  /**
+   * Sanitize meta field editor content.
+   *
+   * Removes malicious HTML, shortcodes, and blocks.
+   *
+   * @since 5.7.4
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string $content  Content to be sanitized.
+   *
+   * @return string Sanitized content.
+   */
+
+  public static function sanitize_meta_field_editor( string $content ) : string {
+    if ( $content === null || $content === '' ) {
+      return '';
+    }
+
+    $content = strip_shortcodes( $content );
+
+    if ( strpos( $content, '<!-- wp:' ) !== false && function_exists( 'parse_blocks' ) ) {
+      $out = '';
+
+      foreach ( parse_blocks( $content ) as $block ) {
+        if ( empty( $block['blockName'] ) && ! empty( $block['innerHTML'] ) ) {
+          $out .= $block['innerHTML'];
+        } elseif ( empty( $block['blockName'] ) && ! empty( $block['innerContent'] ) ) {
+          $out .= implode( '', $block['innerContent'] );
+        }
+      }
+
+      $content = $out;
+    }
+
+    return wp_kses_post( $content );
+  }
 }

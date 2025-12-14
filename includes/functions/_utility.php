@@ -1811,37 +1811,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SANITIZE EDITOR
-// =============================================================================
-
-/**
- * Sanitize editor content.
- *
- * Removes malicious HTML, magic quote slashes, shortcodes, and blocks.
- *
- * @since 5.7.4
- *
- * @param string $content  The content to be sanitized.
- *
- * @return string The sanitized content.
- */
-
-function fictioneer_sanitize_editor( $content ) {
-  if ( is_null( $content ) ) {
-    return '';
-  }
-
-  $content = wp_kses_post( $content );
-  $content = strip_shortcodes( $content );
-
-  if ( strpos( $content, '<!-- wp:' ) !== false ) {
-    $content = preg_replace( '/<!--\s*wp:(.*?)-->(.*?)<!--\s*\/wp:\1\s*-->/s', '', $content );
-  }
-
-  return $content;
-}
-
-// =============================================================================
 // ASPECT RATIO CSS
 // =============================================================================
 

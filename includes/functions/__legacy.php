@@ -282,3 +282,20 @@ function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args =
 function fictioneer_sanitize_post_type( $post_type ) {
   return Sanitizer::sanitize_post_type( $post_type );
 }
+
+/**
+ * [Deprecated] Sanitize editor content.
+ *
+ * Removes malicious HTML, magic quote slashes, shortcodes, and blocks.
+ *
+ * @since 5.7.4
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_meta_field_editor() instead.
+ *
+ * @param string $content  The content to be sanitized.
+ *
+ * @return string The sanitized content.
+ */
+
+function fictioneer_sanitize_editor( $content ) {
+  return Sanitizer::sanitize_meta_field_editor( $content );
+}
