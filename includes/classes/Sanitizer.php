@@ -482,4 +482,47 @@ class Sanitizer {
 
     return wp_kses_post( $content );
   }
+
+  /**
+   * Sanitize a CSS aspect ratio value.
+   *
+   * @since 5.14.0
+   * @since 5.23.0 - Refactored to accept fractional values.
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed       $value    Value to be sanitized.
+   * @param string|bool $default  Optional. Default value if invalid. Default false.
+   *
+   * @return string|bool Sanitized aspect-ratio or default.
+   */
+
+  public static function sanitize_css_aspect_ratio( mixed $value, string|bool $default = false ) : string|bool {
+    if ( $default instanceof \WP_Customize_Setting ) {
+      $default = (string) $default->default;
+    }
+
+    if ( $value === null ) {
+      return $default;
+    }
+
+    $value = trim( (string) $value );
+
+    if ( ! preg_match( '/^\d+(?:\.\d+)?\/\d+(?:\.\d+)?$/', $value ) ) {
+      return $default;
+    }
+
+    list( $num, $den ) = explode( '/', $value, 2 );
+
+    $num = (float) $num;
+    $den = (float) $den;
+
+    if ( $num <= 0 || $den <= 0 || ! is_finite( $num ) || ! is_finite( $den ) ) {
+      return $default;
+    }
+
+    $num = rtrim( rtrim( (string) $num, '0' ), '.' );
+    $den = rtrim( rtrim( (string) $den, '0' ), '.' );
+
+    return $num . '/' . $den;
+  }
 }

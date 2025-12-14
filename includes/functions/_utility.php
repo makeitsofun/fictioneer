@@ -1810,48 +1810,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
   }
 }
 
-// =============================================================================
-// ASPECT RATIO CSS
-// =============================================================================
-
-/**
- * Sanitize a CSS aspect ratio value.
- *
- * @since 5.14.0
- * @since 5.23.0 - Refactored to accept fractional values.
- *
- * @param string $css      The CSS value to be sanitized.
- * @param string $default  Optional default value.
- *
- * @return string|bool The sanitized value or default if invalid.
- */
-
-function sanitize_css_aspect_ratio( $css, $default = false ) {
-  // Remove unwanted white spaces
-  $css = trim( $css ?? '' );
-
-  // Validate
-  if ( preg_match( '/^\d+(\.\d+)?\/\d+(\.\d+)?$/', $css ) ) {
-    // Split based on the slash '/'
-    list( $numerator, $denominator ) = explode( '/', $css, 2 );
-
-    // Sanitize parts
-    $numerator = max( 0, floatval( $numerator ) );
-    $denominator = max( 0, floatval( $denominator ) );
-
-    // Nonsense?
-    if ( $numerator == 0 || $denominator == 0 ) {
-      return $default;
-    }
-
-    // Combine and return
-    return $numerator . '/' . $denominator;
-  }
-
-  // Default if invalid
-  return $default;
-}
-
 /**
  * Return aspect ratio values as tuple.
  *
