@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 
 // =============================================================================
 // SETUP
@@ -802,55 +803,55 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_user_profile_page' => array(
       'name' => 'fictioneer_user_profile_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_bookmarks_page' => array(
       'name' => 'fictioneer_bookmarks_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_stories_page' => array(
       'name' => 'fictioneer_stories_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_chapters_page' => array(
       'name' => 'fictioneer_chapters_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_recommendations_page' => array(
       'name' => 'fictioneer_recommendations_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_collections_page' => array(
       'name' => 'fictioneer_collections_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_bookshelf_page' => array(
       'name' => 'fictioneer_bookshelf_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_404_page' => array(
       'name' => 'fictioneer_404_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_authors_page' => array(
       'name' => 'fictioneer_authors_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_comment_report_threshold' => array(
@@ -886,17 +887,17 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_patreon_global_lock_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_patreon_global_lock_lifetime_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_lifetime_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_patreon_global_lock_unlock_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_unlock_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_oauth_cookie_expiration_days' => array(
       'name' => 'fictioneer_oauth_cookie_expiration_days',

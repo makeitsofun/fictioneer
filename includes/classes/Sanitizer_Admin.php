@@ -248,4 +248,48 @@ class Sanitizer_Admin {
 
     return preg_replace( '/\s{2,}/', ' ', trim( $html ) );
   }
+
+  /**
+   * Sanitize a page ID and check whether it is valid.
+   *
+   * @since 4.6.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $input  Page ID to be sanitized.
+   *
+   * @return int Valid page ID or -1 if invalid or not a page.
+   */
+
+  public static function sanitize_page_id( mixed $input ) : int {
+    if ( ! is_scalar( $input ) ) {
+      return -1;
+    }
+
+    $id = (int) $input;
+
+    if ( $id <= 0 ) {
+      return -1;
+    }
+
+    return ( get_post_type( $id ) === 'page' ) ? $id : -1;
+  }
+
+  /**
+   * Sanitize with absint() unless it is an empty string.
+   *
+   * @since 5.15.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $input  Value to be sanitized.
+   *
+   * @return int|string Sanitized integer or an empty string.
+   */
+
+  public static function sanitize_absint_or_empty_string( mixed $input ) : int|string {
+    if ( $input === '' ) {
+      return '';
+    }
+
+    return absint( $input );
+  }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils;
 
 // =============================================================================
@@ -352,7 +353,7 @@ function fictioneer_sanitize_safe_title( $title, $date, $time ) {
  * [Deprecated] Sanitize a page ID and checks whether it is valid.
  *
  * @since 4.6.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_page_id() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_page_id() instead.
  *
  * @param mixed $input  The page ID to be sanitized.
  *
@@ -360,14 +361,14 @@ function fictioneer_sanitize_safe_title( $title, $date, $time ) {
  */
 
 function fictioneer_sanitize_page_id( $input ) {
-  return Sanitizer::sanitize_page_id( $input );
+  return Sanitizer_Admin::sanitize_page_id( $input );
 }
 
 /**
  * [Deprecated] Sanitize with absint() unless it is an empty string.
  *
  * @since 5.15.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_absint_or_empty_string() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -375,7 +376,7 @@ function fictioneer_sanitize_page_id( $input ) {
  */
 
 function fictioneer_sanitize_absint_or_empty_string( $input ) {
-  return Sanitizer::sanitize_absint_or_empty_string( $input );
+  return Sanitizer_Admin::sanitize_absint_or_empty_string( $input );
 }
 
 // =============================================================================
