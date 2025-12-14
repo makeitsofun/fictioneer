@@ -30,4 +30,32 @@ class Utils {
 
     return $values;
   }
+
+  /**
+   * Extract aspect ratio values from string.
+   *
+   * @since 5.14.0
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param mixed $value  Aspect-ratio value (e.g. '16/9, '1.5/1').
+   *
+   * @return array Tuple of numerator (0) and denominator (1).
+   */
+
+  public static function split_aspect_ratio( mixed $value ) : array {
+    if ( ! is_string( $value ) || ! str_contains( $value, '/' ) ) {
+      return [ 1.0, 1.0 ];
+    }
+
+    list( $num, $den ) = explode( '/', $value, 2 );
+
+    $num = filter_var( $num, FILTER_VALIDATE_FLOAT );
+    $den = filter_var( $den, FILTER_VALIDATE_FLOAT );
+
+    if ( $num === false || $den === false || $num <= 0 || $den <= 0 ) {
+      return [ 1.0, 1.0 ];
+    }
+
+    return [ (float) $num, (float) $den ];
+  }
 }

@@ -37,6 +37,8 @@
  */
 
 
+use Fictioneer\Utils;
+
 // No direct access!
 defined( 'ABSPATH' ) OR exit;
 
@@ -237,7 +239,7 @@ if ( $args['min_width'] ) {
               <figure class="showcase__list-item-figure">
                 <?php
                   // Output image or placeholder
-                  $ratio = fictioneer_get_split_aspect_ratio( $args['aspect_ratio'] ?: '4/2' );
+                  $ratio = Utils::split_aspect_ratio( $args['aspect_ratio'] ?: '4/2' );
                   $quality = $args['quality'] ?? 'medium';
 
                   if ( ! empty( $landscape_image_id ) && $ratio[0] - $ratio[1] > 1 ) {

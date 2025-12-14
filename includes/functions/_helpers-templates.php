@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // GET TEMPLATE PARTS
 // =============================================================================
@@ -737,7 +739,7 @@ if ( ! function_exists( 'fictioneer_get_small_card_thumbnail' ) ) {
 
     // Landscape thumbnail?
     if ( $landscape_image_id && $aspect_ratio ) {
-      $ratio = fictioneer_get_split_aspect_ratio( $aspect_ratio );
+      $ratio = Utils::split_aspect_ratio( $aspect_ratio );
 
       if ( ( $ratio[1] / $ratio[0] ) < 1 ) {
         $thumbnail = wp_get_attachment_image( $landscape_image_id, $thumbnail_size, false, $thumbnail_args );

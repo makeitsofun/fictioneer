@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -298,4 +299,23 @@ function fictioneer_sanitize_post_type( $post_type ) {
 
 function fictioneer_sanitize_editor( $content ) {
   return Sanitizer::sanitize_meta_field_editor( $content );
+}
+
+// =============================================================================
+// UTILITY DELEGATES
+// =============================================================================
+
+/**
+ * [Deprecated] Return aspect ratio values as tuple.
+ *
+ * @since 5.14.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::split_aspect_ratio() instead.
+ *
+ * @param string $css  Aspect-ratio CSS value.
+ *
+ * @return array Tuple of aspect-ratio values.
+ */
+
+function fictioneer_get_split_aspect_ratio( $css ) {
+  return Utils::split_aspect_ratio( $css );
 }
