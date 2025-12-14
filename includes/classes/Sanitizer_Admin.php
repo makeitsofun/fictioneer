@@ -292,4 +292,42 @@ class Sanitizer_Admin {
 
     return absint( $input );
   }
+
+  /**
+   * Sanitize the phrase for the cookie consent banner.
+   *
+   * Checks whether the input is a string and has at least 32 characters,
+   * otherwise a default is returned. The content is also cleaned of any
+   * problematic HTML.
+   *
+   * @since 4.6.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $input  Content for the cookie consent banner.
+   *
+   * @return string Sanitized content for the cookie consent banner.
+   */
+
+  public static function sanitize_phrase_consent_banner( mixed $input ) : string {
+    $default = __( 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Some features are not available without, but you can limit the site to strictly necessary cookies only. See <a href="[[privacy_policy_url]]" target="_blank" tabindex="1">Privacy Policy</a>.', 'fictioneer' );
+
+    if ( ! is_string( $input ) ) {
+      return $default;
+    }
+
+    $raw = trim( wp_unslash( $input ) );
+    $visible = trim( wp_strip_all_tags( $raw ) );
+    $len = function_exists( 'mb_strlen' ) ? mb_strlen( $visible ) : strlen( $visible );
+
+    if ( $len < 32 ) {
+      return $default;
+    }
+
+    $allowed = wp_kses_allowed_html( 'post' );
+
+    $allowed['a'] = $allowed['a'] ?? [];
+    $allowed['a']['tabindex'] = true;
+
+    return wp_kses( $raw, $allowed ) ?: $default;
+  }
 }

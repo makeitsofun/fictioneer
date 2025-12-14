@@ -928,7 +928,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_phrase_cookie_consent_banner' => array(
       'name' => 'fictioneer_phrase_cookie_consent_banner',
       'group' => 'fictioneer-settings-phrases-group',
-      'sanitize_callback' => 'fictioneer_sanitize_phrase_cookie_consent_banner'
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_phrase_consent_banner' ]
     ),
     'fictioneer_phrase_comment_reply_notification' => array(
       'name' => 'fictioneer_phrase_comment_reply_notification',
@@ -1358,44 +1358,6 @@ function fictioneer_register_settings() {
 // =============================================================================
 // SPECIAL SANITIZATION CALLBACKS
 // =============================================================================
-
-/**
- * Sanitize the phrase for the cookie consent banner.
- *
- * Checks whether the input is a string and has at least 32 characters,
- * otherwise a default is returned. The content is also cleaned of any
- * problematic HTML.
- *
- * @since 4.6.0
- *
- * @param mixed $input  The content for the cookie consent banner.
- *
- * @return string The sanitized content for the cookie consent banner.
- */
-
-function fictioneer_sanitize_phrase_cookie_consent_banner( $input ) {
-  global $allowedtags;
-
-  // Setup
-  $default = __( 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Some features are not available without, but you can limit the site to strictly necessary cookies only. See <a href="[[privacy_policy_url]]" target="_blank" tabindex="1">Privacy Policy</a>.', 'fictioneer' );
-
-  // Return default if input is empty
-  if ( ! is_string( $input ) ) {
-    return $default;
-  }
-
-  // Temporarily allow tabindex attribute
-  $allowedtags['a']['tabindex'] = [];
-
-  // Apply KSES
-  $output = wp_kses( stripslashes_deep( $input ), $allowedtags );
-
-  // Disallow tabindex attribute
-  unset( $allowedtags['a']['tabindex'] );
-
-  // Return
-  return strlen( $input ) < 32 ? $default : $output;
-}
 
 /**
  * Sanitize the textarea input for Google Fonts links.
