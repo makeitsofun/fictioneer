@@ -460,6 +460,34 @@ if ( ! defined( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES' ) ) {
   define( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES', false );
 }
 
+// =======================================================================================
+// AUTOLOADER
+// =======================================================================================
+
+spl_autoload_register( function ( $class ) {
+  // Setup
+  $prefix = 'Fictioneer\\';
+  $len = strlen( $prefix );
+
+  // Check namespace
+  if ( strncmp( $prefix, $class, $len ) !== 0 ) {
+    return;
+  }
+
+  // Class name relative to namespace
+  $relative_class = substr( $class, $len );
+
+  // Convert namespace separators
+  $relative_path = str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class );
+
+  // Load file
+  $file = trailingslashit( get_template_directory() ) . 'includes/classes/' . $relative_path . '.php';
+
+  if ( file_exists( $file ) ) {
+    require_once $file;
+  }
+} );
+
 // =============================================================================
 // GLOBAL
 // =============================================================================
