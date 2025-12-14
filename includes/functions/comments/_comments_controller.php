@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // FIX COMMENT POST REDIRECT
 // =============================================================================
@@ -27,7 +29,7 @@ function fictioneer_redirect_comment( $location, $commentdata ) {
   }
 
   // Setup
-  $order = fictioneer_sanitize_query_var( $_REQUEST['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
+  $order = Sanitizer::sanitize_query_var( $_REQUEST['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
   $commentcode = wp_hash( $commentdata->comment_date_gmt );
 
   if ( ( $_REQUEST['for'] ?? 0 ) === 'jetpack' ) {

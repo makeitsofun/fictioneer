@@ -383,4 +383,35 @@ class Sanitizer {
 
     return $css;
   }
+
+  /**
+   * Sanitize a query variable.
+   *
+   * @since 5.14.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string      $var      Query variable to sanitize.
+   * @param string[]    $allowed  Array of allowed strings (lowercase).
+   * @param string|null $default  Optional. Default value.
+   * @param array       $args     Optional. Additional arguments.
+   *
+   * @return string The sanitized (lowercase) query variable.
+   */
+
+  public static function sanitize_query_var(
+    string $var, array $allowed, ?string $default = null, array $args = [] ) : ?string
+  {
+    if ( ! is_scalar( $var ) ) {
+      return $default;
+    }
+
+    $value = (string) $var;
+
+    if ( empty( $args['keep_case'] ) ) {
+      $value = strtolower( $value );
+      $allowed = array_map( 'strtolower', $allowed );
+    }
+
+    return in_array( $value, $allowed, true ) ? $value : $default;
+  }
 }

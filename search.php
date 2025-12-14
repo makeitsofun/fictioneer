@@ -9,6 +9,8 @@
  */
 
 
+use Fictioneer\Sanitizer;
+
 global $wp_query;
 
 // Setup
@@ -20,7 +22,7 @@ $sentence = sanitize_text_field( $_GET['sentence'] ?? 0 );
 $order = sanitize_text_field( $_GET['order'] ?? 'desc' );
 $orderby = sanitize_text_field( $_GET['orderby'] ?? 'modified' );
 
-$story_status = fictioneer_sanitize_query_var(
+$story_status = Sanitizer::sanitize_query_var(
   $_GET['story_status'] ?? 0,
   ['Completed', 'Ongoing', 'Oneshot', 'Hiatus', 'Canceled'],
   0

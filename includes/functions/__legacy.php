@@ -241,3 +241,26 @@ function fictioneer_sanitize_selection( $value, $allowed_options, $default = nul
 function fictioneer_sanitize_css( $css ) {
   return Sanitizer::sanitize_css( $css );
 }
+
+/**
+ * [Deprecated] Sanitize a query variable.
+ *
+ * @since 5.14.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_query_var() instead.
+ *
+ * @param string      $var      Query variable to sanitize.
+ * @param array       $allowed  Array of allowed string (lowercase).
+ * @param string|null $default  Optional default value.
+ * @param array       $args {
+ *   Optional. An array of additional arguments.
+ *
+ *   @type bool $keep_case  Whether to transform the variable to lowercase. Default false.
+ * }
+ *
+ *
+ * @return string The sanitized (lowercase) query variable.
+ */
+
+function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args = [] ) {
+  return Sanitizer::sanitize_query_var( $var, $allowed, $default, $args );
+}

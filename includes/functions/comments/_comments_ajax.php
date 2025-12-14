@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // REQUEST COMMENT FORM - AJAX
 // =============================================================================
@@ -78,7 +80,7 @@ function fictioneer_ajax_get_comment_section() {
   $post_id = absint( $_GET['post_id'] );
   $post = get_post( $post_id ); // Called later anyway; no performance loss
   $page = absint( $_GET['page'] ?? 1 ) ?: 1;
-  $order = fictioneer_sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
+  $order = Sanitizer::sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
   $commentcode = ( $_GET['commentcode'] ?? 0 ) ?: false;
   $must_login = get_option( 'comment_registration' ) && ! is_user_logged_in();
 

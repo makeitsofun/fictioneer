@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // COMMENT FORM HELPER
 // =============================================================================
@@ -168,7 +170,7 @@ function fictioneer_change_submit_field( $submit_field, $args ) {
 
   // Setup
   $post_id = get_the_ID();
-  $order = fictioneer_sanitize_query_var( $_REQUEST['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
+  $order = Sanitizer::sanitize_query_var( $_REQUEST['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
   $close_bottom_container = is_user_logged_in() ? '' : '</div>';
   $is_ajax = get_option( 'fictioneer_enable_ajax_comment_form' ) || get_option( 'fictioneer_enable_ajax_comments' );
   $hidden = FICTIONEER_COLLAPSE_COMMENT_FORM ? 'hidden' : '';

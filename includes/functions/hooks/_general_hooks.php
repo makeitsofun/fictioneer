@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // CUSTOM CSS
 // =============================================================================
@@ -552,7 +554,7 @@ function fictioneer_sort_order_filter_interface( $args ) {
 
   // Archive?
   if ( is_archive() ) {
-    $post_type = fictioneer_sanitize_query_var(
+    $post_type = Sanitizer::sanitize_query_var(
       sanitize_key( $_GET['post_type'] ?? '' ),
       ['any', 'post', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
     );
@@ -787,7 +789,7 @@ add_action( 'fictioneer_archive_loop_before', 'fictioneer_sort_order_filter_inte
 
 function fictioneer_add_search_for_age_rating( $args ) {
   // Setup
-  $age_rating = fictioneer_sanitize_query_var(
+  $age_rating = Sanitizer::sanitize_query_var(
     $_GET['age_rating'] ?? 0,
     ['Everyone', 'Teen', 'Mature', 'Adult'],
     0,
@@ -819,7 +821,7 @@ add_action( 'fictioneer_search_form_filters', 'fictioneer_add_search_for_age_rat
 
 function fictioneer_add_search_for_status( $args ) {
   // Setup
-  $story_status = fictioneer_sanitize_query_var(
+  $story_status = Sanitizer::sanitize_query_var(
     $_GET['story_status'] ?? 0,
     ['Completed', 'Ongoing', 'Oneshot', 'Hiatus', 'Canceled'],
     0,

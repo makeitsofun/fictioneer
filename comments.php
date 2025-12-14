@@ -10,6 +10,8 @@
  */
 
 
+use Fictioneer\Sanitizer;
+
 // Don't show the comments if the password has not been entered
 if ( post_password_required() ) {
   return;
@@ -22,7 +24,7 @@ $post_id = get_the_ID();
 $post_status = get_post_status();
 $user = wp_get_current_user();
 $comments_count = get_comments_number();
-$order = fictioneer_sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
+$order = Sanitizer::sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
 $logout_url = fictioneer_get_logout_url( get_permalink() );
 $order_link = add_query_arg( 'corder', $order === 'desc' ? 'asc' : 'desc', home_url( $wp->request ) ) . '#comments';
 $is_ajax_comments = get_option( 'fictioneer_enable_ajax_comments' );

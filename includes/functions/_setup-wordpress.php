@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // MAINTENANCE MODE
 // =============================================================================
@@ -1085,7 +1087,7 @@ function fictioneer_add_sof_to_taxonomy_query( $query ) {
   }
 
   // Post type?
-  $post_type = fictioneer_sanitize_query_var(
+  $post_type = Sanitizer::sanitize_query_var(
     sanitize_key( $_GET['post_type'] ?? '' ),
     ['any', 'post', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
   );

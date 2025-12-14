@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // LOG IN TO COMMENT
 // =============================================================================
@@ -249,7 +251,7 @@ if ( ! function_exists( 'fictioneer_ajax_list_comments' ) ) {
 function fictioneer_comment_list_args( $parsed_args ) {
   // Setup
   $page = get_query_var( 'cpage', 1 );
-  $order = fictioneer_sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
+  $order = Sanitizer::sanitize_query_var( $_GET['corder'] ?? 0, ['desc', 'asc'], get_option( 'comment_order' ) );
 
   // Build arguments
   $list_args = array(

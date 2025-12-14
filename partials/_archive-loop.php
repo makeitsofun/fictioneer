@@ -18,13 +18,15 @@
  */
 
 
+use Fictioneer\Sanitizer;
+
 // No direct access!
 defined( 'ABSPATH' ) OR exit;
 
 // Setup
 $page = get_query_var( 'paged', 1 ) ?: 1; // Main query
-$order = fictioneer_sanitize_query_var( $_GET['order'] ?? 0, ['desc', 'asc'], 'desc' );
-$orderby = fictioneer_sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
+$order = Sanitizer::sanitize_query_var( $_GET['order'] ?? 0, ['desc', 'asc'], 'desc' );
+$orderby = Sanitizer::sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
 $ago = $_GET['ago'] ?? 0;
 $ago = is_numeric( $ago ) ? absint( $ago ) : sanitize_text_field( $ago );
 

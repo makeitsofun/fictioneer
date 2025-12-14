@@ -22,6 +22,8 @@
  */
 
 
+use Fictioneer\Sanitizer;
+
 // Setup
 $no_params = empty( array_filter( $_GET ) );
 $show_advanced = ! get_option( 'fictioneer_disable_theme_search' ) && ! ( $args['simple'] ?? 0 );
@@ -36,14 +38,14 @@ if ( $show_advanced ) {
   $min_words = absint( $_GET['miw'] ?? 0 );
   $max_words = absint( $_GET['maw'] ?? 0 );
 
-  $story_status = fictioneer_sanitize_query_var(
+  $story_status = Sanitizer::sanitize_query_var(
     $_GET['story_status'] ?? 0,
     ['Completed', 'Ongoing', 'Oneshot', 'Hiatus', 'Canceled'],
     0,
     array( 'keep_case' => 1 )
   );
 
-  $age_rating = fictioneer_sanitize_query_var(
+  $age_rating = Sanitizer::sanitize_query_var(
     $_GET['age_rating'] ?? 0,
     ['Everyone', 'Teen', 'Mature', 'Adult'],
     0,

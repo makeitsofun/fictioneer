@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // ALLOWED ORDERBY
 // =============================================================================
@@ -213,7 +215,7 @@ if ( ! function_exists( 'fictioneer_append_date_query' ) ) {
 
     // Orderby?
     if ( empty( $orderby ) ) {
-      $orderby = fictioneer_sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
+      $orderby = Sanitizer::sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
     }
 
     // Validate ago argument

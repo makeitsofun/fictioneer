@@ -789,7 +789,7 @@ function fictioneer_shortcode_latest_stories( $attr ) {
   $args['footer_comments'] = filter_var( $args['footer_comments'] ?? 0, FILTER_VALIDATE_BOOLEAN );
 
   // Terms
-  $args['terms'] = fictioneer_sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
+  $args['terms'] = Sanitizer::sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
   $args['max_terms'] = absint( ( $args['max_terms'] ?? 10 ) ?: 10 );
 
   // Extra classes
@@ -913,7 +913,7 @@ function fictioneer_shortcode_latest_story_updates( $attr ) {
   $type = sanitize_text_field( $args['type'] ?? 'default' );
 
   // Terms
-  $args['terms'] = fictioneer_sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
+  $args['terms'] = Sanitizer::sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
   $args['max_terms'] = absint( ( $args['max_terms'] ?? 10 ) ?: 10 );
 
   // Extra classes
@@ -1017,7 +1017,7 @@ function fictioneer_shortcode_latest_recommendations( $attr ) {
   $type = sanitize_text_field( $args['type'] ?? 'default' );
 
   // Terms
-  $args['terms'] = fictioneer_sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
+  $args['terms'] = Sanitizer::sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
   $args['max_terms'] = absint( ( $args['max_terms'] ?? 10 ) ?: 10 );
 
   // Extra classes
@@ -1986,7 +1986,7 @@ function fictioneer_shortcode_article_cards( $attr ) {
   );
 
   // Terms
-  $args['terms'] = fictioneer_sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
+  $args['terms'] = Sanitizer::sanitize_query_var( $args['terms'] ?? 0, ['inline', 'pills', 'none', 'false'], 'inline' );
   $args['max_terms'] = absint( ( $args['max_terms'] ?? 10 ) ?: 10 );
 
   // Post type(s)...
