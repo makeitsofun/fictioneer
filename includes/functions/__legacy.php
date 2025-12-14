@@ -264,3 +264,21 @@ function fictioneer_sanitize_css( $css ) {
 function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args = [] ) {
   return Sanitizer::sanitize_query_var( $var, $allowed, $default, $args );
 }
+
+/**
+ * [Deprecated] Sanitize a post type string.
+ *
+ * Note: Also associates simple strings like 'story' with their
+ * registered post type, such as 'fcn_story'.
+ *
+ * @since 5.33.5
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_post_type() instead.
+ *
+ * @param string $post_type  The string to be sanitized.
+ *
+ * @return string The sanitized value.
+ */
+
+function fictioneer_sanitize_post_type( $post_type ) {
+  return Sanitizer::sanitize_post_type( $post_type );
+}

@@ -414,4 +414,35 @@ class Sanitizer {
 
     return in_array( $value, $allowed, true ) ? $value : $default;
   }
+
+  /**
+   * Sanitize a post type.
+   *
+   * Note: Also associates simple strings like 'story' with their
+   * registered post type, such as 'fcn_story'.
+   *
+   * @since 5.33.5
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string $post_type  Post type to be sanitized.
+   *
+   * @return string The sanitized post type.
+   */
+
+  public static function sanitize_post_type( string $post_type ) : string {
+    $post_type = sanitize_key( $post_type );
+
+    static $types = array(
+      'story' => 'fcn_story',
+      'stories' => 'fcn_story',
+      'chapter' => 'fcn_chapter',
+      'chapters' => 'fcn_chapter',
+      'collection' => 'fcn_collection',
+      'collections' => 'fcn_collection',
+      'recommendation' => 'fcn_recommendation',
+      'recommendations' => 'fcn_recommendation'
+    );
+
+    return $types[ $post_type ] ?? $post_type;
+  }
 }

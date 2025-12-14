@@ -1014,7 +1014,7 @@ function fictioneer_random_spotlight_query( $post_type = 'fcn_story', $args = []
   $args = apply_filters( 'fictioneer_filter_spotlight_args', $args, $post_type );
 
   // Setup
-  $post_type = fictioneer_sanitize_post_type( $post_type );
+  $post_type = Sanitizer::sanitize_post_type( $post_type );
   $option_key = 'fictioneer_spotlight_' . ( $args['pool'] ?? '' ) . '_' . $post_type;
   $count = max( 1, (int) ( $args['count'] ?? 6 ) );
   $all_post_ids = [];
