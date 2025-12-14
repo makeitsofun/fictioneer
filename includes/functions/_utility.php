@@ -2008,7 +2008,7 @@ function fictioneer_sanitize_css( $css ) {
  */
 
 function fictioneer_sanitize_list_into_array( $input, $args = [] ) {
-  $input = fictioneer_explode_list( sanitize_textarea_field( $input ?? '' ) );
+  $input = wp_parse_list( sanitize_textarea_field( $input ?? '' ) );
 
   if ( $args['absint'] ?? 0 ) {
     $input = array_map( 'absint', $input );
@@ -2993,12 +2993,10 @@ if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
 // =============================================================================
 
 /**
- * Explode string into an array.
- *
- * Strips lines breaks, trims whitespaces, and removes empty elements.
- * Values might not be unique.
+ * [Legacy] Explode string into an array.
  *
  * @since 5.1.3
+ * @since 5.34.0 - Delegate to wp_parse_list().
  *
  * @param string $string  The string to explode.
  *
@@ -3006,17 +3004,7 @@ if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
  */
 
 function fictioneer_explode_list( $string ) {
-  if ( empty( $string ) ) {
-    return [];
-  }
-
-  $string = str_replace( ["\n", "\r"], '', $string ); // Remove line breaks
-  $array = explode( ',', $string );
-  $array = array_map( 'trim', $array ); // Remove extra whitespaces
-  $array = array_filter( $array, 'strlen' ); // Remove empty elements
-  $array = is_array( $array ) ? $array : [];
-
-  return $array;
+  return wp_parse_list( $string );
 }
 
 // =============================================================================

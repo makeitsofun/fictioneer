@@ -2512,8 +2512,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Co-Authors
   if ( isset( $_POST['fictioneer_story_co_authors'] ) && get_option( 'fictioneer_enable_advanced_meta_fields' ) ){
-    $co_authors = fictioneer_explode_list( $_POST['fictioneer_story_co_authors'] );
-    $co_authors = array_map( 'absint', $co_authors );
+    $co_authors = wp_parse_id_list( $_POST['fictioneer_story_co_authors'] );
     $co_authors = array_filter( $co_authors, function( $user_id ) {
       return get_userdata( $user_id ) !== false;
     });
@@ -3199,8 +3198,7 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
 
   // Co-authors
   if ( isset( $_POST['fictioneer_chapter_co_authors'] ) && get_option( 'fictioneer_enable_advanced_meta_fields' ) ){
-    $co_authors = fictioneer_explode_list( $_POST['fictioneer_chapter_co_authors'] );
-    $co_authors = array_map( 'absint', $co_authors );
+    $co_authors = wp_parse_id_list( $_POST['fictioneer_chapter_co_authors'] );
     $co_authors = array_filter( $co_authors, function( $user_id ) {
       return get_userdata( $user_id ) !== false;
     });
@@ -3726,7 +3724,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
 
   // Story blogs
   if ( isset( $_POST['fictioneer_post_story_blogs'] ) && $post_type === 'post' ) {
-    $story_blogs = fictioneer_explode_list( $_POST['fictioneer_post_story_blogs'] );
+    $story_blogs = wp_parse_id_list( $_POST['fictioneer_post_story_blogs'] );
     $story_blogs = fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $post_author_id );
 
     $fields['fictioneer_post_story_blogs'] = array_values( array_map( 'strval', $story_blogs ) );
@@ -3744,7 +3742,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
     if ( get_option( 'fictioneer_enable_oauth' ) && $patreon_client_id && $patreon_client_secret && $patreon_tiers ) {
       // Tiers
       if ( isset( $_POST['fictioneer_patreon_lock_tiers'] ) ) {
-        $selected_patreon_tiers = fictioneer_explode_list( $_POST['fictioneer_patreon_lock_tiers'] );
+        $selected_patreon_tiers = wp_parse_id_list( $_POST['fictioneer_patreon_lock_tiers'] );
 
         if ( ! empty( $patreon_tiers ) ) {
           $selected_patreon_tiers = array_intersect( $selected_patreon_tiers, array_keys( $patreon_tiers ) );

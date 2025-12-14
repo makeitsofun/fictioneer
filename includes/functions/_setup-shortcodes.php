@@ -244,12 +244,12 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
     'page' => max( 1, get_query_var( 'page' ) ?: get_query_var( 'paged' ) ),
     'posts_per_page' => absint( $attr['per_page'] ?? 0 ) ?: get_option( 'posts_per_page' ),
     'post_status' => sanitize_key( $attr['post_status'] ?? 'publish' ),
-    'post_ids' => fictioneer_explode_list( $attr['post_ids'] ?? '' ),
+    'post_ids' => wp_parse_id_list( $attr['post_ids'] ?? '' ),
     'author' => sanitize_title( $attr['author'] ?? '' ),
-    'author_ids' => fictioneer_explode_list( $attr['author_ids'] ?? '' ),
-    'excluded_authors' => fictioneer_explode_list( $attr['exclude_author_ids'] ?? '' ),
-    'excluded_tags' => fictioneer_explode_list( $attr['exclude_tag_ids'] ?? '' ),
-    'excluded_cats' => fictioneer_explode_list( $attr['exclude_cat_ids'] ?? '' ),
+    'author_ids' => wp_parse_id_list( $attr['author_ids'] ?? '' ),
+    'excluded_authors' => wp_parse_id_list( $attr['exclude_author_ids'] ?? '' ),
+    'excluded_tags' => wp_parse_id_list( $attr['exclude_tag_ids'] ?? '' ),
+    'excluded_cats' => wp_parse_id_list( $attr['exclude_cat_ids'] ?? '' ),
     'taxonomies' => fictioneer_get_shortcode_taxonomies( $attr ),
     'relation' => strtolower( $attr['rel'] ?? 'and' ) === 'or' ? 'OR' : 'AND',
     'ignore_sticky' => filter_var( $attr['ignore_sticky'] ?? 0, FILTER_VALIDATE_BOOLEAN ),
@@ -337,27 +337,27 @@ function fictioneer_get_shortcode_taxonomies( $attr ) {
 
   // Tags
   if ( ! empty( $attr['tags'] ) ) {
-    $taxonomies['tags'] = fictioneer_explode_list( $attr['tags'] );
+    $taxonomies['tags'] = Utils::parse_list( $attr['tags'], 'sanitize_key' );
   }
 
   // Categories
   if ( ! empty( $attr['categories'] ) ) {
-    $taxonomies['categories'] = fictioneer_explode_list( $attr['categories'] );
+    $taxonomies['categories'] = Utils::parse_list( $attr['categories'], 'sanitize_key' );
   }
 
   // Fandoms
   if ( ! empty( $attr['fandoms'] ) ) {
-    $taxonomies['fandoms'] = fictioneer_explode_list( $attr['fandoms'] );
+    $taxonomies['fandoms'] = Utils::parse_list( $attr['fandoms'], 'sanitize_key' );
   }
 
   // Characters
   if ( ! empty( $attr['characters'] ) ) {
-    $taxonomies['characters'] = fictioneer_explode_list( $attr['characters'] );
+    $taxonomies['characters'] = Utils::parse_list( $attr['characters'], 'sanitize_key' );
   }
 
   // Genres
   if ( ! empty( $attr['genres'] ) ) {
-    $taxonomies['genres'] = fictioneer_explode_list( $attr['genres'] );
+    $taxonomies['genres'] = Utils::parse_list( $attr['genres'], 'sanitize_key' );
   }
 
   // Return
@@ -1305,7 +1305,7 @@ function fictioneer_shortcode_chapter_list( $attr ) {
 
   // Extract chapter IDs (if any)
   if ( ! empty( $attr['chapter_ids'] ) ) {
-    $chapter_ids = fictioneer_explode_list( $attr['chapter_ids'] );
+    $chapter_ids = wp_parse_id_list( $attr['chapter_ids'] );
   }
 
   // Get chapters...
@@ -1718,11 +1718,11 @@ function fictioneer_shortcode_search( $attr ) {
   $simple = filter_var( $attr['simple'] ?? 0, FILTER_VALIDATE_BOOLEAN );
   $placeholder = $attr['placeholder'] ?? false;
   $type = $attr['type'] ?? false;
-  $pre_tags = fictioneer_explode_list( $attr['tags'] ?? '' );
-  $pre_genres = fictioneer_explode_list( $attr['genres'] ?? '' );
-  $pre_fandoms = fictioneer_explode_list( $attr['fandoms'] ?? '' );
-  $pre_characters = fictioneer_explode_list( $attr['characters'] ?? '' );
-  $pre_warnings = fictioneer_explode_list( $attr['warnings'] ?? '' );
+  $pre_tags = Utils::parse_list( $attr['tags'] ?? '', 'sanitize_key' );
+  $pre_genres = Utils::parse_list( $attr['genres'] ?? '', 'sanitize_key' );
+  $pre_fandoms = Utils::parse_list( $attr['fandoms'] ?? '', 'sanitize_key' );
+  $pre_characters = Utils::parse_list( $attr['characters'] ?? '', 'sanitize_key' );
+  $pre_warnings = Utils::parse_list( $attr['warnings'] ?? '', 'sanitize_key' );
 
   // Prepare arguments
   $args['expanded'] = filter_var( $attr['expanded'] ?? 0, FILTER_VALIDATE_BOOLEAN );
@@ -1990,7 +1990,7 @@ function fictioneer_shortcode_article_cards( $attr ) {
 
   // Post type(s)...
   $post_types = sanitize_text_field( $args['post_type'] ?? 'post' );
-  $post_types = fictioneer_explode_list( $post_types );
+  $post_types = Utils::parse_list( $post_types, 'sanitize_key' );
 
   $allowed_post_types = array(
     'post' => 'post',

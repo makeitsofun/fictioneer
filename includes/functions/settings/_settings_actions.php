@@ -1944,8 +1944,7 @@ function fictioneer_convert_line_breaks() {
 
   // Setup
   $action = $_REQUEST['preview'] ?? 0 ? 'preview' : 'perform';
-  $post_ids = fictioneer_explode_list( $_REQUEST['post_id'] ?? '' );
-  $post_ids = array_map( 'absint', $post_ids );
+  $post_ids = wp_parse_id_list( $_REQUEST['post_id'] ?? '' );
   $successes = 0;
   $failures = 0;
 

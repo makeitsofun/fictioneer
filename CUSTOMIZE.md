@@ -259,8 +259,7 @@ add_filter( 'fictioneer_filter_metabox_story_meta', 'child_add_co_authors_to_sto
 function child_save_co_authors_of_story( $fields ) {
   // Append sanitized field content for saving (if any)
   if ( isset( $_POST['fictioneer_story_co_authors'] ) ){
-    $co_authors = fictioneer_explode_list( $_POST['fictioneer_story_co_authors'] ); // Array from comma separated list
-    $co_authors = array_map( 'absint', $co_authors ); // Only positive integers are allowed
+    $co_authors = wp_parse_id_list( $_POST['fictioneer_story_co_authors'] ); // Array from comma separated list
     $co_authors = array_filter( $co_authors, function( $user_id ) {
       return get_userdata( $user_id ) !== false; // Filter out user IDs that do not exist
     });

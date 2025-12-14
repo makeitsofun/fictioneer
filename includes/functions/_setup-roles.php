@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // SETUP CAPABILITIES
 // =============================================================================
@@ -1392,9 +1394,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
     // Setup
     $filetype = wp_check_filetype( $file['name'] );
     $mime_type = $filetype['type'];
-    $allowed = get_option( 'fictioneer_upload_mime_types', FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS ) ?:
-      FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
-    $allowed = fictioneer_explode_list( $allowed );
+    $allowed = get_option( 'fictioneer_upload_mime_types' ) ?: FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
+    $allowed = wp_parse_list( $allowed );
 
     // Limit upload file types
     if ( ! in_array( $mime_type, $allowed ) ){

@@ -560,7 +560,7 @@ function fictioneer_ajax_mark_alert_read() {
 
   // Sanitize
   $new_read_alerts = $_POST['ids'] ?? [];
-  $new_read_alerts = is_array( $new_read_alerts ) ? $new_read_alerts : fictioneer_explode_list( $new_read_alerts );
+  $new_read_alerts = is_array( $new_read_alerts ) ? $new_read_alerts : wp_parse_list( $new_read_alerts );
   $new_read_alerts = array_map( 'intval', $new_read_alerts );
   $new_read_alerts = array_filter( $new_read_alerts, static fn( $v ) => $v > 0 );
   $new_read_alerts = array_values( array_unique( $new_read_alerts ) );
