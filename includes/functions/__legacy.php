@@ -439,3 +439,18 @@ function fictioneer_get_username_nouns() {
 function fictioneer_get_random_username( $unique = true ) {
   return Utils_Admin::get_random_username( $unique );
 }
+
+if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
+  /**
+   * Return URL without query arguments or page number.
+   *
+   * @since 5.4.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_clean_url() instead.
+   *
+   * @return string The clean URL.
+   */
+
+  function fictioneer_get_clean_url() {
+    return Utils::get_clean_url();
+  }
+}

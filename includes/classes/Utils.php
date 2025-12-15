@@ -59,4 +59,24 @@ class Utils {
 
     return [ (float) $num, (float) $den ];
   }
+
+  /**
+   * Return URL without query arguments or page number.
+   *
+   * @since 5.4.0
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @return string Clean URL.
+   */
+
+  public static function get_clean_url() : string {
+    global $wp, $wp_rewrite;
+
+    $url = home_url( $wp->request );
+    $url = untrailingslashit( $url );
+    $pagination_base = $wp_rewrite->pagination_base ?: 'page';
+    $pattern = '#/' . preg_quote( $pagination_base, '#' ) . '/\d+$#';
+
+    return preg_replace( $pattern, '', $url );
+  }
 }

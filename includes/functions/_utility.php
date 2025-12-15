@@ -2507,34 +2507,6 @@ if ( ! function_exists( 'fictioneer_minify_css' ) ) {
 }
 
 // =============================================================================
-// GET CLEAN CURRENT URL
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
-  /**
-   * Returns URL without query arguments or page number
-   *
-   * @since 5.4.0
-   *
-   * @return string The clean URL.
-   */
-
-  function fictioneer_get_clean_url() {
-    global $wp;
-
-    // Setup
-    $url = home_url( $wp->request );
-
-    // Remove page (if any)
-    $url = preg_replace( '/\/page\/\d+\/$/', '', $url );
-    $url = preg_replace( '/\/page\/\d+$/', '', $url );
-
-    // Return cleaned URL
-    return $url;
-  }
-}
-
-// =============================================================================
 // GET AUTHOR IDS OF POST
 // =============================================================================
 

@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // CUSTOM CSS
@@ -549,7 +550,7 @@ add_action( 'fictioneer_inner_header', 'fictioneer_inner_header_background', 10 
 function fictioneer_sort_order_filter_interface( $args ) {
   // Setup
   $template = get_page_template_slug();
-  $current_url = fictioneer_get_clean_url();
+  $current_url = Utils::get_clean_url();
   $post_type = null;
 
   // Archive?
