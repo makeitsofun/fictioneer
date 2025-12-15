@@ -3,7 +3,6 @@
 namespace Fictioneer;
 
 use Fictioneer\Traits\Singleton_Trait;
-use Fictioneer\Sanitizer_Admin;
 
 defined( 'ABSPATH' ) OR exit;
 
