@@ -14,6 +14,8 @@
  */
 
 
+use Fictioneer\Utils;
+
 // No direct access!
 defined( 'ABSPATH' ) OR exit;
 
@@ -30,7 +32,7 @@ $text_icon = get_post_meta( $post_id, 'fictioneer_chapter_text_icon', true );
 $excerpt = fictioneer_get_forced_excerpt( $post, 512, true );
 $card_classes = [];
 
-$icon_words = fictioneer_get_theme_icon(
+$icon_words = Utils::get_theme_icon(
   'icon_words',
   '<i class="fa-solid fa-font"></i>',
   array(

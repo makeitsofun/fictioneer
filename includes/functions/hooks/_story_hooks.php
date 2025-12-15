@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // STATISTICS FOR ALL STORIES
 // =============================================================================
@@ -648,7 +650,7 @@ function fictioneer_story_chapters( $args ) {
   $disable_folding = get_post_meta( $story_id, 'fictioneer_story_disable_collapse', true )
     || get_option( 'fictioneer_disable_chapter_collapsing' );
   $collapse_groups = get_option( 'fictioneer_collapse_groups_by_default' );
-  $checkmark_icon = fictioneer_get_theme_icon( 'icon_checkmark_chapter_list', '<i class="fa-solid fa-check"></i>' );
+  $checkmark_icon = Utils::get_theme_icon( 'icon_checkmark_chapter_list', '<i class="fa-solid fa-check"></i>' );
   $enable_checkmarks = get_option( 'fictioneer_enable_checkmarks' );
 
   // Capture output

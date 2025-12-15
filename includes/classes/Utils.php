@@ -212,4 +212,73 @@ class Utils {
       1
     );
   }
+
+  /**
+   * Return theme icon HTML set in the Customizer.
+   *
+   * @since 5.32.0
+   * @since 5.33.2 - Moved into Utils class.
+   *
+   * @param string      $name     Name of the icon.
+   * @param string|null $default  Optional. Fallback icon, defaults to empty string.
+   * @param array|null  $args     Optional. Additional arguments. Supports:
+   *   - 'class' (string) : CSS classes.
+   *   - 'title' (string) : Title attribute.
+   *   - 'data' (array) : Associative array of `data-*` attributes.
+   *   - 'no_cache' (bool) : Skip caching if not needed.
+   *
+   * @return string The icon HTML.
+   */
+
+  public static function get_theme_icon( string $name, ?string $default = '', ?array $args = [] ) : string {
+    static $cache = [];
+
+    $id = isset( $args['id'] ) ? (string) $args['id'] : '';
+    $class = isset( $args['class'] ) ? (string) $args['class'] : '';
+    $title = isset( $args['title'] ) ? (string) $args['title'] : '';
+    $data = isset( $args['data'] ) && is_array( $args['data'] ) ? $args['data'] : [];
+
+    $attributes = '';
+
+    if ( $title !== '' ) {
+      $attributes .= ' title="' . esc_attr( $title ) . '"';
+    }
+
+    if ( $id !== '' ) {
+      $attributes .= ' id="' . esc_attr( $id ) . '"';
+    }
+
+    if ( $data ) {
+      foreach ( $data as $key => $value ) {
+        if ( $key ) {
+          $attributes .= ' data-' . $key . '="' . esc_attr( $value ) . '"';
+        }
+      }
+    }
+
+    $key = empty( $args['no_cache'] )
+      ? md5( $name . '|' . (string) $default . '|' . $class . '|' . $attributes )
+      : false;
+
+    if ( $key && isset( $cache[ $key ] ) ) {
+      return $cache[ $key ];
+    }
+
+    $icon = get_theme_mod( $name, $default ) ?: $default;
+    $icon = Utils::add_class_to_element( $icon, $class );
+
+    if ( $attributes !== '' ) {
+      $p = strpos( $icon, 'class="' );
+
+      if ( $p !== false ) {
+        $icon = substr_replace( $icon, $attributes, $p, 0 );
+      }
+    }
+
+    if ( $key ) {
+      $cache[ $key ] = $icon;
+    }
+
+    return $icon;
+  }
 }

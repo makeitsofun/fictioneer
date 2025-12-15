@@ -56,7 +56,7 @@ $splide = $args['splide'] ?? 0;
 $show_terms = ! in_array( $args['terms'], ['none', 'false'] ) &&
   ! get_option( 'fictioneer_hide_taxonomies_on_story_cards' );
 
-$icon_words = fictioneer_get_theme_icon(
+$icon_words = Utils::get_theme_icon(
   'icon_words',
   '<i class="fa-solid fa-font"></i>',
   array(

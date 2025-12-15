@@ -500,3 +500,24 @@ function fictioneer_decrypt( $data ) {
 function fictioneer_add_class_to_element( $html, $class ) {
   return Utils::add_class_to_element( $html, $class );
 }
+
+/**
+ * [Deprecated] Return theme icon HTML set in the Customizer.
+ *
+ * @since 5.32.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_theme_icon() instead.
+ *
+ * @param string      $name     Name of the icon.
+ * @param string|null $default  Optional. Fallback icon, defaults to empty string.
+ * @param array|null  $args     Optional. Additional arguments. Supports:
+ *   - 'class' (string) : CSS classes.
+ *   - 'title' (string) : Title attribute.
+ *   - 'data' (array) : Associative array of `data-*` attributes.
+ *   - 'no_cache' (bool) : Skip caching if not needed.
+ *
+ * @return string The icon HTML.
+ */
+
+function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
+  return Utils::get_theme_icon( $name, $default, $args );
+}

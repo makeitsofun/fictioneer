@@ -55,7 +55,7 @@ defined( 'ABSPATH' ) OR exit;
 $splide = $args['splide'] ?? 0;
 $card_counter = 0;
 
-$icon_words = fictioneer_get_theme_icon(
+$icon_words = Utils::get_theme_icon(
   'icon_words',
   '<i class="fa-solid fa-font"></i>',
   array(

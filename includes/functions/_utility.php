@@ -464,7 +464,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
     $warnings = get_the_terms( $story_id, 'fcn_content_warning' );
     $genres = get_the_terms( $story_id, 'fcn_genre' );
     $status = get_post_meta( $story_id, 'fictioneer_story_status', true );
-    $icon = fictioneer_get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
+    $icon = Utils::get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
     $chapter_count = 0;
     $word_count = 0;
     $comment_count = 0;
@@ -475,16 +475,16 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
     if ( $status != 'Ongoing' ) {
       switch ( $status ) {
         case 'Completed':
-          $icon = fictioneer_get_theme_icon( 'icon_story_status_completed', '<i class="fa-solid fa-circle-check"></i>' );
+          $icon = Utils::get_theme_icon( 'icon_story_status_completed', '<i class="fa-solid fa-circle-check"></i>' );
           break;
         case 'Oneshot':
-          $icon = fictioneer_get_theme_icon( 'icon_story_status_oneshot', '<i class="fa-solid fa-circle-check"></i>' );
+          $icon = Utils::get_theme_icon( 'icon_story_status_oneshot', '<i class="fa-solid fa-circle-check"></i>' );
           break;
         case 'Hiatus':
-          $icon = fictioneer_get_theme_icon( 'icon_story_status_hiatus', '<i class="fa-solid fa-circle-pause"></i>' );
+          $icon = Utils::get_theme_icon( 'icon_story_status_hiatus', '<i class="fa-solid fa-circle-pause"></i>' );
           break;
         case 'Canceled':
-          $icon = fictioneer_get_theme_icon( 'icon_story_status_canceled', '<i class="fa-solid fa-ban"></i>' );
+          $icon = Utils::get_theme_icon( 'icon_story_status_canceled', '<i class="fa-solid fa-ban"></i>' );
           break;
       }
     }
@@ -3378,78 +3378,6 @@ function fictioneer_get_story_status_label( $story_id, $status = null ) {
   $status = $status ?: get_post_meta( $story_id, 'fictioneer_story_status', true );
 
   return fcntr( $status );
-}
-
-// =============================================================================
-// GET THEME ICON
-// =============================================================================
-
-/**
- * Return theme icon HTML set in the Customizer.
- *
- * @since 5.32.0
- *
- * @param string      $name     Name of the icon.
- * @param string|null $default  Optional. Fallback icon, defaults to empty string.
- * @param array|null  $args     Additional arguments. Supports:
- *   - 'class' (string) : CSS classes.
- *   - 'title' (string) : Title attribute.
- *   - 'data' (array) : Associative array of `data-*` attributes.
- *   - 'no_cache' (bool) : Skip caching if not needed.
- *
- * @return string The icon HTML.
- */
-
-function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
-  static $cache = [];
-
-  $id = isset( $args['id'] ) ? (string) $args['id'] : '';
-  $class = isset( $args['class'] ) ? (string) $args['class'] : '';
-  $title = isset( $args['title'] ) ? (string) $args['title'] : '';
-  $data = isset( $args['data'] ) && is_array( $args['data'] ) ? $args['data'] : [];
-
-  $attributes = '';
-
-  if ( $title !== '' ) {
-    $attributes .= ' title="' . esc_attr( $title ) . '"';
-  }
-
-  if ( $id !== '' ) {
-    $attributes .= ' id="' . esc_attr( $id ) . '"';
-  }
-
-  if ( $data ) {
-    foreach ( $data as $key => $value ) {
-      if ( $key ) {
-        $attributes .= ' data-' . $key . '="' . esc_attr( $value ) . '"';
-      }
-    }
-  }
-
-  $key = empty( $args['no_cache'] )
-    ? md5( $name . '|' . (string) $default . '|' . $class . '|' . $attributes )
-    : false;
-
-  if ( $key && isset( $cache[ $key ] ) ) {
-    return $cache[ $key ];
-  }
-
-  $icon = get_theme_mod( $name, $default ) ?: $default;
-  $icon = Utils::add_class_to_element( $icon, $class );
-
-  if ( $attributes !== '' ) {
-    $p = strpos( $icon, 'class="' );
-
-    if ( $p !== false ) {
-      $icon = substr_replace( $icon, $attributes, $p, 0 );
-    }
-  }
-
-  if ( $key ) {
-    $cache[ $key ] = $icon;
-  }
-
-  return $icon;
 }
 
 // =============================================================================

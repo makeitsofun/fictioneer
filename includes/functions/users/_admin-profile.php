@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // UTILITY
@@ -1521,7 +1522,7 @@ function fictioneer_admin_profile_fields_data_nodes( $profile_user ) {
   if ( get_option( 'fictioneer_enable_follows' ) && $follows_count > 0 ) {
     $nodes[] = array(
       'follows',
-      fictioneer_get_theme_icon( 'icon_follow', '<i class="fa-solid fa-star"></i>' ),
+      Utils::get_theme_icon( 'icon_follow', '<i class="fa-solid fa-star"></i>' ),
       $follows_count
     );
   }
@@ -1530,7 +1531,7 @@ function fictioneer_admin_profile_fields_data_nodes( $profile_user ) {
   if ( get_option( 'fictioneer_enable_reminders' ) && $reminders_count > 0 ) {
     $nodes[] = array(
       'reminders',
-      fictioneer_get_theme_icon( 'icon_reminder', '<i class="fa-solid fa-clock"></i>' ),
+      Utils::get_theme_icon( 'icon_reminder', '<i class="fa-solid fa-clock"></i>' ),
       $reminders_count
     );
   }
@@ -1539,7 +1540,7 @@ function fictioneer_admin_profile_fields_data_nodes( $profile_user ) {
   if ( get_option( 'fictioneer_enable_checkmarks' ) && $checkmarks_count > 0 ) {
     $nodes[] = array(
       'checkmarks',
-      fictioneer_get_theme_icon( 'icon_checkmark_chapter_list', '<i class="fa-solid fa-star"></i>' ),
+      Utils::get_theme_icon( 'icon_checkmark_chapter_list', '<i class="fa-solid fa-star"></i>' ),
       "{$checkmarks_count}|{$checkmarks_chapters_count}"
     );
   }

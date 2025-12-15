@@ -13,6 +13,8 @@
  */
 
 
+use Fictioneer\Utils;
+
 // No direct access!
 defined( 'ABSPATH' ) OR exit;
 
@@ -29,7 +31,7 @@ $items = get_post_meta( $post_id, 'fictioneer_collection_items', true );
 $items = empty( $items ) ? [] : $items;
 $card_classes = [];
 
-$icon_words = fictioneer_get_theme_icon(
+$icon_words = Utils::get_theme_icon(
   'icon_words',
   '<i class="fa-solid fa-font"></i>',
   array(

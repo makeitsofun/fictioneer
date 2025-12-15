@@ -1105,7 +1105,7 @@ if ( ! function_exists( 'fictioneer_get_story_buttons' ) ) {
       $output['reminder'] = sprintf(
         '<button class="button _secondary button-read-later hide-if-logged-out" data-story-id="%1$d" data-fictioneer-reminders-target="toggleButton" data-action="click->fictioneer-reminders#toggleReminder" data-fictioneer-reminders-id-param="%1$d">%2$s<span class="span-follow hide-below-480">%3$s</span></button>',
         $story_id,
-        fictioneer_get_theme_icon( 'icon_reminder', '<i class="fa-solid fa-clock"></i>' ),
+        Utils::get_theme_icon( 'icon_reminder', '<i class="fa-solid fa-clock"></i>' ),
         fcntr( 'read_later' )
       );
 
@@ -1113,7 +1113,7 @@ if ( ! function_exists( 'fictioneer_get_story_buttons' ) ) {
         $output['reminder'] .= sprintf(
           '<button class="button _secondary button-read-later-notice hide-if-logged-in" data-tooltip="%1$s" data-action="click->fictioneer#toggleModal" data-fictioneer-id-param="login-modal">%2$s<span class="span-follow hide-below-480">%3$s</span></button>',
           esc_attr__( 'Log in to set Reminders', 'fictioneer' ),
-          fictioneer_get_theme_icon( 'icon_reminder_off', '<i class="fa-regular fa-clock"></i>', array( 'class' => 'off' ) ),
+          Utils::get_theme_icon( 'icon_reminder_off', '<i class="fa-regular fa-clock"></i>', array( 'class' => 'off' ) ),
           fcntr( 'read_later' )
         );
       }
@@ -1124,7 +1124,7 @@ if ( ! function_exists( 'fictioneer_get_story_buttons' ) ) {
       $output['follow'] = sprintf(
         '<button class="button _secondary button-follow-story hide-if-logged-out" data-story-id="%1$d" data-fictioneer-follows-target="toggleButton" data-action="click->fictioneer-follows#toggleFollow" data-fictioneer-follows-id-param="%1$d">%2$s<span class="span-follow hide-below-400">%3$s</span></button>',
         $story_id,
-        fictioneer_get_theme_icon( 'icon_follow', '<i class="fa-solid fa-star"></i>' ),
+        Utils::get_theme_icon( 'icon_follow', '<i class="fa-solid fa-star"></i>' ),
         fcntr( 'follow' )
       );
 
@@ -1132,7 +1132,7 @@ if ( ! function_exists( 'fictioneer_get_story_buttons' ) ) {
         $output['follow'] .= sprintf(
           '<button class="button _secondary button-follow-login-notice hide-if-logged-in" data-tooltip="%1$s" data-action="click->fictioneer#toggleModal" data-fictioneer-id-param="login-modal">%2$s<span class="span-follow hide-below-400">%3$s</span></button>',
           esc_attr__( 'Log in to Follow', 'fictioneer' ),
-          fictioneer_get_theme_icon( 'icon_follow_off', '<i class="fa-regular fa-star"></i>', array( 'class' => 'off' ) ),
+          Utils::get_theme_icon( 'icon_follow_off', '<i class="fa-regular fa-star"></i>', array( 'class' => 'off' ) ),
           fcntr( 'follow' )
         );
       }
@@ -1810,7 +1810,7 @@ if ( ! function_exists( 'fictioneer_get_card_controls' ) ) {
 
     // Reminder icon
     if ( $can_reminders ) {
-      $icons['reminder'] = fictioneer_get_theme_icon(
+      $icons['reminder'] = Utils::get_theme_icon(
         'icon_reminder',
         '<i class="fa-solid fa-clock"></i>',
         array(
@@ -1825,7 +1825,7 @@ if ( ! function_exists( 'fictioneer_get_card_controls' ) ) {
 
     // Follows icon
     if ( $can_follows ) {
-      $icons['follow'] = fictioneer_get_theme_icon(
+      $icons['follow'] = Utils::get_theme_icon(
         'icon_follow',
         '<i class="fa-solid fa-star"></i>',
         array(
@@ -1851,9 +1851,9 @@ if ( ! function_exists( 'fictioneer_get_card_controls' ) ) {
       );
 
       if ( empty( $chapter_id ) ) {
-        $icons['checkmark'] = fictioneer_get_theme_icon( 'icon_checkmark_card_story', '<i class="fa-solid fa-check-double"></i>', $checkmark_args );
+        $icons['checkmark'] = Utils::get_theme_icon( 'icon_checkmark_card_story', '<i class="fa-solid fa-check-double"></i>', $checkmark_args );
       } else {
-        $icons['checkmark'] = fictioneer_get_theme_icon( 'icon_checkmark_card_chapter', '<i class="fa-solid fa-check"></i>', $checkmark_args );
+        $icons['checkmark'] = Utils::get_theme_icon( 'icon_checkmark_card_chapter', '<i class="fa-solid fa-check"></i>', $checkmark_args );
       }
     }
 

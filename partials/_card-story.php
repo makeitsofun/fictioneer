@@ -52,7 +52,7 @@ $excerpt = empty( $excerpt ) ? fictioneer_get_excerpt( $post_id ) : $excerpt;
 $tags = false;
 $card_classes = [];
 
-$icon_words = fictioneer_get_theme_icon(
+$icon_words = Utils::get_theme_icon(
   'icon_words',
   '<i class="fa-solid fa-font"></i>',
   array(
