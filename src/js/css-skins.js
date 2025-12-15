@@ -306,6 +306,8 @@ _$('[data-css-skin-target="file"]')?.addEventListener('input', event => {
 
     fcn_setSkins(skins);
     fcn_renderSkinList();
+
+    _$$('button[data-skin-id][disabled]').forEach(element => element.disabled = false);
   }
 
   reader.onerror = () => {
