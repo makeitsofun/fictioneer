@@ -484,3 +484,19 @@ function fictioneer_encrypt( $data ) {
 function fictioneer_decrypt( $data ) {
   return Utils::decrypt( $data );
 }
+
+/**
+ * [Deprecated] Add or prepend class to element HTML string.
+ *
+ * @since 5.32.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::add_class_to_element() instead.
+ *
+ * @param string $html   HTML of the element.
+ * @param string $class  CSS class string to be added.
+ *
+ * @return string Element HTML with the class added.
+ */
+
+function fictioneer_add_class_to_element( $html, $class ) {
+  return Utils::add_class_to_element( $html, $class );
+}

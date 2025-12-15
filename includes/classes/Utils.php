@@ -176,4 +176,40 @@ class Utils {
 
     return json_decode( $plaintext, true );
   }
+
+  /**
+   * Add class to element HTML string.
+   *
+   * @since 5.32.0
+   * @since 5.33.2 - Moved into Utils class.
+   *
+   * @param string $html   HTML of the element.
+   * @param string $class  CSS class string to be added.
+   *
+   * @return string Element HTML with the class added.
+   */
+
+  public static function add_class_to_element( string $html, string $class ) : string {
+    if ( $html === '' || $class === '' ) {
+      return $html;
+    }
+
+    $class = trim( $class );
+
+    if ( preg_match( '/^<[^>]+\sclass=(["\'])/i', $html, $m ) ) {
+      return preg_replace(
+        '/\sclass=(["\'])/i',
+        ' class=$1' . $class . ' ',
+        $html,
+        1
+      );
+    }
+
+    return preg_replace(
+      '/^<([a-z][a-z0-9:-]*)([^>]*)>/i',
+      '<$1$2 class="' . $class . '">',
+      $html,
+      1
+    );
+  }
 }

@@ -52,6 +52,8 @@
  */
 
 
+use Fictioneer\Utils;
+
 // No direct access!
 defined( 'ABSPATH' ) OR exit;
 
@@ -515,7 +517,7 @@ if ( $args['count'] < 2 || count( $args['post_ids'] ?? [] ) === 1 ) {
                       }
 
                       if ( $args['footer_status'] ) {
-                        $footer_items['status'] = '<span class="card__footer-status _' . strtolower( $story['status'] ) . '">' . fictioneer_add_class_to_element( $story['icon'], 'card-footer-icon' ) . ' ' . fictioneer_get_story_status_label( $story['id'], $story['status'] ) . '</span>';
+                        $footer_items['status'] = '<span class="card__footer-status _' . strtolower( $story['status'] ) . '">' . Utils::add_class_to_element( $story['icon'], 'card-footer-icon' ) . ' ' . fictioneer_get_story_status_label( $story['id'], $story['status'] ) . '</span>';
                       }
 
                       // Filter footer items
