@@ -1081,7 +1081,7 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
    * @param float  $start_opacity  The starting opacity of the gradient in percentage.
    * @param int    $start          The starting point of the gradient in percentage.
    * @param int    $end            The ending point of the gradient in percentage.
-   * @param int    $direction      The direction of the gradient with unit (e.g. '180deg').
+   * @param string $direction      The direction of the gradient with unit (e.g. '180deg').
    * @param string $hsl            The HSL string used as color. Default '0 0% 0%'.
    *
    * @return string The linear-gradient CSS.
