@@ -385,6 +385,36 @@ function fictioneer_sanitize_absint_or_empty_string( $input ) {
 // =============================================================================
 
 /**
+ * [Deprecated] Return directory path of the theme cache.
+ *
+ * @since 5.23.1
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_cache_dir() instead.
+ *
+ * @param string|null $context  Optional. Context of the call. Default null.
+ *
+ * @return string Path of the cache directory.
+ */
+
+function fictioneer_get_theme_cache_dir( $context = null ) {
+  return Utils::get_cache_dir( $context );
+}
+
+/**
+ * [Deprecated] Return theme cache URI.
+ *
+ * @since 5.23.1
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_cache_uri() instead.
+ *
+ * @param string|null $context  The context of the call. Default null.
+ *
+ * @return string Theme cache URI.
+ */
+
+function fictioneer_get_theme_cache_uri( $context = null ) {
+  return Utils::get_cache_uri( $context );
+}
+
+/**
  * [Deprecated] Return aspect ratio values as tuple.
  *
  * @since 5.14.0

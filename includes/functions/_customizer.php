@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // HEX TO RGB
@@ -436,7 +437,7 @@ function fictioneer_build_bundled_fonts() {
 
   // Save
   file_put_contents(
-    fictioneer_get_theme_cache_dir( 'build_bundled_fonts' ) . '/bundled-fonts.css',
+    Utils::get_cache_dir( 'build_bundled_fonts' ) . '/bundled-fonts.css',
     $combined_font_css
   );
 }
@@ -539,7 +540,7 @@ function fictioneer_get_theme_color( $mod, $default = null ) {
 function fictioneer_build_customize_css( $context = null ) {
   // --- Setup -----------------------------------------------------------------
 
-  $file_path = fictioneer_get_theme_cache_dir( 'build_customize_css' ) . '/customize.css';
+  $file_path = Utils::get_cache_dir( 'build_customize_css' ) . '/customize.css';
   $site_width = (int) get_theme_mod( 'site_width', FICTIONEER_DEFAULT_SITE_WIDTH );
   $header_image_style = get_theme_mod( 'header_image_style', 'default' );
   $header_style = get_theme_mod( 'header_style', 'default' );
@@ -553,7 +554,7 @@ function fictioneer_build_customize_css( $context = null ) {
   $css = '';
 
   if ( $context === 'preview' ) {
-    $file_path = fictioneer_get_theme_cache_dir( 'preview' ) . '/customize-preview.css';
+    $file_path = Utils::get_cache_dir( 'preview' ) . '/customize-preview.css';
   }
 
   // --- View transition style -------------------------------------------------

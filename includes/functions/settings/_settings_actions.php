@@ -1374,7 +1374,7 @@ function fictioneer_purge_theme_caches() {
   $wpdb->query( $wpdb->prepare( $sql, 'fictioneer_story_data_collection', 'fictioneer_story_chapter_index_html' ) );
 
   // Delete cached files
-  $files = glob( trailingslashit( fictioneer_get_theme_cache_dir( 'purge_theme_caches' ) ) . '*' );
+  $files = glob( trailingslashit( Utils::get_cache_dir( 'purge_theme_caches' ) ) . '*' );
 
   foreach ( $files as $file ) {
     if ( is_file( $file ) ) {

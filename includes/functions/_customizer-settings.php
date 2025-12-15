@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // WATCH FOR CUSTOMIZER UPDATES
@@ -32,7 +33,7 @@ function fictioneer_watch_for_customizer_updates() {
   fictioneer_clear_all_cached_partials();
 
   // Files
-  $bundled_fonts = fictioneer_get_theme_cache_dir( 'watch_for_customizer_updates' ) . '/bundled-fonts.css';
+  $bundled_fonts = Utils::get_cache_dir( 'watch_for_customizer_updates' ) . '/bundled-fonts.css';
 
   if ( file_exists( $bundled_fonts ) ) {
     unlink( $bundled_fonts );

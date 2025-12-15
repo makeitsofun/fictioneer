@@ -1,52 +1,7 @@
 <?php
 
-// =============================================================================
-// URI HELPERS
-// =============================================================================
-
-/**
- * Returns URI to the theme cache
- *
- * @since 5.23.1
- *
- * @param string|null $context  The context of the call. Default null.
- *
- * @return string URI to the theme cache.
- */
-
-function fictioneer_get_theme_cache_uri( $context = null ) {
-  return apply_filters(
-    'fictioneer_filter_cache_uri',
-    get_template_directory_uri() . '/cache',
-    $context
-  );
-}
-
-/**
- * Returns directory path of the theme cache
- *
- * @since 5.23.1
- *
- * @param string|null $context  The context of the call. Default null.
- *
- * @return string Path of the theme directory.
- */
-
-function fictioneer_get_theme_cache_dir( $context = null ) {
-  static $is_dir = null;
-
-  $dir = apply_filters(
-    'fictioneer_filter_cache_dir',
-    WP_CONTENT_DIR . '/themes/fictioneer/cache',
-    $context
-  );
-
-  if ( ! $is_dir && ! is_dir( $dir ) ) {
-    $is_dir = mkdir( $dir, 0755, true );
-  }
-
-  return $dir;
-}
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // LEGACY CLEANUP
@@ -1158,7 +1113,7 @@ add_action( 'wp_enqueue_scripts', 'fictioneer_style_queue' );
 
 function fictioneer_output_customize_css() {
   // Setup
-  $file_path = fictioneer_get_theme_cache_dir( 'output_customize_css' ) . '/customize.css';
+  $file_path = Utils::get_cache_dir( 'output_customize_css' ) . '/customize.css';
 
   // Create file if it does not exist
   if ( ! file_exists( $file_path ) ) {
@@ -1169,7 +1124,7 @@ function fictioneer_output_customize_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      fictioneer_get_theme_cache_uri( 'output_customize_css' ) . "/customize.css",
+      Utils::get_cache_uri( 'output_customize_css' ) . "/customize.css",
       get_option( 'fictioneer_bundle_stylesheets' ) ? ['fictioneer-complete'] : ['fictioneer-application'],
       fictioneer_get_cache_bust()
     );
@@ -1188,7 +1143,7 @@ if ( ! is_customize_preview() ) {
 
 function fictioneer_output_customize_preview_css() {
   // Setup
-  $file_path = fictioneer_get_theme_cache_dir( 'output_customize_preview_css' ) . '/customize-preview.css';
+  $file_path = Utils::get_cache_dir( 'output_customize_preview_css' ) . '/customize-preview.css';
 
   // Create file if it does not exist
   fictioneer_build_customize_css( 'preview' );
@@ -1197,7 +1152,7 @@ function fictioneer_output_customize_preview_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      fictioneer_get_theme_cache_uri( 'output_customize_preview_css' ) . "/customize-preview.css",
+      Utils::get_cache_uri( 'output_customize_preview_css' ) . "/customize-preview.css",
       ['fictioneer-application'],
       time() // Prevents caching in preview
     );
@@ -1231,7 +1186,7 @@ function fictioneer_get_ffcnr_url() {
 function fictioneer_build_dynamic_scripts() {
   // --- Setup -----------------------------------------------------------------
 
-  $file_path = fictioneer_get_theme_cache_dir( 'build_dynamic_scripts' ) . '/dynamic-scripts.js';
+  $file_path = Utils::get_cache_dir( 'build_dynamic_scripts' ) . '/dynamic-scripts.js';
   $last_version = get_transient( 'fictioneer_dynamic_scripts_version' );
   $scripts = '';
 
@@ -1304,7 +1259,7 @@ function fictioneer_add_custom_scripts() {
 
   wp_register_script(
     'fictioneer-dynamic-scripts',
-    fictioneer_get_theme_cache_uri( 'add_custom_scripts' ) . '/dynamic-scripts.js',
+    Utils::get_cache_uri( 'add_custom_scripts' ) . '/dynamic-scripts.js',
     [],
     $cache_bust,
     $strategy
@@ -1850,7 +1805,7 @@ if ( ! function_exists( 'fictioneer_output_head_fonts' ) ) {
     fictioneer_output_critical_fonts();
 
     // Setup
-    $bundled_fonts = fictioneer_get_theme_cache_dir( 'output_head_fonts' ) . '/bundled-fonts.css';
+    $bundled_fonts = Utils::get_cache_dir( 'output_head_fonts' ) . '/bundled-fonts.css';
     $last_built_timestamp = get_option( 'fictioneer_bundled_fonts_timestamp', '123456789' );
     $cache_bust = "?timestamp={$last_built_timestamp}";
     $loading_pattern = fictioneer_get_async_css_loading_pattern();
@@ -1863,7 +1818,7 @@ if ( ! function_exists( 'fictioneer_output_head_fonts' ) ) {
     // Output font stylesheets...
     if ( file_exists( $bundled_fonts ) ) {
       // ... base and custom
-      $custom_fonts_href = fictioneer_get_theme_cache_uri( 'output_head_fonts' ) . '/bundled-fonts.css' . $cache_bust;
+      $custom_fonts_href = Utils::get_cache_uri( 'output_head_fonts' ) . '/bundled-fonts.css' . $cache_bust;
 
       // Start HTML ---> ?>
       <link rel="stylesheet" id="fictioneer-bundled-fonts-stylesheet" href="<?php echo $custom_fonts_href; ?>" data-no-optimize="1" data-no-minify="1" <?php echo $loading_pattern; ?>>

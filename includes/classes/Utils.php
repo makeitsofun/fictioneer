@@ -11,6 +11,66 @@ class Utils {
   use Singleton_Trait;
 
   /**
+   * Return directory path of the theme cache.
+   *
+   * @since 5.23.1
+   * @since 5.33.3 - Moved into Utils class.
+   *
+   * @param string|null $context  Optional. Context of the call. Default null.
+   *
+   * @return string Path of the cache directory.
+   */
+
+  public static function get_cache_dir( $context = null ) {
+    static $is_dir = false;
+
+    $dir = apply_filters(
+      'fictioneer_filter_cache_dir',
+      WP_CONTENT_DIR . '/cache/fictioneer/',
+      $context
+    );
+
+    if ( ! $is_dir ) {
+      if ( ! is_dir( $dir ) ) {
+        $is_dir = mkdir( $dir, 0755, true );
+
+        if ( ! $is_dir ) {
+          error_log(
+            sprintf(
+              '[Fictioneer] Failed to create cache directory: %s (context: %s)',
+              $dir,
+              $context ?? 'none'
+            )
+          );
+        }
+      } else {
+        $is_dir = true;
+      }
+    }
+
+    return $dir;
+  }
+
+  /**
+   * Return theme cache URI.
+   *
+   * @since 5.23.1
+   * @since 5.33.3 - Moved into Utils class.
+   *
+   * @param string|null $context  The context of the call. Default null.
+   *
+   * @return string Theme cache URI.
+   */
+
+  public static function get_cache_uri( $context = null ) : string {
+    return apply_filters(
+      'fictioneer_filter_cache_uri',
+      content_url( 'cache/fictioneer' ),
+      $context
+    );
+  }
+
+  /**
    * Wrapper for wp_parse_list() with optional sanitizer.
    *
    * @since 5.33.2

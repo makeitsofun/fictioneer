@@ -1,6 +1,8 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // ADMIN INCLUDES
@@ -1089,7 +1091,7 @@ function fictioneer_look_for_issues() {
   global $wpdb;
 
   // Setup
-  $cache_dir = fictioneer_get_theme_cache_dir( 'looking_for_issues' );
+  $cache_dir = Utils::get_cache_dir( 'looking_for_issues' );
   $dynamic_scripts_path = $cache_dir . '/dynamic-scripts.js';
   $bundled_fonts_path = $cache_dir . '/bundled-fonts.css';
   $customize_css_path = $cache_dir . '/customize.css';
