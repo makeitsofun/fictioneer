@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // LIST OF ALL CHAPTERS
 // =============================================================================
@@ -67,7 +69,7 @@ function fictioneer_chapters_list( $args ) {
 
       <?php
         $pag_args = array(
-          'current' => fictioneer_get_global_page(),
+          'current' => Utils::get_global_page(),
           'total' => $args['chapters']->max_num_pages,
           'prev_text' => fcntr( 'previous' ),
           'next_text' => fcntr( 'next' ),

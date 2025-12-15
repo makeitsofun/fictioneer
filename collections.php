@@ -13,10 +13,11 @@
 
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // Setup
 $post_id = get_the_ID();
-$page = fictioneer_get_global_page(); // Main query
+$page = Utils::get_global_page(); // Main query
 $order = Sanitizer::sanitize_query_var( $_GET['order'] ?? 0, ['desc', 'asc'], 'desc' );
 $orderby = Sanitizer::sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
 $ago = $_GET['ago'] ?? 0;

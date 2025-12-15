@@ -521,3 +521,16 @@ function fictioneer_add_class_to_element( $html, $class ) {
 function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
   return Utils::get_theme_icon( $name, $default, $args );
 }
+
+/**
+ * [Deprecated] Return current main pagination page.
+ *
+ * @since 5.32.4
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_global_page() instead.
+ *
+ * @return int Current page or 1.
+ */
+
+function fictioneer_get_global_page() {
+  return Utils::get_global_page();
+}

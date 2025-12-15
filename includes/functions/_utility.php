@@ -3618,25 +3618,6 @@ function fictioneer_maybe_unslash( $data ) {
 }
 
 // =============================================================================
-// CURRENT PAGE NUMBER
-// =============================================================================
-
-/**
- * Return current main pagination page.
- *
- * @since 5.32.4
- *
- * @return int Current page or 1.
- */
-
-function fictioneer_get_global_page() {
-  $paged = absint( get_query_var( 'paged' ) );
-  $page = absint( get_query_var( 'page' ) );
-
-  return max( 1, $paged, $page );
-}
-
-// =============================================================================
 // CHECK WHETHER USER CAN EDIT ANY POST TYPES
 // =============================================================================
 

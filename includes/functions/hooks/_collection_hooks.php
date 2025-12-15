@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // LIST OF ALL COLLECTIONS
 // =============================================================================
@@ -64,7 +66,7 @@ function fictioneer_collections_list( $args ) {
         $pag_args = array(
           'base' => add_query_arg( 'paged', '%#%' ),
           'format' => '?paged=%#%',
-          'current' => fictioneer_get_global_page(),
+          'current' => Utils::get_global_page(),
           'total' => $args['collections']->max_num_pages,
           'prev_text' => fcntr( 'previous' ),
           'next_text' => fcntr( 'next' ),

@@ -81,6 +81,22 @@ class Utils {
   }
 
   /**
+   * Return current main pagination page.
+   *
+   * @since 5.32.4
+   * @since 5.33.2 - Moved into Utils class.
+   *
+   * @return int Current page or 1.
+   */
+
+  public static function get_global_page() : int {
+    $paged = absint( get_query_var( 'paged' ) );
+    $page = absint( get_query_var( 'page' ) );
+
+    return max( 1, $paged, $page );
+  }
+
+  /**
    * Encrypt data.
    *
    * @since 5.19.0
