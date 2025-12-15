@@ -2,6 +2,7 @@
 
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
+use Fictioneer\Customizer;
 
 // =============================================================================
 // LEGACY CLEANUP
@@ -1012,7 +1013,7 @@ function fictioneer_output_customize_css() {
 
   // Create file if it does not exist
   if ( ! file_exists( $file_path ) ) {
-    fictioneer_build_customize_css();
+    Customizer::build_customizer_css();
   }
 
   // Output customize stylesheet...
@@ -1041,7 +1042,7 @@ function fictioneer_output_customize_preview_css() {
   $file_path = Utils::get_cache_dir( 'output_customize_preview_css' ) . '/customize-preview.css';
 
   // Create file if it does not exist
-  fictioneer_build_customize_css( 'preview' );
+  Customizer::build_customizer_css( 'preview' );
 
   // Output customize stylesheet...
   if ( file_exists( $file_path ) ) {
@@ -2271,10 +2272,10 @@ function fictioneer_override_elementor_editor_styles() {
   // Setup
   $css = '
     body {
-      --primary-500: ' . fictioneer_get_theme_color( 'light_primary_500' ) . ';
-      --fg-300: ' . fictioneer_get_theme_color( 'light_fg_300' ) . ';
-      --fg-500: ' . fictioneer_get_theme_color( 'light_fg_500' ) . ';
-      --fg-700: ' . fictioneer_get_theme_color( 'light_fg_700' ) . ';
+      --primary-500: ' . Utils::get_theme_color( 'light_primary_500' ) . ';
+      --fg-300: ' . Utils::get_theme_color( 'light_fg_300' ) . ';
+      --fg-500: ' . Utils::get_theme_color( 'light_fg_500' ) . ';
+      --fg-700: ' . Utils::get_theme_color( 'light_fg_700' ) . ';
     }
 
     .e-global__color[data-global-id="primary"] .e-global__color-preview-color {
@@ -2376,62 +2377,6 @@ function fictioneer_elementor_add_additional_fonts( $fonts ) {
   return $fonts;
 }
 add_filter( 'elementor/fonts/additional_fonts', 'fictioneer_elementor_add_additional_fonts' );
-
-// =============================================================================
-// GET COLORS JSON
-// =============================================================================
-
-/**
- * Returns associative array of theme colors
- *
- * Notes: Considers both parent and child theme.
- *
- * @since 5.21.2
- *
- * @return array Associative array of theme colors.
- */
-
-function fictioneer_get_theme_colors_array() {
-  static $fictioneer_colors = null;
-
-  if ( $fictioneer_colors !== null ) {
-    return $fictioneer_colors;
-  }
-
-  // Setup
-  $parent_colors = [];
-  $child_colors = [];
-
-  // Get parent theme colors
-  $parent_colors_file = get_template_directory() . '/includes/colors.json';
-
-  if ( file_exists( $parent_colors_file ) ) {
-    $parent_colors_content = file_get_contents( $parent_colors_file );
-    $parent_colors = json_decode( $parent_colors_content, true );
-
-    if ( ! is_array( $parent_colors ) ) {
-      $parent_colors = [];
-    }
-  }
-
-  // Get child theme colors
-  $child_colors_file = get_stylesheet_directory() . '/includes/colors.json';
-
-  if ( file_exists( $child_colors_file ) ) {
-    $child_colors_content = file_get_contents( $child_colors_file );
-    $child_colors = json_decode( $child_colors_content, true );
-
-    if ( ! is_array( $child_colors ) ) {
-      $child_colors = [];
-    }
-  }
-
-  // Update static cache
-  $fictioneer_colors = array_merge( $parent_colors, $child_colors );
-
-  // Merge and return colors, child overriding parent
-  return $fictioneer_colors;
-}
 
 // =============================================================================
 // CALENDAR BLOCK

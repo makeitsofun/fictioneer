@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // MODIFY EDITOR SETTINGS
 // =============================================================================
@@ -14,9 +16,9 @@
 
 function fictioneer_add_editor_css( $settings ) {
   // Setup
-  $font_primary = fictioneer_get_custom_font( 'primary_font_family_value', 'var(--ff-system)', 'Open Sans' );
-  $font_secondary = fictioneer_get_custom_font( 'secondary_font_family_value', 'var(--ff-base)', 'Lato' );
-  $font_heading = fictioneer_get_custom_font( 'heading_font_family_value', 'var(--ff-base)', 'Open Sans' );
+  $font_primary = Utils::get_font_family( 'primary_font_family_value', 'var(--ff-system)', 'Open Sans' );
+  $font_secondary = Utils::get_font_family( 'secondary_font_family_value', 'var(--ff-base)', 'Lato' );
+  $font_heading = Utils::get_font_family( 'heading_font_family_value', 'var(--ff-base)', 'Open Sans' );
 
   // Build CSS
   $css = "body {

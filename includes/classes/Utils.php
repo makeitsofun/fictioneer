@@ -356,4 +356,186 @@ class Utils {
 
     return $icon;
   }
+
+  /**
+   * [Delegate] Return associative array of theme colors.
+   *
+   * Notes: Considers both parent and child theme.
+   *
+   * @since 5.21.2
+   * @since 5.33.2 - Refactored and moved into Utils_Admin class.
+   *
+   * @return array Associative array of theme colors.
+   */
+
+  public static function get_theme_colors() : array {
+    return Utils_Admin::get_theme_colors();
+  }
+
+  /**
+   * [Delegate] Return theme color mod with default fallback.
+   *
+   * @since 5.12.0
+   * @since 5.21.2 - Refactored with theme colors helper function.
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string      $mod      Requested theme color.
+   * @param string|null $default  Optional. Default color code.
+   *
+   * @return string Requested color code or '#ff6347' (tomato) if not found.
+   */
+
+  public static function get_theme_color( string $mod, ?string $default = null ) : string {
+    return Utils_Admin::get_theme_color( $mod, $default );
+  }
+
+  /**
+   * [Delegate] Convert hex color to RGB array.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param string $value  The to be converted hex (six digits).
+   *
+   * @return array|bool RGB values as array or false on failure.
+   */
+
+  public static function hex_to_rgb( string $value ) : array|bool {
+    return Utils_Admin::hex_to_rgb( $value );
+  }
+
+  /**
+   * [Delegate] Convert RGB color array to HSL.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param array $value      To be converted RGB array (r, g, b).
+   * @param int   $precision  Optional. Rounding precision. Default 0.
+   *
+   * @return array HSL values as array.
+   */
+
+  public static function rgb_to_hsl( array $value, int $precision = 0 ) : array {
+    return Utils_Admin::rgb_to_hsl( $value, $precision );
+  }
+
+  /**
+   * [Delegate] Convert a hex color to a Fictioneer HSL code.
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $hex     Hex color.
+   * @param string $output  Switch output style. Default 'default'.
+   *
+   * @return string Converted HSL code.
+   */
+
+  public static function get_hsl_code( string $hex, string $output = 'default' ) : string {
+    return Utils_Admin::get_hsl_code( $hex, $output );
+  }
+
+  /**
+   * [Delegate] Convert a hex color to an HSL font code.
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $hex  Hex color.
+   *
+   * @return string Converted HSL font code.
+   */
+
+  public static function get_hsl_font_code( string $hex ) : string {
+    return Utils_Admin::get_hsl_font_code( $hex );
+  }
+
+  /**
+   * [Delegate] Return a font family value.
+   *
+   * @since 5.10.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $option        Name of the theme mod.
+   * @param string $font_default  Fallback font.
+   * @param string $mod_default   Default for get_theme_mod().
+   *
+   * @return string Ready to use font family value.
+   */
+
+  public static function get_font_family( string $option, string $font_default, string $mod_default ) : string {
+    return Utils_Admin::get_font_family( $option, $font_default, $mod_default );
+  }
+
+  /**
+   * Return minified CSS.
+   *
+   * @license CC BY-SA 4.0
+   * @author Qtax https://stackoverflow.com/users/107152/qtax
+   * @author lots0logs https://stackoverflow.com/users/2639936/lots0logs
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Utils class.
+   * @link https://stackoverflow.com/a/15195752/17140970
+   * @link https://stackoverflow.com/a/44350195/17140970
+   *
+   * @param string $string  CSS to be minified.
+   *
+   * @return string Minified CSS.
+   */
+
+  public static function minify_css( string $css = '' ) : string {
+    $comments = <<<'EOS'
+    (?sx)
+        # don't change anything inside of quotes
+        ( "(?:[^"\\]++|\\.)*+" | '(?:[^'\\]++|\\.)*+' )
+    |
+        # comments
+        /\* (?> .*? \*/ )
+    EOS;
+
+    $everything_else = <<<'EOS'
+    (?six)
+        # don't change anything inside of quotes
+        ( "(?:[^"\\]++|\\.)*+" | '(?:[^'\\]++|\\.)*+' )
+    |
+        # spaces before and after ; and }
+        \s*+ ; \s*+ ( } ) \s*+
+    |
+        # all spaces around meta chars/operators (excluding + and -)
+        \s*+ ( [*$~^|]?+= | [{};,>~] | !important\b ) \s*+
+    |
+        # all spaces around + and - (in selectors only!)
+        \s*([+-])\s*(?=[^}]*{)
+    |
+        # spaces right of ( [ :
+        ( [[(:] ) \s++
+    |
+        # spaces left of ) ]
+        \s++ ( [])] )
+    |
+        # spaces left (and right) of : (but not in selectors)!
+        \s+(:)(?![^\}]*\{)
+    |
+        # spaces at beginning/end of string
+        ^ \s++ | \s++ \z
+    |
+        # double spaces to single
+        (\s)\s+
+    EOS;
+
+    $search_patterns  = array( "%{$comments}%", "%{$everything_else}%" );
+    $replace_patterns = array( '$1', '$1$2$3$4$5$6$7$8' );
+
+    return preg_replace( $search_patterns, $replace_patterns, $css );
+  }
 }

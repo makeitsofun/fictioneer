@@ -3,6 +3,7 @@
 use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
+use Fictioneer\Customizer;
 
 // =============================================================================
 // ADMIN INCLUDES
@@ -105,23 +106,23 @@ function fictioneer_dynamic_editor_css() {
     "
     .
     implode( '', array_map( function( $prop ) use ( $mode ) {
-      return "--bg-{$prop}: " . fictioneer_hsl_code( fictioneer_get_theme_color( "{$mode}_bg_{$prop}" ) ) . ';';
+      return "--bg-{$prop}: " . Utils::get_hsl_code( Utils::get_theme_color( "{$mode}_bg_{$prop}" ) ) . ';';
     }, ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] ) )
     .
     implode( '', array_map( function( $prop ) use ( $mode ) {
-      return "--fg-{$prop}: " . fictioneer_hsl_font_code( fictioneer_get_theme_color( "{$mode}_fg_{$prop}" ) ) . ';';
+      return "--fg-{$prop}: " . Utils::get_hsl_font_code( Utils::get_theme_color( "{$mode}_fg_{$prop}" ) ) . ';';
     }, ['100', '200', '300', '400', '500', '600', '700', '800', '900', '950', 'tinted', 'inverted'] ) )
     .
     "
-    --primary-400: " . fictioneer_get_theme_color( $mode . '_primary_400' ) . ";
-    --primary-500: " . fictioneer_get_theme_color( $mode . '_primary_500' ) . ";
-    --primary-600: " . fictioneer_get_theme_color( $mode . '_primary_600' ) . ";
-    --red-400: " . fictioneer_get_theme_color( $mode . '_red_400' ) . ";
-    --red-500: " . fictioneer_get_theme_color( $mode . '_red_500' ) . ";
-    --red-600: " . fictioneer_get_theme_color( $mode . '_red_600' ) . ";
-    --green-400: " . fictioneer_get_theme_color( $mode . '_green_400' ) . ";
-    --green-500: " . fictioneer_get_theme_color( $mode . '_green_500' ) . ";
-    --green-600: " . fictioneer_get_theme_color( $mode . '_green_600' ) . ";
+    --primary-400: " . Utils::get_theme_color( $mode . '_primary_400' ) . ";
+    --primary-500: " . Utils::get_theme_color( $mode . '_primary_500' ) . ";
+    --primary-600: " . Utils::get_theme_color( $mode . '_primary_600' ) . ";
+    --red-400: " . Utils::get_theme_color( $mode . '_red_400' ) . ";
+    --red-500: " . Utils::get_theme_color( $mode . '_red_500' ) . ";
+    --red-600: " . Utils::get_theme_color( $mode . '_red_600' ) . ";
+    --green-400: " . Utils::get_theme_color( $mode . '_green_400' ) . ";
+    --green-500: " . Utils::get_theme_color( $mode . '_green_500' ) . ";
+    --green-600: " . Utils::get_theme_color( $mode . '_green_600' ) . ";
     ";
 
   $css .= ( $mode === 'dark' ) ? "
@@ -1116,7 +1117,7 @@ function fictioneer_look_for_issues() {
 
   // Call build methods if necessary
   if ( ! file_exists( $customize_css_path ) ) {
-    fictioneer_build_customize_css();
+    Customizer::build_customizer_css();
   }
 
   if ( ! file_exists( $dynamic_scripts_path ) ) {
@@ -1771,7 +1772,7 @@ function fictioneer_ajax_reset_theme_colors() {
   // Setup
   $mods = get_theme_mods();
   $theme = get_option( 'stylesheet' );
-  $fictioneer_colors = fictioneer_get_theme_colors_array();
+  $fictioneer_colors = Utils::get_theme_colors();
 
   // Abort if...
   if ( ! is_array( $fictioneer_colors ) || empty( $fictioneer_colors ) ) {
@@ -1787,8 +1788,8 @@ function fictioneer_ajax_reset_theme_colors() {
   update_option( "theme_mods_{$theme}", $mods );
 
   // Refresh custom files
-  fictioneer_build_customize_css();
-  fictioneer_build_customize_css( 'preview' );
+  Customizer::build_customizer_css();
+  Customizer::build_customizer_css( 'preview' );
   fictioneer_build_dynamic_scripts();
 
   // Finish

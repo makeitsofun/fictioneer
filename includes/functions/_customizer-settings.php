@@ -2,6 +2,7 @@
 
 use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
+use Fictioneer\Customizer;
 
 // =============================================================================
 // WATCH FOR CUSTOMIZER UPDATES
@@ -24,7 +25,7 @@ function fictioneer_watch_for_customizer_updates() {
   wp_cache_flush();
 
   // Rebuild customize stylesheet
-  fictioneer_build_customize_css();
+  Customizer::build_customizer_css();
 
   // Rebuild dynamic scripts
   fictioneer_build_dynamic_scripts();
@@ -60,7 +61,7 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
 // =============================================================================
 
 /**
- * Helper to add color theme option
+ * Helper to add color theme option.
  *
  * @since 5.12.0
  * @since 5.21.2 - Improved with theme colors helper function.
@@ -70,7 +71,7 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
  */
 
 function fictioneer_add_color_theme_option( $manager, $args ) {
-  $fictioneer_colors = fictioneer_get_theme_colors_array();
+  $fictioneer_colors = Utils::get_theme_colors();
   $default = $args['default'] ?? $fictioneer_colors[ $args['setting'] ]['hex'] ?? '';
 
   $manager->add_setting(

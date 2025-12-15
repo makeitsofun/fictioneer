@@ -1025,10 +1025,12 @@ Refer to `/includes/functions/_customizer-settings.php` to see the default choic
 
 ---
 
-### `apply_filters( 'fictioneer_filter_css_snippet_{snippet}', $css )`
+### `apply_filters( 'fictioneer_filter_css_snippet_{snippet}', $css, $success )`
 Filters the CSS snippet for certain theme options before they are appended to the customize.css building string.
 
-Refer to `/includes/functions/_customizer.php` to see all snippets.
+**$args:**
+* $css (string) - CSS snippet or empty if not found/readable.
+* $success (bool) - Whether the snippet file was successfully read.
 
 ---
 
@@ -1036,16 +1038,16 @@ Refer to `/includes/functions/_customizer.php` to see all snippets.
 Filters the default search form arguments for the search page (not the shortcode). Most of them do not make sense to change for the search page, likely only the preselect type ('any', 'post', 'fcn_story', 'fcn_chapter', 'fcn_collection', or 'fcn_recommendation').
 
 **$args:**
-* $simple (boolean|null) – Whether to show the simple form. Default null.
-* $expanded (boolean|null) – Whether the form should be expanded. Default null.
-* $placeholder (string|null) – The placeholder message. Default null.
-* $preselect_type (string|null) – The preselected post type. Default null.
-* $preselect_tags (string|null) – Comma-separated list of tag IDs. Default null.
-* $preselect_genres (string|null) – Comma-separated list of genre IDs. Default null.
-* $preselect_fandoms (string|null) – Comma-separated list of fandom IDs. Default null.
-* $preselect_characters (string|null) – Comma-separated list of character IDs. Default null.
-* $preselect_warnings (string|null) – Comma-separated list of content warning IDs. Default null.
-* $cache (boolean|null) – Whether to account for caching. Default null.
+* 'simple' (boolean|null) – Whether to show the simple form. Default null.
+* 'expanded' (boolean|null) – Whether the form should be expanded. Default null.
+* 'placeholder' (string|null) – The placeholder message. Default null.
+* 'preselect_type' (string|null) – The preselected post type. Default null.
+* 'preselect_tags' (string|null) – Comma-separated list of tag IDs. Default null.
+* 'preselect_genres' (string|null) – Comma-separated list of genre IDs. Default null.
+* 'preselect_fandoms' (string|null) – Comma-separated list of fandom IDs. Default null.
+* 'preselect_characters' (string|null) – Comma-separated list of character IDs. Default null.
+* 'preselect_warnings' (string|null) – Comma-separated list of content warning IDs. Default null.
+* 'cache' (boolean|null) – Whether to account for caching. Default null.
 
 **Example:**
 ```php

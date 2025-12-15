@@ -4,6 +4,7 @@ use Fictioneer\Sanitizer;
 use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
+use Fictioneer\Customizer;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -378,6 +379,210 @@ function fictioneer_sanitize_page_id( $input ) {
 
 function fictioneer_sanitize_absint_or_empty_string( $input ) {
   return Sanitizer_Admin::sanitize_absint_or_empty_string( $input );
+}
+
+// =============================================================================
+// CUSTOMIZER DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_hex_to_rgb' ) ) {
+  /**
+   * [Deprecated] Convert hex colors to RGB.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Utils::hex_to_rgb() instead.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param string $input  The to be converted hex (six digits).
+   *
+   * @return array RGB values as array.
+   */
+
+  function fictioneer_hex_to_rgb( $input ) {
+    return Utils::hex_to_rgb( $input );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_rgb_to_hsl' ) ) {
+  /**
+   * [Deprecated] Convert RGB colors to HSL.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Utils::rgb_to_hsl() instead.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param array $input      The to be converted RGB.
+   * @param int   $precision  Rounding precision. Default 0.
+   *
+   * @return array HSL values as array.
+   */
+
+  function fictioneer_rgb_to_hsl( $input, $precision = 0 ) {
+    return Utils::rgb_to_hsl( $input, $precision );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_css_clamp' ) ) {
+  /**
+   * [Deprecated] Generate a high-precision CSS clamp.
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_clamp() instead.
+   *
+   * @param int    $min   The minimum value.
+   * @param int    $max   The maximum value.
+   * @param int    $wmin  The minimum viewport value.
+   * @param int    $wmax  The maximum viewport value.
+   * @param string $unit  The relative clamp unit. Default 'vw'.
+   *
+   * @return string The calculated clamp.
+   */
+
+  function fictioneer_get_css_clamp( $min, $max, $wmin, $wmax, $unit = 'vw' ) {
+    return Customizer::get_clamp( $min, $max, $wmin, $wmax, $unit );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_hsl_code' ) ) {
+  /**
+   * [Deprecated] Convert a hex color to a Fictioneer HSL code.
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_hsl_code() instead.
+   *
+   * @param string $hex     The color as hex.
+   * @param string $output  Switch output style. Default 'default'.
+   *
+   * @return string The converted color.
+   */
+
+  function fictioneer_hsl_code( $hex, $output = 'default' ) {
+    return Utils::get_hsl_code( $hex, $output );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
+  /**
+   * [Deprecated] Convert a hex color to a Fictioneer HSL font code.
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_hsl_font_code() instead.
+   * @see fictioneer_hsl_code( $hex, $output )
+   *
+   * @param string $hex  The color as hex.
+   *
+   * @return string The converted color.
+   */
+
+  function fictioneer_hsl_font_code( $hex ) {
+    return Utils::get_hsl_font_code( $hex );
+  }
+}
+
+/**
+ * [Deprecated] Helper that returns a font family value
+ *
+ * @since 5.10.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_font_family() instead.
+ *
+ * @param string $option        Name of the theme mod.
+ * @param string $font_default  Fallback font.
+ * @param string $mod_default   Default for get_theme_mod().
+ *
+ * @return string Ready to use font family value.
+ */
+
+function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
+  return Utils::get_font_family( $option, $font_default, $mod_default );
+}
+
+/**
+ * [Deprecated] Return the CSS loaded from a snippet file.
+ *
+ * @since 5.11.1
+ * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_css_snippet() instead.
+ *
+ * @param string $snippet      Name of the snippet file without file ending.
+ * @param string|null $filter  Optional. Part of the generated filter, defaulting
+ *                             to the snippet name (lower case, underscores).
+ *
+ * @return string The CSS string from the file.
+ */
+
+function fictioneer_get_customizer_css_snippet( $snippet, $filter = null ) {
+  return Customizer::get_css_snippet( $snippet );
+}
+
+/**
+ * Return associative array of theme colors.
+ *
+ * Notes: Considers both parent and child theme.
+ *
+ * @since 5.21.2
+ *
+ * @return array Associative array of theme colors.
+ */
+
+function fictioneer_get_theme_colors_array() {
+  return Utils::get_theme_colors();
+}
+
+/**
+ * [Deprecated] Helper to get theme color mod with default fallback.
+ *
+ * @since 5.12.0
+ * @since 5.21.2 - Refactored with theme colors helper function.
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_theme_color() instead.
+ *
+ * @param string $mod           The requested theme color.
+ * @param string|null $default  Optional. Default color code.
+ *
+ * @return string The requested color code or '#ff6347' (tomato) if not found.
+ */
+
+function fictioneer_get_theme_color( $mod, $default = null ) {
+  return Utils::get_theme_color( $mod, $default );
+}
+
+/**
+ * [Deprecated] Build the customization stylesheet.
+ *
+ * @since 5.11.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Customizer::build_customizer_css() instead.
+ *
+ * @param string|null $context  Optional. In which context the stylesheet created,
+ *                              for example 'preview' for the Customizer.
+ */
+
+function fictioneer_build_customize_css( $context = null ) {
+  Customizer::build_customizer_css( $context );
+}
+
+if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
+  /**
+   * [Deprecated] Return an eased fading linear-gradient CSS.
+   *
+   * @since 5.11.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_fading_gradient() instead.
+   *
+   * @param float  $start_opacity  The starting opacity of the gradient in percentage.
+   * @param int    $start          The starting point of the gradient in percentage.
+   * @param int    $end            The ending point of the gradient in percentage.
+   * @param string $direction      The direction of the gradient with unit (e.g. '180deg').
+   * @param string $hsl            The HSL string used as color. Default '0 0% 0%'.
+   *
+   * @return string The linear-gradient CSS.
+   */
+
+  function fictioneer_get_fading_gradient( $start_opacity, $start, $end, $direction, $hsl = '0 0% 0%' ) {
+    return Customizer::get_fading_gradient( $start_opacity, $start, $end, $direction, $hsl );
+  }
 }
 
 // =============================================================================
