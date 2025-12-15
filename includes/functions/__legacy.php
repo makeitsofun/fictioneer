@@ -405,9 +405,22 @@ function fictioneer_get_split_aspect_ratio( $css ) {
  * @since 5.19.0
  * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
  *
- * @return array Array of nouns.
+ * @return array Array of adjectives.
  */
 
 function fictioneer_get_username_adjectives() {
   return Utils_Admin::get_username_adjectives();
+}
+
+/**
+ * [Deprecated] Return array of nouns for randomized username generation
+ *
+ * @since 5.19.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_nouns() instead.
+ *
+ * @return array Array of nouns.
+ */
+
+function fictioneer_get_username_nouns() {
+  return Utils_Admin::get_username_nouns();
 }
