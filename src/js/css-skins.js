@@ -7,15 +7,104 @@
  */
 
 function fcn_validateCss(css) {
-  const openBraces = (css.match(/{/g) || []).length;
-  const closeBraces = (css.match(/}/g) || []).length;
+  if (typeof css !== 'string') {
+    return false;
+  }
 
-  if (openBraces !== closeBraces) {
+  css = css.replace(/^\uFEFF/, '');
+
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(css)) {
     return false;
   }
 
   if (css.includes('<')) {
     return false;
+  }
+
+  const noComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const noStrings = noComments.replace(/(["'])(?:\\.|(?!\1)[\s\S])*?\1/g, '""');
+
+  const openBraces = (noStrings.match(/{/g) || []).length;
+  const closeBraces = (noStrings.match(/}/g) || []).length;
+
+  if (openBraces !== closeBraces) {
+    return false;
+  }
+
+  function isAllowedImport(url) {
+    try {
+      const urlInterface = new URL(url);
+
+      return (
+        urlInterface.protocol === 'https:' &&
+        urlInterface.hostname === 'fonts.googleapis.com' &&
+        urlInterface.pathname.startsWith('/css')
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  function validateImports(css) {
+    const regex = /@import\s+(?:url\s*\(\s*)?(?:"([^"]+)"|'([^']+)'|([^"')\s]+))\s*\)?\s*;/gi;
+
+    let match;
+
+    while ((match = regex.exec(css)) !== null) {
+      const url = (match[1] || match[2] || match[3] || '').trim();
+
+      if (!isAllowedImport(url)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  if (!validateImports(noComments)) {
+    return false;
+  }
+
+  const scan = noStrings.toLowerCase();
+
+  if (
+    scan.includes('</style') ||
+    scan.includes('<style') ||
+    /expression\s*\(/.test(scan) ||
+    /-moz-binding\b/.test(scan) ||
+    /\bbehavior\s*:/.test(scan)
+  ) {
+    return false;
+  }
+
+  const urlRegex = /url\s*\(\s*([^)]+?)\s*\)/gi;
+
+  let match;
+
+  while ((match = urlRegex.exec(noComments)) !== null) {
+    let inside = match[1].trim();
+
+    if (
+      (inside.startsWith('"') && inside.endsWith('"')) ||
+      (inside.startsWith("'") && inside.endsWith("'"))
+    ) {
+      inside = inside.slice(1, -1);
+    }
+
+    const u = inside.trim().toLowerCase();
+
+    if (u.startsWith('javascript:')) {
+      return false;
+    }
+
+    if (u.startsWith('data:')) {
+      const allowed = /^(data:(image\/(png|jpeg|jpg|gif|webp|svg\+xml)|font\/(woff|woff2)|application\/font-woff2);)/i;
+
+      if (!allowed.test(u)) {
+        return false;
+      }
+    }
   }
 
   return true;
@@ -307,7 +396,7 @@ _$('[data-css-skin-target="file"]')?.addEventListener('input', event => {
     fcn_setSkins(skins);
     fcn_renderSkinList();
 
-    _$$('button[data-skin-id][disabled]').forEach(element => element.disabled = false);
+    _$$('.custom-skin button[disabled]').forEach(element => element.disabled = false);
   }
 
   reader.onerror = () => {
@@ -393,6 +482,7 @@ function fcn_downloadSkins(trigger) {
       },
       finalCallback: () => {
         _$('[data-css-skin-target="file"]').value = '';
+        _$$('.custom-skin button[disabled]').forEach(element => element.disabled = false);
       }
     }
   );

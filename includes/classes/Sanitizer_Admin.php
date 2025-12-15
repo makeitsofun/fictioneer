@@ -42,14 +42,13 @@ class Sanitizer_Admin {
    * @since 5.27.4 - Unslash string.
    * @since 5.33.2 - Moved into Sanitizer class.
    *
-   * @param string $css  CSS to be sanitized. Expects slashed string.
+   * @param string $css  CSS to be sanitized.
    *
    * @return string The sanitized string.
    */
 
   public static function sanitize_css( string $css ) : string {
     $css = (string) ( $css ?? '' );
-    $css = wp_unslash( $css );
     $css = wp_kses_no_null( $css );
     $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
     $css = trim( $css );
@@ -58,15 +57,48 @@ class Sanitizer_Admin {
       return '';
     }
 
-    $check = preg_replace( '#/\*.*?\*/#s', '', $css );
-    $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $check );
+    $no_comments = preg_replace( '#/\*.*?\*/#s', '', $css );
+    $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $no_comments );
 
     if ( strpos( $check, '<' ) !== false ) {
       return '';
     }
 
-    if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|@import\b|javascript\s*:)/i', $check ) ) {
+    if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|javascript\s*:)/i', $check ) ) {
       return '';
+    }
+
+    if ( stripos( $no_comments, '@import' ) !== false ) {
+      $import_regex = '/@import\s+(?:url\s*\(\s*)?(?:"([^"]+)"|\'([^\']+)\'|([^"\')\s]+))\s*\)?\s*;/i';
+
+      if ( preg_match_all( $import_regex, $no_comments, $imports, PREG_SET_ORDER ) ) {
+        foreach ( $imports as $match ) {
+          // Check matches for double quotes, single quotes, and no quotes
+          $url = trim( $match[1] ?: ( $match[2] ?: ( $match[3] ?? '' ) ) );
+
+          $url_parts = wp_parse_url( $url );
+
+          if ( ! is_array( $url_parts ) ) {
+            return '';
+          }
+
+          $scheme = strtolower( $url_parts['scheme'] ?? '' );
+          $host = strtolower( $url_parts['host'] ?? '' );
+          $path = $url_parts['path'] ?? '';
+
+          if ( $scheme !== 'https' || $host !== 'fonts.googleapis.com' || strpos( $path, '/css' ) !== 0 ) {
+            return '';
+          }
+        }
+      } else {
+        return ''; // @import present in not recognized form
+      }
+
+      $stripped = preg_replace( $import_regex, '', $no_comments );
+
+      if ( $stripped === null || stripos( $stripped, '@import' ) !== false ) {
+        return '';
+      }
     }
 
     if ( preg_match( '/url\s*\(\s*[^)]*javascript\s*:/i', $check ) ) {

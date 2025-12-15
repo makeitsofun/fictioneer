@@ -2572,7 +2572,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Custom story CSS
   if ( isset( $_POST['fictioneer_story_css'] ) && current_user_can( 'fcn_custom_page_css', $post_id ) ) {
-    $fields['fictioneer_story_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_story_css'] );
+    $fields['fictioneer_story_css'] = Sanitizer::sanitize_css( wp_unslash( $_POST['fictioneer_story_css'] ) );
   }
 
   // Short description (required)
@@ -2673,7 +2673,9 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
     // Custom ePUB CSS
     if ( isset( $_POST['fictioneer_story_epub_custom_css'] ) && current_user_can( 'fcn_custom_epub_css', $post_id ) ) {
-      $fields['fictioneer_story_epub_custom_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_story_epub_custom_css'] );
+      $fields['fictioneer_story_epub_custom_css'] = Sanitizer::sanitize_css(
+        wp_unslash( $_POST['fictioneer_story_epub_custom_css'] )
+      );
     }
   }
 
@@ -3696,7 +3698,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
 
   // Custom page CSS
   if ( isset( $_POST['fictioneer_custom_css'] ) && current_user_can( 'fcn_custom_page_css', $post_id ) ) {
-    $fields['fictioneer_custom_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_custom_css'] );
+    $fields['fictioneer_custom_css'] = Sanitizer::sanitize_css( wp_unslash( $_POST['fictioneer_custom_css'] ) );
   }
 
   // Short name
