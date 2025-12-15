@@ -4,6 +4,8 @@
 // CONSTANTS/SETTINGS
 // =============================================================================
 
+define( 'FICTIONEER_THEME_DIR', trailingslashit( __DIR__ ) );
+
 // Version
 define( 'FICTIONEER_VERSION', '5.33.2-beta1' );
 define( 'FICTIONEER_MAJOR_VERSION', '5' );
@@ -481,7 +483,7 @@ spl_autoload_register( function ( $class ) {
   $relative_path = str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class );
 
   // Load file
-  $file = trailingslashit( get_template_directory() ) . 'includes/classes/' . $relative_path . '.php';
+  $file = FICTIONEER_THEME_DIR . 'includes/classes/' . $relative_path . '.php';
 
   if ( file_exists( $file ) ) {
     require_once $file;
