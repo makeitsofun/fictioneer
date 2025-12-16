@@ -348,6 +348,108 @@ class Utils_Admin {
   }
 
   /**
+   * Return fonts data from a Google Fonts link.
+   *
+   * @since 5.10.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $link  Google Fonts link.
+   *
+   * @return array|false|null Font data if successful, false if malformed,
+   *                          null if not a valid Google Fonts link.
+   */
+
+  public static function extract_font_from_google_link( string $link ) : array|false|null {
+    $link = trim( $link );
+
+    if ( preg_match( '#^https://fonts\.googleapis\.com/css2(?:\?|$)#i', $link ) !== 1 ) {
+      return null; // Not a Google Fonts link
+    }
+
+    $parts = wp_parse_url( $link );
+
+    if ( ! is_array( $parts ) || empty( $parts['query'] ) ) {
+      return false;
+    }
+
+    if ( preg_match_all( '/(?:^|&)family=([^&]+)/', (string) $parts['query'], $m ) !== 1 ) {
+      return false; // Reject multiple 'family='
+    }
+
+    $family_raw = trim( (string) $m[1][0] );
+
+    if ( $family_raw === '' ) {
+      return false;
+    }
+
+    $family_decoded = rawurldecode( str_replace( '+', ' ', $family_raw ) );
+
+    $name = trim( strtok( $family_decoded, ':' ) );
+
+    if ( $name === '' ) {
+      return false;
+    }
+
+    $font = array(
+      'google_link' => $link,
+      'skip' => true,
+      'chapter' => true,
+      'version' => '',
+      'key' => sanitize_title( $name ),
+      'name' => $name,
+      'family' => $name,
+      'type' => '',
+      'styles' => ['normal'],
+      'weights' => [],
+      'charsets' => [],
+      'formats' => [],
+      'about' => __( 'This font is loaded via the Google Fonts CDN, see source for additional information.', 'fictioneer' ),
+      'note' => '',
+      'sources' => array(
+        'googleFontsCss' => array(
+          'name' => 'Google Fonts CSS File',
+          'url' => $link
+        )
+      )
+    );
+
+    $weights = [];
+    $is_italic = false;
+
+    if ( preg_match( '/:ital,wght@([0-9,;]+)/', $family_decoded, $ital_weight_matches ) === 1 ) {
+      foreach ( explode( ';', $ital_weight_matches[1] ) as $spec ) {
+        $pair = explode( ',', $spec, 2 );
+
+        if ( count( $pair ) !== 2 ) {
+          continue;
+        }
+
+        list( $ital, $weight ) = $pair;
+
+        if ( $ital === '1' ) {
+          $is_italic = true;
+        }
+
+        $weights[ (string) $weight ] = true;
+      }
+    } elseif ( preg_match( '/:wght@([0-9;]+)/', $family_decoded, $ital_weight_matches ) === 1 ) {
+      foreach ( explode( ';', $ital_weight_matches[1] ) as $weight ) {
+        $weights[ (string) $weight ] = true;
+      }
+    }
+
+    if ( $is_italic ) {
+      $font['styles'][] = 'italic';
+    }
+
+    if ( $weights ) {
+      $font['weights'] = array_keys( $weights );
+    }
+
+    return $font;
+  }
+
+  /**
    * Build bundled font stylesheet.
    *
    * @since 5.10.0

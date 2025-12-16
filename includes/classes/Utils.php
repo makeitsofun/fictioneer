@@ -509,6 +509,22 @@ class Utils {
   }
 
   /**
+   * [Delegate] Return fonts data from a Google Fonts link.
+   *
+   * @since 5.10.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $link  Google Fonts link.
+   *
+   * @return array|false|null Font data if successful, false if malformed,
+   *                          null if not a valid Google Fonts link.
+   */
+
+  public static function extract_font_from_google_link( string $link ) : array|false|null {
+    return Utils_Admin::extract_font_from_google_link( $link );
+  }
+
+  /**
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0

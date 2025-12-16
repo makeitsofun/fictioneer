@@ -596,6 +596,22 @@ function fictioneer_build_bundled_fonts() : void {
   Utils_Admin::bundle_fonts();
 }
 
+/**
+ * [Deprecated] Return fonts data from a Google Fonts link.
+ *
+ * @since 5.10.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::extract_font_from_google_link() instead.
+ *
+ * @param string $link  Google Fonts link.
+ *
+ * @return array|false|null Font data if successful, false if malformed,
+ *                          null if not a valid Google Fonts link.
+ */
+
+function fictioneer_extract_font_from_google_link( $link ) {
+  return Utils_Admin::extract_font_from_google_link( $link );
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================
