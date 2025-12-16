@@ -1020,7 +1020,7 @@ function fictioneer_output_customize_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      Utils::get_cache_uri( 'output_customize_css' ) . "/customize.css",
+      Utils::get_cache_uri( 'output_customize_css' ) . "customize.css",
       ['fictioneer-application'],
       fictioneer_get_cache_bust()
     );
@@ -1048,7 +1048,7 @@ function fictioneer_output_customize_preview_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      Utils::get_cache_uri( 'output_customize_preview_css' ) . "/customize-preview.css",
+      Utils::get_cache_uri( 'output_customize_preview_css' ) . "customize-preview.css",
       ['fictioneer-application'],
       time() // Prevents caching in preview
     );
@@ -1155,7 +1155,7 @@ function fictioneer_add_custom_scripts() {
 
   wp_register_script(
     'fictioneer-dynamic-scripts',
-    Utils::get_cache_uri( 'add_custom_scripts' ) . '/dynamic-scripts.js',
+    Utils::get_cache_uri( 'add_custom_scripts' ) . 'dynamic-scripts.js',
     [],
     $cache_bust,
     $strategy
@@ -1706,7 +1706,7 @@ if ( ! function_exists( 'fictioneer_output_head_fonts' ) ) {
     // Output font stylesheets...
     if ( file_exists( $bundled_fonts ) ) {
       // ... base and custom
-      $custom_fonts_href = Utils::get_cache_uri( 'output_head_fonts' ) . '/bundled-fonts.css' . $cache_bust;
+      $custom_fonts_href = Utils::get_cache_uri( 'output_head_fonts' ) . 'bundled-fonts.css' . $cache_bust;
 
       // Start HTML ---> ?>
       <link rel="stylesheet" id="fictioneer-bundled-fonts-stylesheet" href="<?php echo $custom_fonts_href; ?>" data-no-optimize="1" data-no-minify="1" <?php echo $loading_pattern; ?>>

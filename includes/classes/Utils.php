@@ -62,11 +62,13 @@ class Utils {
    */
 
   public static function get_cache_uri( $context = null ) : string {
-    return apply_filters(
+    $uri = apply_filters(
       'fictioneer_filter_cache_uri',
       content_url( 'cache/fictioneer' ),
       $context
     );
+
+    return trailingslashit( $uri );
   }
 
   /**
