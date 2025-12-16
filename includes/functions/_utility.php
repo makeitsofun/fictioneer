@@ -2294,7 +2294,7 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
 
     // Make sure fonts are set up!
     if ( ! $custom_fonts || ! is_array( $custom_fonts ) ) {
-      fictioneer_build_bundled_fonts();
+      Utils::bundle_fonts();
     }
 
     // Setup

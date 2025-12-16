@@ -1698,7 +1698,7 @@ if ( ! function_exists( 'fictioneer_output_head_fonts' ) ) {
 
     // Create file if it does not exist
     if ( ! file_exists( $bundled_fonts ) ) {
-      fictioneer_build_bundled_fonts();
+      Utils::bundle_fonts();
     }
 
     // Output font stylesheets...

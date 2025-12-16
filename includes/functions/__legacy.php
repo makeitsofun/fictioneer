@@ -585,6 +585,17 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
   }
 }
 
+/**
+ * [Deprecated] Build bundled font stylesheet.
+ *
+ * @since 5.10.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::bundle_fonts() instead.
+ */
+
+function fictioneer_build_bundled_fonts() : void {
+  Utils_Admin::bundle_fonts();
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================

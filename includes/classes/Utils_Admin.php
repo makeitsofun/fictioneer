@@ -346,4 +346,73 @@ class Utils_Admin {
 
     return $family;
   }
+
+  /**
+   * Build bundled font stylesheet.
+   *
+   * @since 5.10.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   */
+
+  public static function bundle_fonts() : void {
+    $fonts = apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', fictioneer_get_font_data() );
+
+    $disabled_fonts = Utils::get_disabled_fonts();
+    $parent_uri = trailingslashit( get_template_directory_uri() );
+    $child_uri = trailingslashit( get_stylesheet_directory_uri() );
+    $combined_css = '';
+    $font_stack = [];
+
+    $base_file = get_parent_theme_file_path( 'css/fonts-base.css' );
+
+    if ( is_readable( $base_file ) ) {
+      $css = file_get_contents( $base_file );
+
+      if ( $css !== false && $css !== '' ) {
+        $combined_css .= str_replace( '../fonts/', $parent_uri . 'fonts/', $css );
+      }
+    }
+
+    foreach ( $fonts as $key => $font ) {
+      if ( in_array( $key, $disabled_fonts, true ) ) {
+        continue;
+      }
+
+      if ( ! empty( $font['chapter'] ) ) {
+        $font_stack[ $font['key'] ?? $key ] = array(
+          'css' => fictioneer_font_family_value( $font['family'] ?? '' ),
+          'name' => $font['name'] ?? '',
+          'alt' => $font['alt'] ?? ''
+        );
+      }
+
+      if ( ! empty( $font['skip'] ) || ! empty( $font['google_link'] ) ) {
+        continue;
+      }
+
+      $css_file = $font['css_file'] ?? '';
+
+      if ( ! is_string( $css_file ) || $css_file === '' || ! is_readable( $css_file ) ) {
+        continue;
+      }
+
+      $css = file_get_contents( $css_file );
+
+      if ( empty( $css ) ) {
+        continue;
+      }
+
+      $uri = empty( $font['in_child_theme'] ) ? $parent_uri : $child_uri;
+      $combined_css .= str_replace( '../fonts/', $uri . 'fonts/', $css );
+    }
+
+    update_option( 'fictioneer_chapter_fonts', $font_stack, true );
+    update_option( 'fictioneer_bundled_fonts_timestamp', time(), true );
+
+    $save_path = Utils::get_cache_dir( 'build_bundled_fonts' ) . 'bundled-fonts.css';
+
+    if ( file_put_contents( $save_path, $combined_css ) === false ) {
+      error_log( '[Fictioneer] Failed to write bundled fonts CSS: ' . $save_path );
+    }
+  }
 }

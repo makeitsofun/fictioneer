@@ -365,7 +365,7 @@ function fictioneer_tools_disable_font() {
   update_option( 'fictioneer_disabled_fonts', $disabled_fonts );
 
   // Rebuild stylesheet
-  fictioneer_build_bundled_fonts();
+  Utils::bundle_fonts();
 
   // Clear cached HTML for good measure
   fictioneer_clear_all_cached_partials();
@@ -417,7 +417,7 @@ function fictioneer_tools_enable_font() {
   update_option( 'fictioneer_disabled_fonts', $disabled_fonts );
 
   // Rebuild stylesheet
-  fictioneer_build_bundled_fonts();
+  Utils::bundle_fonts();
 
   // Clear cached HTML for good measure
   fictioneer_clear_all_cached_partials();

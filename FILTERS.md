@@ -1556,7 +1556,7 @@ Filters the intermediate output array of the `fictioneer_get_post_meta_items()` 
 ---
 
 ### `apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', $fonts )`
-Filters the font array before the bundled-fonts.css stylesheet is built in the `fictioneer_build_bundled_fonts()` function. This allows you to add, remove, or change fonts at the last opportunity. Note that the function reads the file system, which is potentially slow. The result is cached in the `fictioneer_chapter_fonts` option.
+Filters the font array before the bundled-fonts.css stylesheet is built in the `\Fictioneer\Utils_Admin::bundle_fonts()` function. This allows you to add, remove, or change fonts at the last opportunity. Note that the function reads the file system, which is potentially slow. The result is cached in the `fictioneer_chapter_fonts` option.
 
 **Parameters:**
 * $fonts (array) – Array of font data.

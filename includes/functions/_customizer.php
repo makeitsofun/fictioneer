@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // EXTRACT FONT DATA FROM GOOGLE FONTS LINK
@@ -176,71 +177,4 @@ function fictioneer_get_font_data() {
 
   // Return complete font list
   return $fonts;
-}
-
-// =============================================================================
-// BUILD BUNDLED FONT CSS FILE
-// =============================================================================
-
-/**
- * Build bundled font stylesheet
- *
- * @since 5.10.0
- */
-
-function fictioneer_build_bundled_fonts() {
-  // Setup
-  $base_fonts = WP_CONTENT_DIR . '/themes/fictioneer/css/fonts-base.css';
-  $fonts = fictioneer_get_font_data();
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
-  $combined_font_css = '';
-  $font_stack = [];
-
-  // Apply filters
-  $fonts = apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', $fonts );
-
-  // Build
-  if ( file_exists( $base_fonts ) ) {
-    $css = file_get_contents( $base_fonts );
-    $css = str_replace( '../fonts/', get_template_directory_uri() . '/fonts/', $css );
-
-    $combined_font_css .= $css;
-  }
-
-  foreach ( $fonts as $key => $font ) {
-    if ( in_array( $key, $disabled_fonts ) ) {
-      continue;
-    }
-
-    if ( $font['chapter'] ?? 0 ) {
-      $font_stack[ $font['key'] ] = array(
-        'css' => fictioneer_font_family_value( $font['family'] ?? '' ),
-        'name' => $font['name'] ?? '',
-        'alt' => $font['alt'] ?? ''
-      );
-    }
-
-    if ( ! ( $font['skip'] ?? 0 ) && ! ( $font['google_link'] ?? 0 ) ) {
-      $css = file_get_contents( $font['css_file'] );
-
-      if ( $font['in_child_theme'] ?? 0 ) {
-        $css = str_replace( '../fonts/', get_stylesheet_directory_uri() . '/fonts/', $css );
-      } else {
-        $css = str_replace( '../fonts/', get_template_directory_uri() . '/fonts/', $css );
-      }
-
-      $combined_font_css .= $css;
-    }
-  }
-
-  // Update options
-  update_option( 'fictioneer_chapter_fonts', $font_stack, true );
-  update_option( 'fictioneer_bundled_fonts_timestamp', time(), true );
-
-  // Save
-  file_put_contents(
-    Utils::get_cache_dir( 'build_bundled_fonts' ) . '/bundled-fonts.css',
-    $combined_font_css
-  );
 }

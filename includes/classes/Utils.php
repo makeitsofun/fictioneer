@@ -479,6 +479,17 @@ class Utils {
   }
 
   /**
+   * [Delegate] Build bundled font stylesheet.
+   *
+   * @since 5.10.0
+   * @since 5.33.3 - Moved into Utils_Admin class.
+   */
+
+  public static function bundle_fonts() : void {
+    Utils_Admin::bundle_fonts();
+  }
+
+  /**
    * Return array of disabled font keys.
    *
    * @since 5.33.3
