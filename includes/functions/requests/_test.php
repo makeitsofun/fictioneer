@@ -7,8 +7,8 @@ defined( 'ABSPATH' ) OR exit;
 $user = ffcnr_get_current_user();
 
 // Report
-header( 'Content-Type: text/html; charset=utf-8' );
-header( 'HTTP/1.1 200 OK' );
+header( 'Content-Type: text/plain; charset=utf-8' );
+http_response_code( 200 );
 
 if ( $user === 0 ) {
   echo 'FFCNR authentication is not working for unknown reasons, turn it off or try to fix it.';
