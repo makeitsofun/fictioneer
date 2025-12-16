@@ -227,6 +227,8 @@ class Customizer {
     $css = '';
 
     $properties = array(
+      '--site-title-heading-color' => Utils::get_hsl_font_code( Utils::get_theme_color( 'light_header_title_color' ) ),
+      '--site-title-tagline-color' => Utils::get_hsl_font_code( Utils::get_theme_color( 'light_header_tagline_color' ) ),
       '--hue-offset' => get_theme_mod( 'hue_offset_light', 0 ) . 'deg',
       '--saturation-offset' => (float) get_theme_mod( 'saturation_offset_light', 0 ) / 100,
       '--lightness-offset' => (float) get_theme_mod( 'lightness_offset_light', 0 ) / 100,
