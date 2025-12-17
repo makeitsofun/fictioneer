@@ -529,8 +529,6 @@ require_once __DIR__ . '/includes/functions/_module-alerts.php';
  * Set up the theme customizer.
  */
 
-require_once __DIR__ . '/includes/functions/_customizer.php';
-
 if ( is_customize_preview() ) {
   require_once __DIR__ . '/includes/functions/_customizer-settings.php';
 }
