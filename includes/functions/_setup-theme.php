@@ -976,7 +976,12 @@ function fictioneer_style_queue() {
   );
 
   // Comments
-  if ( comments_open() ) {
+  if (
+    get_post_type() === 'fcn_story' ||
+    get_page_template_slug() === 'user-profile.php' ||
+    comments_open() ||
+    is_page_template( 'singular-story.php' )
+  ) {
     wp_enqueue_style(
       'fictioneer-comments',
       get_template_directory_uri() . '/css/comments.css',
