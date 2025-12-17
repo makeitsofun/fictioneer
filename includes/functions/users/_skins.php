@@ -78,6 +78,8 @@ function fictioneer_ajax_save_skins() {
       }
     }
 
+    delete_user_meta( $user->ID, 'fictioneer_skins' ); // Just easier this way
+
     if ( update_user_meta( $user->ID, 'fictioneer_skins', $skins ) ) {
       wp_send_json_success( array( 'message' => __( 'Skins uploaded successfully.', 'fictioneer' ) ) );
     } else {
