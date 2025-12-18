@@ -311,7 +311,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
    *                                Default true.
    * @param array   $args           Optional array of arguments.
    *
-   * @return array|boolean Data of the story or false if invalid.
+   * @return array|bool Data of the story or false if invalid.
    */
 
   function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {

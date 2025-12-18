@@ -94,7 +94,7 @@ function fictioneer_generate_test_comments( $post_id, $number = 3 ) {
 }
 
 /**
- * Generate a test users, stories, and chapters.
+ * Generate test users, stories, and chapters.
  *
  * @since 5.23.1
  */
