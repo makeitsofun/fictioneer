@@ -378,30 +378,12 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
     $warnings = get_the_terms( $story_id, 'fcn_content_warning' );
     $genres = get_the_terms( $story_id, 'fcn_genre' );
     $status = get_post_meta( $story_id, 'fictioneer_story_status', true );
-    $icon = Utils::get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
+    $icon = Utils::get_story_status_icon( $status );
     $chapter_count = 0;
     $word_count = 0;
     $comment_count = 0;
     $visible_chapter_ids = [];
     $indexed_chapter_ids = [];
-
-    // Assign correct icon
-    if ( $status != 'Ongoing' ) {
-      switch ( $status ) {
-        case 'Completed':
-          $icon = Utils::get_theme_icon( 'icon_story_status_completed', '<i class="fa-solid fa-circle-check"></i>' );
-          break;
-        case 'Oneshot':
-          $icon = Utils::get_theme_icon( 'icon_story_status_oneshot', '<i class="fa-solid fa-circle-check"></i>' );
-          break;
-        case 'Hiatus':
-          $icon = Utils::get_theme_icon( 'icon_story_status_hiatus', '<i class="fa-solid fa-circle-pause"></i>' );
-          break;
-        case 'Canceled':
-          $icon = Utils::get_theme_icon( 'icon_story_status_canceled', '<i class="fa-solid fa-ban"></i>' );
-          break;
-      }
-    }
 
     // Custom SQL query to count chapters, words, comments, etc.
     // This significantly faster than WP_Query (up to 15 times with 500 chapters)

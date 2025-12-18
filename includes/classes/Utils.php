@@ -668,4 +668,33 @@ class Utils {
 
     return json_last_error() === JSON_ERROR_NONE;
   }
+
+  /**
+   * Get story status icon HTML.
+   *
+   * @since 5.33.3
+   *
+   * @param string $status  Status of the story.
+   *
+   * @return string HTML of the status icon.
+   */
+
+  public static function get_story_status_icon( string $status ) : string {
+    $icon = Utils::get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
+
+    if ( $status !== 'Ongoing' ) {
+      switch ( $status ) {
+        case 'Completed':
+          return Utils::get_theme_icon( 'icon_story_status_completed', '<i class="fa-solid fa-circle-check"></i>' );
+        case 'Oneshot':
+          return Utils::get_theme_icon( 'icon_story_status_oneshot', '<i class="fa-solid fa-circle-check"></i>' );
+        case 'Hiatus':
+          return Utils::get_theme_icon( 'icon_story_status_hiatus', '<i class="fa-solid fa-circle-pause"></i>' );
+        case 'Canceled':
+          return Utils::get_theme_icon( 'icon_story_status_canceled', '<i class="fa-solid fa-ban"></i>' );
+      }
+    }
+
+    return $icon;
+  }
 }
