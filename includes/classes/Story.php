@@ -144,7 +144,6 @@ class Story {
     );
 
     if ( (int) ( $meta_cache['last_modified'] ?? 0 ) >= (int) $last_modified ) {
-      error_log( 'cached' );
       return $meta_cache;
     }
 
