@@ -81,8 +81,11 @@ if ( ! function_exists( 'fictioneer_get_card_list' ) ) {
     // Query (but not if 'post__in' is set and empty)
     if ( ! ( isset( $the_query_args['post__in'] ) && empty( $the_query_args['post__in'] ) ) ) {
 
+      $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'card_list' );
+      $batch_limit = max( 100, min( 2000, $batch_limit ) );
+
       // Look for IDs to exclude if story or chapter...
-      if ( in_array( $post_type, ['fcn_story', 'fcn_chapter'] ) && FICTIONEER_QUERY_ID_ARRAY_LIMIT > 0 ) {
+      if ( in_array( $post_type, ['fcn_story', 'fcn_chapter'] ) && $batch_limit > 0 ) {
         // Get complete set for filtering (required due to pagination)
         $all_query = new WP_Query(
           array_merge(
@@ -117,7 +120,7 @@ if ( ! function_exists( 'fictioneer_get_card_list' ) ) {
         }
       }
 
-      if ( ! empty( $excluded ) && count( $excluded ) <= FICTIONEER_QUERY_ID_ARRAY_LIMIT ) {
+      if ( ! empty( $excluded ) && count( $excluded ) <= $batch_limit ) {
         $the_query_args['post__not_in'] = array_values(
           array_unique( array_merge( $excluded, $the_query_args['post__not_in'] ?? [] ) )
         );

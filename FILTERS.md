@@ -1628,6 +1628,13 @@ function child_add_custom_profile_support_field( $fields, $profile_user ) {
 add_filter( 'fictioneer_filter_profile_fields_support', 'child_add_custom_profile_support_field', 10, 2 );
 ```
 
+### `apply_filters( 'fictioneer_filter_query_batch_limit', $limit, $context )`
+Filters the maximum batch size for chunked queries, used to limit memory usage and prevent performance degradation when processing large datasets.
+
+**Parameters:**
+* $limit (int) – Current limit per batch.
+* $context (string) – Context of the filter.
+
 ---
 
 ### `apply_filters( 'fictioneer_filter_recommendations_card_args', $card_args, $args )`
@@ -2595,7 +2602,7 @@ add_filter( 'fictioneer_filter_story_card_footer', 'child_add_item_to_story_card
 ---
 
 ### `apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids )`
-Filters the arguments for the story chapter posts query, an utility function called on story and chapter pages. There are two query variants depending on whether the `FICTIONEER_QUERY_ID_ARRAY_LIMIT` (1000) is exceeded or not.
+Filters the arguments for the story chapter posts query, an utility function called on story and chapter pages. There are two query variants depending on whether the threshold of 800 (see `fictioneer_filter_query_batch_limit`) is exceeded or not.
 
 **$query_args:**
 * $post_type (string) - Which post types to query. Default `'fcn_chapter'`.

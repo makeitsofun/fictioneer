@@ -197,14 +197,17 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
     return $cached_results[ $cache_key ];
   }
 
+  $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
+  $batch_limit = max( 100, min( 2000, $batch_limit ) );
+
   // Batched or one go?
-  if ( count( $chapter_ids ) <= FICTIONEER_QUERY_ID_ARRAY_LIMIT ) {
+  if ( count( $chapter_ids ) <= $batch_limit ) {
     $query_args['post__in'] = $chapter_ids ?: [0];
     $chapter_query = new WP_Query( $query_args );
     $chapter_posts = $chapter_query->posts;
   } else {
     $chapter_posts = [];
-    $batches = array_chunk( $chapter_ids, FICTIONEER_QUERY_ID_ARRAY_LIMIT );
+    $batches = array_chunk( $chapter_ids, $batch_limit );
 
     foreach ( $batches as $batch ) {
       $query_args['post__in'] = $batch ?: [0];
@@ -365,9 +368,10 @@ function fictioneer_get_story_comment_count( $story_id, $chapter_ids = null ) {
   // SQL
   global $wpdb;
 
-  $chunks = array_chunk( $chapter_ids, FICTIONEER_QUERY_ID_ARRAY_LIMIT );
+  $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
+  $batch_limit = max( 100, min( 2000, $batch_limit ) );
 
-  foreach ( $chunks as $chunk ) {
+  foreach ( array_chunk( $chapter_ids, $batch_limit ) as $chunk ) {
     $placeholders = implode( ',', array_fill( 0, count( $chunk ), '%d' ) );
     $query = $wpdb->prepare("
       SELECT COUNT(comment_ID)

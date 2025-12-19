@@ -273,13 +273,6 @@ if ( ! defined( 'FICTIONEER_REQUESTS_PER_MINUTE' ) ) {
   define( 'FICTIONEER_REQUESTS_PER_MINUTE', 10 );
 }
 
-// Integer: Maximum number of IDs in 'post__in' and 'post__not_in' query arguments
-// to prevent performance degradation. If exceeded, the whole argument will be
-// ignored in certain queries, which account for.
-if ( ! defined( 'FICTIONEER_QUERY_ID_ARRAY_LIMIT' ) ) {
-  define( 'FICTIONEER_QUERY_ID_ARRAY_LIMIT', 1000 );
-}
-
 // Integer: Time until a user's Patreon data expires in seconds
 if ( ! defined( 'FICTIONEER_PATREON_EXPIRATION_TIME' ) ) {
   define( 'FICTIONEER_PATREON_EXPIRATION_TIME', WEEK_IN_SECONDS );

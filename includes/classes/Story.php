@@ -176,7 +176,7 @@ class Story {
       $chapter_ids = array_slice( $chapter_ids, 0, $posts_per_page );
     }
 
-    $batch_limit = (int) apply_filters( 'fictioneer_filter_story_data_batch_limit', 800, $story_id );
+    $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'fast_story_chapter_posts' );
     $batch_limit = max( 100, min( 2000, $batch_limit ) );
 
     $fields = $full
