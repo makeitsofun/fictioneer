@@ -12,7 +12,7 @@
  * @since 5.17.0 - Turned meta data into filterable array.
  * @see single-fcn_story.php
  *
- * @internal $args['story_data']  Story data from fictioneer_get_story_data().
+ * @internal $args['story_data']  Story data from \Fictioneer\Story::get_data().
  * @internal $args['story_id']    Current story and post ID.
  */
 

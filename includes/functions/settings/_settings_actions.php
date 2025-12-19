@@ -1480,7 +1480,7 @@ function fictioneer_tools_append_chapters() {
   // Show preview and exit...
   if ( $action === 'preview' ) {
     $previews = [];
-    $story_data = fictioneer_get_story_data( $story_id, false );
+    $story_data = \Fictioneer\Story::get_data( $story_id, false );
     $description = sprintf(
       "<p>The chapters considered for appending to <strong>%s</strong> (#%s), in order of publication. Chapters which are already listed will be skipped. Beware that all post ownership restrictions will be ignored.</p><p style='margin-top: -10px;'>%s</p>",
       $story_data['title'],

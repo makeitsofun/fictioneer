@@ -11,7 +11,7 @@
  * @since 5.20.0 - Added Elementor support.
  * @see single-fcn_story.php
  *
- * @internal $args['story_data']  Story data from fictioneer_get_story_data().
+ * @internal $args['story_data']  Story data from \Fictioneer\Story::get_data().
  * @internal $args['story_id']    Current story and post ID.
  * @internal $args['context']     Render context. Default null.
  */

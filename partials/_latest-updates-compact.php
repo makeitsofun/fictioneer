@@ -183,7 +183,7 @@ if ( $args['count'] < 2 || count( $args['post_ids'] ?? [] ) === 1 ) {
           <?php
             // Setup
             $post_id = $post->ID;
-            $story = fictioneer_get_story_data( $post_id, false ); // Does not refresh comment count!
+            $story = \Fictioneer\Story::get_data( $post_id, false ); // Does not refresh comment count!
             $story_link = get_post_meta( $post_id, 'fictioneer_story_redirect_link', true ) ?: get_permalink( $post_id );
             $grid_or_vertical = $args['vertical'] ? '_vertical' : '_grid';
             $chapter_list = [];

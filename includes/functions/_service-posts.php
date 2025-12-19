@@ -585,7 +585,7 @@ function fictioneer_increment_story_comment_count( $comment_id ) {
   }
 
   $story_id = fictioneer_get_chapter_story_id( $comment->comment_post_ID );
-  $story_data = $story_id ? fictioneer_get_story_data( $story_id ) : null;
+  $story_data = $story_id ? \Fictioneer\Story::get_data( $story_id ) : null;
 
   // Increment comment count (will be recounted at some later point)
   if ( $story_data ) {
@@ -613,7 +613,7 @@ function fictioneer_decrement_story_comment_count( $comment_id ) {
   }
 
   $story_id = fictioneer_get_chapter_story_id( $comment->comment_post_ID );
-  $story_data = $story_id ? fictioneer_get_story_data( $story_id ) : null;
+  $story_data = $story_id ? \Fictioneer\Story::get_data( $story_id ) : null;
 
   // Decrement comment count (will be recounted at some later point)
   if ( $story_data ) {

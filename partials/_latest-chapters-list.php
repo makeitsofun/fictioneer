@@ -176,7 +176,7 @@ if ( $splide ) {
 
             // Continue setup
             $title = fictioneer_get_safe_title( $post_id, 'shortcode-latest-chapters-list' );
-            $story = $story_id ? fictioneer_get_story_data( $story_id, false ) : null; // Does not refresh comment count!
+            $story = $story_id ? \Fictioneer\Story::get_data( $story_id, false ) : null; // Does not refresh comment count!
             $permalink = get_permalink( $post_id );
             $chapter_rating = get_post_meta( $post_id, 'fictioneer_chapter_rating', true );
             $words = fictioneer_get_word_count( $post_id );

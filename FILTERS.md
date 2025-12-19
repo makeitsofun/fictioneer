@@ -697,7 +697,7 @@ Filters the maximum number of chapter IDs processed per batch when querying chap
 ---
 
 ### `apply_filters( 'fictioneer_filter_get_story_data_indexed_chapter_statuses', $statuses, $story_id )`
-Filters the array of chapter statuses that can be appended to a story’s `indexed_chapter_ids` array in the `fictioneer_get_story_data()` function. These chapters are a subset of the queried chapters, which need to be filtered separately. By default, the statuses are `['publish']`.
+Filters the array of chapter statuses that can be appended to a story’s `indexed_chapter_ids` array in the `\Fictioneer\Story::get_data()` function. These chapters are a subset of the queried chapters, which need to be filtered separately. By default, the statuses are `['publish']`.
 
 **Note:** If you enable the `FICTIONEER_LIST_SCHEDULED_CHAPTERS` constant, the filter will be used to treat scheduled chapters as published.
 
@@ -718,7 +718,7 @@ add_filter( 'fictioneer_filter_get_story_data_indexed_chapter_statuses', 'child_
 ---
 
 ### `apply_filters( 'fictioneer_filter_get_story_data_queried_chapter_statuses', $statuses, $story_id )`
-Filters the array of queried chapter statuses in the `fictioneer_get_story_data()` function. These chapters may appear in lists but cannot necessarily be navigated to (for example, `'future'` chapters). By default, the statuses are `['publish']`.
+Filters the array of queried chapter statuses in the `\Fictioneer\Story::get_data()` function. These chapters may appear in lists but cannot necessarily be navigated to (for example, `'future'` chapters). By default, the statuses are `['publish']`.
 
 **Note:** If you enable the `FICTIONEER_LIST_SCHEDULED_CHAPTERS` constant, the filter will be used to treat scheduled chapters as published.
 
@@ -739,7 +739,7 @@ add_filter( 'fictioneer_filter_get_story_data_queried_chapter_statuses', 'child_
 ---
 
 ### `apply_filters( 'fictioneer_filter_get_story_data_sql', $sql, $story_id, $chapter_ids, $statuses )`
-Filters the prepared raw SQL used to query chapters in the `fictioneer_get_story_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
+Filters the prepared raw SQL used to query chapters in the `\Fictioneer\Story::get_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
 
 **Warning:** Of all filters that can mess up your site, this one can mess up your site the most.
 
@@ -2670,7 +2670,7 @@ Filters the intermediate output array in the `_story-header.php` partial before 
 
 **Parameters:**
 * $story_id (int) – The story ID.
-* $story (array) – Array with story data from `fictioneer_get_story_data()`.
+* $story (array) – Array with story data from `\Fictioneer\Story::get_data()`.
 
 ---
 

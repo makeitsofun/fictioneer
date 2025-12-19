@@ -175,7 +175,7 @@ if ( $splide ) {
           <?php
             // Setup
             $post_id = $post->ID;
-            $story = fictioneer_get_story_data( $post_id, false ); // Does not refresh comment count!
+            $story = \Fictioneer\Story::get_data( $post_id, false ); // Does not refresh comment count!
             $permalink = get_post_meta( $post_id, 'fictioneer_story_redirect_link', true ) ?: get_permalink( $post_id );
             $tags = ( $show_terms && get_option( 'fictioneer_show_tags_on_story_cards' ) ) ? get_the_tags( $post ) : false;
             $chapter_list = [];

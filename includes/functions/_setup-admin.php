@@ -1705,7 +1705,7 @@ function fictioneer_ajax_get_chapter_group_options() {
   // Setup
   global $wpdb;
 
-  $story = fictioneer_get_story_data( $story_id, false );
+  $story = \Fictioneer\Story::get_data( $story_id, false );
   $groups = [];
 
   // Query groups

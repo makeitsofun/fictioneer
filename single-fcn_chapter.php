@@ -59,7 +59,7 @@ get_header(
 
         // Story data
         if ( $story_post ) {
-          $story_data = fictioneer_get_story_data( $story_id, false ); // Does not refresh comment count!
+          $story_data = \Fictioneer\Story::get_data( $story_id, false ); // Does not refresh comment count!
           $chapter_ids = $story_data['chapter_ids'];
           $indexed_chapters = $story_data['indexed_chapter_ids'] ?? $chapter_ids;
 

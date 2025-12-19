@@ -560,7 +560,7 @@ if ( ! function_exists( 'fictioneer_get_collection_statistics' ) ) {
         $query_chapter_ids[] = $post->ID;
       } elseif ( $post->post_type === 'fcn_story' ) {
         // ... stories have pre-processed data
-        $story = fictioneer_get_story_data( $post->ID, false );
+        $story = Story::get_data( $post->ID, false );
         $found_chapter_ids = array_merge( $found_chapter_ids, $story['chapter_ids'] );
         $word_count += $story['word_count'];
         $chapter_count += $story['chapter_count'];

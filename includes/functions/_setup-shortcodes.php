@@ -2,6 +2,7 @@
 
 use Fictioneer\Utils;
 use Fictioneer\Sanitizer;
+use Fictioneer\Story;
 
 // =============================================================================
 // GET SHORTCODE TRANSIENT
@@ -1313,7 +1314,7 @@ function fictioneer_shortcode_chapter_list( $attr ) {
   if ( $story_id && empty( $chapter_ids ) ) {
     // ... via story
     $hide_icons = $hide_icons || get_post_meta( $story_id, 'fictioneer_story_hide_chapter_icons', true );
-    $story_data = fictioneer_get_story_data( $story_id, false ); // Does not refresh comment count!
+    $story_data = Story::get_data( $story_id, false ); // Does not refresh comment count!
     $chapters = $story_data['chapter_ids'];
   } elseif ( ! empty( $chapter_ids ) ) {
     // ... via chapter IDs
@@ -2100,7 +2101,7 @@ function fictioneer_shortcode_story_section( $attr ) {
   $cache = filter_var( $attr['cache'] ?? 1, FILTER_VALIDATE_BOOLEAN );
   $story_id = fictioneer_validate_id( $attr['story_id'] ?? 0, 'fcn_story' );
   $post = get_post( $story_id );
-  $story_data = fictioneer_get_story_data( $story_id );
+  $story_data = Story::get_data( $story_id );
   $classes = wp_strip_all_tags( $attr['class'] ?? '' );
   $show_tabs = filter_var( $attr['tabs'] ?? 0, FILTER_VALIDATE_BOOLEAN );
   $show_pages = filter_var( $attr['pages'] ?? 0, FILTER_VALIDATE_BOOLEAN );
@@ -2228,7 +2229,7 @@ function fictioneer_shortcode_story_actions( $attr ) {
   // Setup
   $cache = filter_var( $attr['cache'] ?? 1, FILTER_VALIDATE_BOOLEAN );
   $story_id = fictioneer_validate_id( $attr['story_id'] ?? 0, 'fcn_story' );
-  $story_data = fictioneer_get_story_data( $story_id );
+  $story_data = Story::get_data( $story_id );
   $classes = wp_strip_all_tags( $attr['class'] ?? '' );
   $follow = filter_var( $attr['follow'] ?? 1, FILTER_VALIDATE_BOOLEAN );
   $reminder = filter_var( $attr['reminder'] ?? 1, FILTER_VALIDATE_BOOLEAN );
@@ -2398,7 +2399,7 @@ function fictioneer_shortcode_story_comments( $attr ) {
 
   // Setup
   $story_id = fictioneer_validate_id( $attr['story_id'] ?? get_the_ID(), 'fcn_story' );
-  $story_data = fictioneer_get_story_data( $story_id ?: 0 );
+  $story_data = Story::get_data( $story_id ?: 0 );
   $header = filter_var( $attr['header'] ?? 1, FILTER_VALIDATE_BOOLEAN );
   $classes = wp_strip_all_tags( $attr['classes'] ?? $attr['class'] ?? '' );
   $style = esc_attr( wp_strip_all_tags( $attr['style'] ?? '' ) );
@@ -2462,7 +2463,7 @@ add_shortcode( 'fictioneer_story_comments', 'fictioneer_shortcode_story_comments
 function fictioneer_shortcode_story_data( $attr ) {
   // Setup
   $story_id = fictioneer_validate_id( $attr['story_id'] ?? get_the_ID(), 'fcn_story' );
-  $story_data = fictioneer_get_story_data( $story_id ?: 0 );
+  $story_data = Story::get_data( $story_id ?: 0 );
   $data = $attr['data'] ?? '';
   $format = $attr['format'] ?? '';
   $separator = wp_strip_all_tags( $attr['separator'] ?? '' ) ?: ', ';

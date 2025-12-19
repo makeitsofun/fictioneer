@@ -176,7 +176,7 @@ if ( $args['count'] < 2 || count( $args['post_ids'] ?? [] ) === 1 ) {
             }
 
             $title = fictioneer_get_safe_title( $post_id, 'shortcode-latest-chapters-compact' );
-            $story = $story_id ? fictioneer_get_story_data( $story_id, false ) : null; // Does not refresh comment count!
+            $story = $story_id ? \Fictioneer\Story::get_data( $story_id, false ) : null; // Does not refresh comment count!
             $text_icon = get_post_meta( $post_id, 'fictioneer_chapter_text_icon', true );
             $words = fictioneer_get_word_count( $post_id );
             $grid_or_vertical = $args['vertical'] ? '_vertical' : '_grid';

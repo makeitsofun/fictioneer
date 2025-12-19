@@ -148,7 +148,7 @@ function fictioneer_ajax_set_checkmark() {
     wp_send_json_error( array( 'error' => 'Invalid story ID.' ) );
   }
 
-  $story_data = fictioneer_get_story_data( $story_id, false ); // Does not refresh comment count!
+  $story_data = \Fictioneer\Story::get_data( $story_id, false ); // Does not refresh comment count!
 
   // Prepare update
   $update = isset( $_POST['update'] ) ? array_map( 'absint', explode( ' ', sanitize_text_field( $_POST['update'] ) ) ) : [];
