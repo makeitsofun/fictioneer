@@ -1628,12 +1628,25 @@ function child_add_custom_profile_support_field( $fields, $profile_user ) {
 add_filter( 'fictioneer_filter_profile_fields_support', 'child_add_custom_profile_support_field', 10, 2 );
 ```
 
+---
+
 ### `apply_filters( 'fictioneer_filter_query_batch_limit', $limit, $context )`
 Filters the maximum batch size for chunked queries, used to limit memory usage and prevent performance degradation when processing large datasets.
 
 **Parameters:**
 * $limit (int) – Current limit per batch.
 * $context (string) – Context of the filter.
+
+---
+
+### `apply_filters( 'fictioneer_filter_fast_story_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full )`
+Filters the maximum batch size for chunked queries, used to limit memory usage and prevent performance degradation when processing large datasets. Clamped between 100 and 2000. See `includes/classes/Story.php` for details.
+
+**Parameters:**
+* $meta_keys (array) – List of post meta keys to preload.
+*	$story_id (int|string) – ID of the parent story.
+*	$args (array) – WordPress query arguments. Only partially honored.
+*	$full (bool) – Whether the content is loaded as well. Default false.
 
 ---
 

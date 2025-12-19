@@ -1376,7 +1376,7 @@ $images = get_template_directory_uri() . '/img/documentation/';
                     __( 'Enable optimized chapter post queries', 'fictioneer' ),
                     __( 'Significantly reduces RAM usage, but may interfere with plugins or customizations that rely on native WordPress queries. This is an advanced option — use with care!' ),
                     __( '<p>Compiling grouped chapter lists on story pages can place significant strain on your server, especially if you have hundreds of chapters per story that all need to be queried.</p><p>While Transient caching helps, rebuilding the list is still expensive due to how native WordPress queries work. This option replaces the default query with an optimized custom one, at the expense of full compatibility with all plugins and filters.<p><p>More specifically, only selected post and meta fields are queried. If you need more, add them with the filter. Otherwise, WordPress will make additional expensive queries to fetch the missing data.</p>' ),
-                    '<code class="helper-modal-code">fictioneer_filter_fast_chapter_posts_meta_keys</code>'
+                    '<code class="helper-modal-code">fictioneer_filter_fast_story_chapter_posts_meta_keys</code>'
                   );
                 ?>
               </div>

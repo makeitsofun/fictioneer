@@ -198,7 +198,7 @@ class Story {
       '_word_count'
     );
 
-    $meta_keys = apply_filters( 'fictioneer_filter_fast_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full );
+    $meta_keys = apply_filters( 'fictioneer_filter_fast_story_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full );
 
     $by_id = [];
 
