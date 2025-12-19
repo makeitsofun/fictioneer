@@ -654,7 +654,9 @@ function fictioneer_story_chapters( $args ) {
   $enable_checkmarks = get_option( 'fictioneer_enable_checkmarks' );
 
   // Capture output
-  ob_start();
+  if ( $enable_transients ) {
+    ob_start();
+  }
 
   // Start HTML ---> ?>
   <section class="story__tab-target _current story__chapters" data-fictioneer-story-target="tabContent" data-tab-name="chapters" data-order="asc" data-view="list">
@@ -867,15 +869,15 @@ function fictioneer_story_chapters( $args ) {
   </section>
   <?php // <--- End HTML
 
-  // Store output
-  $chapters_html = ob_get_clean();
-
-  // Flush buffered output
-  echo $chapters_html;
-
-  // Cache for next time (24 hours)
+  // Cache and flush buffered output (if enabled)
   if ( $enable_transients ) {
+    $chapters_html = ob_get_clean();
+
+    echo $chapters_html;
+
     $chapters_html = fictioneer_minify_html( $chapters_html ); // Compress
+
+    // Cache for next time (24 hours)
     set_transient( 'fictioneer_story_chapter_list_html_' . $story_id, $chapters_html, 86400 );
   }
 }
