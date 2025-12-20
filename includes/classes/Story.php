@@ -301,6 +301,35 @@ class Story {
 
     $meta_keys = apply_filters( 'fictioneer_filter_fast_story_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full );
 
+    // === WP CACHE ===
+
+    $cache_group = 'fictioneer_fast_chapter_posts';
+
+    $cache_args = array(
+      'post__in' => $args['post__in'] ?? null,
+      'post_status' => $statuses,
+      'posts_per_page' => $posts_per_page
+    );
+
+    $cache_version = self::get_story_chapter_cache_version( (int) $story_id );
+
+    $cache_key = sprintf(
+      'story:%d:v:%d:full:%d:a:%s:m:%s',
+      $story_id,
+      $cache_version,
+      (int) $full,
+      md5( wp_json_encode( $cache_args ) ),
+      md5( implode( ',', $meta_keys ) )
+    );
+
+    $cached = wp_cache_get( $cache_key, $cache_group );
+
+    if ( $cached !== false ) {
+      return $cached;
+    }
+
+    // ================
+
     $by_id = [];
 
     foreach ( array_chunk( $chapter_ids, $batch_limit ) as $batch ) {
@@ -351,6 +380,12 @@ class Story {
         $ordered[ $cid ] = $by_id[ $cid ];
       }
     }
+
+    // === WP CACHE ===
+
+    wp_cache_set( $cache_key, $ordered, $cache_group, self::get_chapter_posts_cache_ttl() );
+
+    // ================
 
     return $ordered;
   }
@@ -767,5 +802,79 @@ class Story {
         fictioneer_sql_update_comment_count( $story_id, $new_total_comment_count );
       }
     }
+  }
+
+  /**
+   * Return cache TTL for chapter posts.
+   *
+   * @since 5.33.2
+   *
+   * @return int TTL in seconds.
+   */
+
+  protected static function get_chapter_posts_cache_ttl() : int {
+    return defined( 'FICTIONEER_WP_CACHE_TTL' ) ? max( 0, (int) FICTIONEER_WP_CACHE_TTL ) : 0;
+  }
+
+  /**
+   * Return cache TTL for chapter posts cache version keys (2x TTL).
+   *
+   * @since 5.33.2
+   *
+   * @return int TTL in seconds.
+   */
+
+  protected static function get_chapter_posts_cache_version_ttl() : int {
+    $ttl = self::get_chapter_posts_cache_ttl();
+
+    return $ttl > 0 ? $ttl * 4 : 0;
+  }
+
+  /**
+   * Bump cache version for a story's chapter posts cache.
+   *
+   * @since 5.33.2
+   *
+   * @param int $story_id  Story ID.
+   */
+
+  public static function bump_story_chapter_cache_version( int $story_id ) : void {
+    if ( ! $story_id ) {
+      return;
+    }
+
+    $group = 'fictioneer_fast_chapter_posts';
+    $key = 'v:' . $story_id;
+
+    $version = wp_cache_get( $key, $group );
+    $version = $version === false ? 1 : (int) $version;
+    $version = $version > 0 ? $version + 1 : 2;
+
+    wp_cache_set( $key, $version, $group, self::get_chapter_posts_cache_version_ttl() );
+  }
+
+  /**
+   * Return cache version for a story's chapter posts cache.
+   *
+   * @since 5.33.2
+   *
+   * @param int $story_id  Story ID.
+   *
+   * @return int Cache version.
+   */
+
+  protected static function get_story_chapter_cache_version( int $story_id ) : int {
+    $group = 'fictioneer_fast_chapter_posts';
+    $key = 'v:' . $story_id;
+
+    $version = wp_cache_get( $key, $group );
+
+    if ( $version === false ) {
+      $version = 1;
+
+      wp_cache_set( $key, $version, $group, self::get_chapter_posts_cache_version_ttl() );
+    }
+
+    return (int) $version;
   }
 }

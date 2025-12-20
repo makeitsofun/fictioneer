@@ -321,6 +321,11 @@ if ( ! defined( 'FICTIONEER_SITEMAP_ENTRIES_PER_PAGE' ) ) {
   define( 'FICTIONEER_SITEMAP_ENTRIES_PER_PAGE', 2000 );
 }
 
+// Integer: Cache TTL for the WP cache (may or may not be persistent)
+if ( ! defined( 'FICTIONEER_WP_CACHE_TTL' ) ) {
+  define( 'FICTIONEER_WP_CACHE_TTL', 30 * MINUTE_IN_SECONDS );
+}
+
 /*
  * Booleans
  */

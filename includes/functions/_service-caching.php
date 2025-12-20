@@ -86,7 +86,7 @@ if ( ! function_exists( 'fictioneer_caching_active' ) ) {
   /**
    * Check whether caching is active.
    *
-   * Checks for a number of known caching plugins or the cache
+   * Note: Checks for a number of known caching plugins or the cache
    * compatibility option for anything not covered.
    *
    * @since 4.0.0
@@ -223,6 +223,74 @@ function fictioneer_enable_menu_transients( $location ) {
     $location
   );
 }
+
+// =============================================================================
+// PURGE CACHES NEW (WIP)
+// =============================================================================
+
+/**
+ * Helper to invalidate the story chapter posts cache.
+ *
+ * @since 5.33.2
+ *
+ * @param int $post_id  Post ID.
+ */
+
+function fictioneer_invalidate_story_chapter_posts_cache( $post_id ) {
+  $post_type = get_post_type( $post_id );
+
+  if ( $post_type === 'fcn_story' ) {
+    \Fictioneer\Story::bump_story_chapter_cache_version( $post_id );
+
+    return;
+  }
+
+  if ( $post_type === 'fcn_chapter' ) {
+    $story_id = get_post_meta( $post_id, 'fictioneer_chapter_story', true );
+
+    if ( $story_id ) {
+      \Fictioneer\Story::bump_story_chapter_cache_version( $story_id );
+    }
+  }
+}
+add_action( 'trashed_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+add_action( 'untrashed_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+add_action( 'before_delete_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+
+/**
+ * Watch transitions of story and chapter posts.
+ *
+ * @since 5.33.2
+ *
+ * @param int     $post_id   Post ID.
+ * @param array   $old_post  Post fields before update.
+ * @param array   $new_post  Post fields after update.
+ * @param array   $old_meta  Post meta fields before update.
+ * @param array   $new_meta  Post meta fields after update.
+ * @param WP_Post $post      Current post object.
+ */
+
+function fictioneer_watch_story_and_chapter_transitions( $post_id, $old_post, $new_post, $old_meta, $new_meta, $post ) {
+  if ( $post->post_type === 'fcn_story' ) {
+    \Fictioneer\Story::bump_story_chapter_cache_version( $post_id );
+
+    return;
+  }
+
+  if ( $post->post_type === 'fcn_chapter' ) {
+    $old_story_id = $old_meta['fictioneer_chapter_story'] ?? [];
+    $old_story_id = (int) ( empty( $old_story_id ) ? 0 : $old_story_id[0] );
+
+    $new_story_id = $new_meta['fictioneer_chapter_story'] ?? [];
+    $new_story_id = (int) ( empty( $new_story_id ) ? 0 : $new_story_id[0] );
+
+    if ( $old_story_id !== $new_story_id ) {
+      \Fictioneer\Story::bump_story_chapter_cache_version( $old_story_id );
+      \Fictioneer\Story::bump_story_chapter_cache_version( $new_story_id );
+    }
+  }
+}
+add_action( 'fictioneer_post_transition', 'fictioneer_watch_story_and_chapter_transitions', 10, 6 );
 
 // =============================================================================
 // PURGE CACHES
