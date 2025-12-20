@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // CUSTOM AVATAR
 // =============================================================================
@@ -30,7 +32,7 @@ if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
 }
 
 /**
- * Filter the avatar URL
+ * Filter the avatar URL.
  *
  * @since 4.0.0
  *
@@ -48,7 +50,7 @@ function fictioneer_get_avatar_url( $url, $id_or_email, $args ) {
   }
 
   // Setup
-  $user = fictioneer_get_user_by_id_or_email( $id_or_email );
+  $user = Utils::get_user_by_id_or_email( $id_or_email );
   $custom_avatar = fictioneer_get_custom_avatar_url( $user );
 
   // Check user and permissions
@@ -70,7 +72,7 @@ function fictioneer_get_avatar_url( $url, $id_or_email, $args ) {
 
   // Return default avatar
   return $url;
-};
+}
 add_filter( 'get_avatar_url', 'fictioneer_get_avatar_url', 10, 3 );
 
 // =============================================================================

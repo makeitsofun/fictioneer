@@ -864,6 +864,23 @@ function fictioneer_is_valid_json( $data ) {
   return Utils::json_validate( $data );
 }
 
+if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
+  /**
+   * [Deprecated] Get user by ID or email.
+   *
+   * @since 4.6.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_user_by_id_or_email() instead.
+   *
+   * @param mixed $id_or_email  User ID or email address.
+   *
+   * @return WP_User|false Returns the user or false if not found.
+   */
+
+  function fictioneer_get_user_by_id_or_email( $id_or_email ) {
+    return Utils::get_user_by_id_or_email( $id_or_email );
+  }
+}
+
 // =============================================================================
 // GET STORY DATA
 // =============================================================================

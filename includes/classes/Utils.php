@@ -732,4 +732,34 @@ class Utils {
   public static function get_permalink( object $chapter, string $story_id, bool $leavename = false ) : string {
     return \Fictioneer\Post::get_permalink( $chapter, $story_id, $leavename );
   }
+
+  /**
+   * Get user by ID or email.
+   *
+   * @since 4.6.0
+   * @since 5.33.2 - Refactored and moved into Utils class.
+   *
+   * @param mixed $id_or_email  User ID or email address.
+   *
+   * @return WP_User|false Returns the user or false if not found.
+   */
+
+  public static function get_user_by_id_or_email( mixed $id_or_email ) : \WP_User|false {
+    if ( is_object( $id_or_email ) && isset( $id_or_email->user_id ) ) {
+      $id = (int) $id_or_email->user_id;
+      return $id > 0 ? get_user_by( 'id', $id ) : false;
+    }
+
+    if ( is_numeric( $id_or_email ) ) {
+      $id = (int) $id_or_email;
+      return $id > 0 ? get_user_by( 'id', $id ) : false;
+    }
+
+    if ( is_string( $id_or_email ) ) {
+      $email = sanitize_email( $id_or_email );
+      return $email !== '' ? get_user_by( 'email', $email ) : false;
+    }
+
+    return false;
+  }
 }

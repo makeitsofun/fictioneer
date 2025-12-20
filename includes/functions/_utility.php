@@ -71,40 +71,6 @@ if ( ! function_exists( 'fictioneer_seo_plugin_active' ) ) {
 }
 
 // =============================================================================
-// GET USER BY ID OR EMAIL
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
-  /**
-   * Get user by ID or email.
-   *
-   * @since 4.6.0
-   *
-   * @param int|string $id_or_email  User ID or email address.
-   *
-   * @return WP_User|boolean Returns the user or false if not found.
-   */
-
-  function fictioneer_get_user_by_id_or_email( $id_or_email ) {
-    $user = false;
-
-    if ( is_numeric( $id_or_email ) ) {
-      $id = (int) $id_or_email;
-      $user = get_user_by( 'id' , $id );
-    } elseif ( is_object( $id_or_email ) ) {
-      if ( ! empty( $id_or_email->user_id ) ) {
-        $id = (int) $id_or_email->user_id;
-        $user = get_user_by( 'id' , $id );
-      }
-    } else {
-      $user = get_user_by( 'email', $id_or_email );
-    }
-
-    return $user;
-  }
-}
-
-// =============================================================================
 // GROUP CHAPTERS
 // =============================================================================
 
