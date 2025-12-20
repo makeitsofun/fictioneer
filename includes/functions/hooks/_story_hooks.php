@@ -661,7 +661,7 @@ function fictioneer_story_chapters( $args ) {
   // Start HTML ---> ?>
   <section class="story__tab-target _current story__chapters" data-fictioneer-story-target="tabContent" data-tab-name="chapters" data-order="asc" data-view="list">
     <?php
-      $chapters = fictioneer_get_story_chapter_posts( $story_id );
+      $chapters = \Fictioneer\Story::get_chapter_posts( $story_id );
       $chapter_groups = fictioneer_prepare_chapter_groups( $story_id, $chapters );
       $chapter_group_count = count( $chapter_groups );
       $group_classes = [];

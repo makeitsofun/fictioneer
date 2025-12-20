@@ -119,6 +119,107 @@ class Story {
   }
 
   /**
+   * Return array of chapter posts for a story.
+   *
+   * @since 5.9.2
+   * @since 5.22.3 - Refactored.
+   * @since 5.33.2 - Optimized and moved into Story class.
+   *
+   * @param int        $story_id  ID of the story.
+   * @param array|null $args      Optional. Additional query arguments.
+   * @param bool|null  $full      Optional. Whether to not reduce the posts. Default false.
+   * @param bool|null  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
+   *
+   * @return array Array of chapter posts or empty.
+   */
+
+  public static function get_chapter_posts(
+    int $story_id,
+    ?array $args = [],
+    ?bool $full = false,
+    ?bool $slow = false
+  ) : array {
+    // Static variable cache
+    static $cached_results = [];
+
+    // Setup
+    $chapter_ids = fictioneer_get_story_chapter_ids( $story_id );
+
+    // No chapters?
+    if ( empty( $chapter_ids ) ) {
+      return [];
+    }
+
+    // Query arguments
+    $query_args = array(
+      'fictioneer_query_name' => 'get_story_chapter_posts',
+      'post_type' => 'fcn_chapter',
+      'post_status' => 'publish',
+      'ignore_sticky_posts' => true,
+      'posts_per_page' => -1,
+      'update_post_meta_cache' => true, // Required
+      'update_post_term_cache' => false, // Improve performance
+      'no_found_rows' => true // Improve performance
+    );
+
+    // Apply filters and custom arguments
+    $query_args = array_merge( $query_args, $args );
+    $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
+
+    $query_args['orderby'] = 'none'; // Not documented, prevents orderby from being used at all
+    unset( $query_args['order'] );
+
+    // Faster query?
+    if ( ! $slow && get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
+      return self::get_fast_chapter_posts( $story_id, $query_args, $full );
+    }
+
+    // Static cache key
+    $cache_key = $story_id . '_' . md5( wp_json_encode( [ $query_args, $full ] ) );
+
+    // Static cache hit?
+    if ( isset( $cached_results[ $cache_key ] ) ) {
+      return $cached_results[ $cache_key ];
+    }
+
+    // Batched or one go?
+    $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
+    $batch_limit = max( 100, min( 2000, $batch_limit ) );
+
+    $by_id = [];
+
+    foreach ( array_chunk( $chapter_ids, $batch_limit ) as $batch ) {
+      $batch = $batch ?: [ 0 ];
+
+      $query_args['post__in'] = $batch;
+      $query_args['posts_per_page'] = count( $batch );
+
+      $chapter_query = new \WP_Query( $query_args );
+
+      foreach ( $chapter_query->posts as $chapter_post ) {
+        $by_id[ $chapter_post->ID ] = $chapter_post;
+      }
+    }
+
+    // Restore order
+    $ordered_chapter_posts = [];
+
+    foreach ( $chapter_ids as $cid ) {
+      $cid = (int) $cid;
+
+      if ( isset( $by_id[ $cid ] ) ) {
+        $ordered_chapter_posts[] = $by_id[ $cid ];
+      }
+    }
+
+    // Cache for subsequent calls (non-persistent)
+    $cached_results[ $cache_key ] = $ordered_chapter_posts;
+
+    // Return chapters selected in story
+    return $ordered_chapter_posts;
+  }
+
+  /**
    * Return array of chapter post-like objects for a story using fast SQL.
    *
    * @since 5.33.2

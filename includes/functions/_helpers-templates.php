@@ -1339,7 +1339,7 @@ function fictioneer_get_chapter_index_html( $story_id ) {
   // Setup
   $story_link = get_post_meta( $story_id, 'fictioneer_story_redirect_link', true )
     ?: get_permalink( $story_id );
-  $chapters = fictioneer_get_story_chapter_posts( $story_id );
+  $chapters = \Fictioneer\Story::get_chapter_posts( $story_id );
   $allowed_statuses = apply_filters( 'fictioneer_filter_chapter_index_list_statuses', ['publish'], $story_id );
   $hide_icons = get_post_meta( $story_id, 'fictioneer_story_hide_chapter_icons', true ) ||
     get_option( 'fictioneer_hide_chapter_icons' );

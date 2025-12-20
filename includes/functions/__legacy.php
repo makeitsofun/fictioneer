@@ -888,3 +888,22 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
     return \Fictioneer\Story::get_data( $story_id, $show_comments, $args );
   }
 }
+
+/**
+ * [Deprecated] Return array of chapter posts for a story.
+ *
+ * @since 5.9.2
+ * @since 5.22.3 - Refactored.
+ * @deprecated 5.33.2 - Use \Fictioneer\Story::get_chapter_posts() instead.
+ *
+ * @param int        $story_id  ID of the story.
+ * @param array|null $args      Optional. Additional query arguments.
+ * @param bool|null  $full      Optional. Whether to not reduce the posts. Default false.
+ * @param bool|null  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
+ *
+ * @return array Array of chapter posts or empty.
+ */
+
+function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
+  return \Fictioneer\Story::get_chapter_posts( $story_id, $args, $full, $slow );
+}
