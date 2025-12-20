@@ -219,8 +219,6 @@ function fictioneer_generate_test_content() {
 
   fictioneer_clear_all_cached_partials();
 
-  update_option( 'fictioneer_story_or_chapter_updated_timestamp', time() * 1000 );
-
   // Finish
   wp_die( 'Done' );
 }

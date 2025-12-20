@@ -105,31 +105,6 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
 }
 
 // =============================================================================
-// GET LAST CHAPTER/STORY UPDATE
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_last_fiction_update' ) ) {
-  /**
-   * Get Unix timestamp for last story or chapter update.
-   *
-   * @since 5.0.0
-   *
-   * @return int The timestamp in milliseconds.
-   */
-
-  function fictioneer_get_last_fiction_update() {
-    $last_update = get_option( 'fictioneer_story_or_chapter_updated_timestamp' );
-
-    if ( empty( $last_update ) ) {
-      $last_update = time() * 1000;
-      update_option( 'fictioneer_story_or_chapter_updated_timestamp', $last_update );
-    }
-
-    return $last_update;
-  }
-}
-
-// =============================================================================
 // GROUP CHAPTERS
 // =============================================================================
 

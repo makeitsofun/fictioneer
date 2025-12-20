@@ -792,10 +792,6 @@ if ( ! function_exists( 'fictioneer_track_chapter_and_story_updates' ) ) {
 
     // If there is a story...
     if ( $story_id ) {
-      // Decides when cached story/chapter data need to be refreshed (only used for Follows)
-      // Beware: This is an option, not a Transient!
-      update_option( 'fictioneer_story_or_chapter_updated_timestamp', time() * 1000 );
-
       // Clear meta caches
       delete_post_meta( $story_id, 'fictioneer_story_data_collection' );
       delete_post_meta( $story_id, 'fictioneer_story_chapter_index_html' );
