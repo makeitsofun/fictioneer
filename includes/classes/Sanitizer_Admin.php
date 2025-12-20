@@ -159,7 +159,7 @@ class Sanitizer_Admin {
    * @return string Sanitized icon HTML.
    */
 
-  public static function sanitize_icon_html( string $html ): string {
+  public static function sanitize_icon_html( string $html ) : string {
     $html = trim( wp_unslash( $html ?? '' ) );
 
     if ( $html === '' ) {

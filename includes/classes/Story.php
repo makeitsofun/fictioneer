@@ -22,7 +22,7 @@ class Story {
    * @return array|bool Data of the story or false if invalid.
    */
 
-  public static function get_data( int|string $story_id, bool $show_comments = true, array $args = [] ) : array|bool {
+  public static function get_data( int|string $story_id, bool $show_comments = true, array $args = [] ) {
     $story_id = fictioneer_validate_id( $story_id, 'fcn_story' );
 
     if ( ! $story_id ) {

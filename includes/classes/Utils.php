@@ -16,7 +16,7 @@ class Utils {
    * @return string Path of the cache directory.
    */
 
-  public static function get_cache_dir( $context = null ) {
+  public static function get_cache_dir( $context = null ) : string {
     static $checked = false;
 
     $dir = apply_filters(
@@ -402,7 +402,7 @@ class Utils {
    * @return array|bool RGB values as array or false on failure.
    */
 
-  public static function hex_to_rgb( string $value ) : array|bool {
+  public static function hex_to_rgb( string $value ) {
     return Utils_Admin::hex_to_rgb( $value );
   }
 
@@ -516,7 +516,7 @@ class Utils {
    *                          null if not a valid Google Fonts link.
    */
 
-  public static function extract_font_from_google_link( string $link ) : array|false|null {
+  public static function extract_font_from_google_link( string $link ) {
     return Utils_Admin::extract_font_from_google_link( $link );
   }
 
@@ -701,7 +701,7 @@ class Utils {
    * @return bool True if the JSON is valid, false if not.
    */
 
-  public static function json_validate( $data ) : string {
+  public static function json_validate( $data ) : bool {
     if ( ! is_string( $data ) ) {
       return false;
     }

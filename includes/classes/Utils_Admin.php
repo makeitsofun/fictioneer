@@ -183,7 +183,7 @@ class Utils_Admin {
    * @return array|bool RGB values as array or false on failure.
    */
 
-  public static function hex_to_rgb( string $value ) : array|bool {
+  public static function hex_to_rgb( string $value ) {
     if ( substr( trim( $value ), 0, 1 ) === '#' ) {
       $value = substr( $value, 1 );
     }
@@ -355,7 +355,7 @@ class Utils_Admin {
    *                          null if not a valid Google Fonts link.
    */
 
-  public static function extract_font_from_google_link( string $link ) : array|false|null {
+  public static function extract_font_from_google_link( string $link ) {
     $link = trim( $link );
 
     if ( preg_match( '#^https://fonts\.googleapis\.com/css2(?:\?|$)#i', $link ) !== 1 ) {
