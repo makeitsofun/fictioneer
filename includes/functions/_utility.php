@@ -166,13 +166,17 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
     'post_status' => 'publish',
     'ignore_sticky_posts' => true,
     'posts_per_page' => -1,
-    'no_found_rows' => true, // Improve performance
-    'update_post_term_cache' => false // Improve performance
+    'update_post_meta_cache' => true, // Required
+    'update_post_term_cache' => false, // Improve performance
+    'no_found_rows' => true // Improve performance
   );
 
   // Apply filters and custom arguments
   $query_args = array_merge( $query_args, $args );
   $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
+
+  $query_args['orderby'] = 'none'; // Not documented, prevents orderby from being used at all
+  unset( $query_args['order'] );
 
   // Faster query?
   if ( ! $slow && get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
@@ -180,42 +184,33 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
   }
 
   // Static cache key
-  $cache_key = $story_id . '_' . md5( serialize( [ $query_args, $full ] ) );
+  $cache_key = $story_id . '_' . md5( wp_json_encode( [ $query_args, $full ] ) );
 
   // Static cache hit?
   if ( isset( $cached_results[ $cache_key ] ) ) {
     return $cached_results[ $cache_key ];
   }
 
+  // Batched or one go?
   $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
   $batch_limit = max( 100, min( 2000, $batch_limit ) );
 
-  // Batched or one go?
-  if ( count( $chapter_ids ) <= $batch_limit ) {
-    $query_args['post__in'] = $chapter_ids ?: [0];
+  $by_id = [];
+
+  foreach ( array_chunk( $chapter_ids, $batch_limit ) as $batch ) {
+    $batch = $batch ?: [ 0 ];
+
+    $query_args['post__in'] = $batch;
+    $query_args['posts_per_page'] = count( $batch );
+
     $chapter_query = new WP_Query( $query_args );
-    $chapter_posts = $chapter_query->posts;
-  } else {
-    $chapter_posts = [];
-    $batches = array_chunk( $chapter_ids, $batch_limit );
 
-    foreach ( $batches as $batch ) {
-      $query_args['post__in'] = $batch ?: [0];
-      $chapter_query = new WP_Query( $query_args );
-
-      foreach ( $chapter_query->posts as $p ) {
-        $chapter_posts[] = $p;
-      }
+    foreach ( $chapter_query->posts as $chapter_post ) {
+      $by_id[ $chapter_post->ID ] = $chapter_post;
     }
   }
 
   // Restore order
-  $by_id = [];
-
-  foreach ( $chapter_posts as $p ) {
-    $by_id[ (int) $p->ID ] = $p;
-  }
-
   $ordered_chapter_posts = [];
 
   foreach ( $chapter_ids as $cid ) {
@@ -226,7 +221,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
     }
   }
 
-  // Cache for subsequent calls
+  // Cache for subsequent calls (non-persistent)
   $cached_results[ $cache_key ] = $ordered_chapter_posts;
 
   // Return chapters selected in story
