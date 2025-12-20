@@ -1846,62 +1846,6 @@ if ( ! function_exists( 'fictioneer_get_taxonomy_names' ) ) {
 }
 
 // =============================================================================
-// GET FONTS
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
-  /**
-   * Returns array of font items
-   *
-   * Note: The css string can contain quotes in case of multiple words,
-   * such as "Roboto Mono".
-   *
-   * @since 5.1.1
-   * @since 5.10.0 - Refactor for font manager.
-   * @since 5.12.5 - Add theme mod for chapter body font.
-   *
-   * @return array Font items (css, name, and alt).
-   */
-
-  function fictioneer_get_fonts() {
-    $custom_fonts = get_option( 'fictioneer_chapter_fonts' );
-
-    // Make sure fonts are set up!
-    if ( ! $custom_fonts || ! is_array( $custom_fonts ) ) {
-      Utils::bundle_fonts();
-    }
-
-    // Setup
-    $primary_chapter_font = get_theme_mod( 'chapter_chapter_body_font_family_value', 'default' );
-    $fonts = array(
-      array( 'css' => Utils::get_font_family_value( FICTIONEER_PRIMARY_FONT_CSS ), 'name' => FICTIONEER_PRIMARY_FONT_NAME ),
-      array( 'css' => '', 'name' => _x( 'System Font', 'Font name.', 'fictioneer' ) )
-    );
-
-    // Build final font array
-    foreach ( $custom_fonts as $custom_font ) {
-      if (
-        ! in_array( $custom_font, $fonts ) &&
-        $custom_font['name'] !== FICTIONEER_PRIMARY_FONT_NAME &&
-        $custom_font['css'] !== FICTIONEER_PRIMARY_FONT_CSS
-      ) {
-        if (
-          $primary_chapter_font !== 'default' &&
-          strpos( $custom_font['css'], $primary_chapter_font ) !== false
-        ) {
-          array_unshift( $fonts, $custom_font );
-        } else {
-          $fonts[] = $custom_font;
-        }
-      }
-    }
-
-    // Apply filters and return
-    return apply_filters( 'fictioneer_filter_fonts', $fonts );
-  }
-}
-
-// =============================================================================
 // GET FONT COLORS
 // =============================================================================
 

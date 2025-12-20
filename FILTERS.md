@@ -1233,7 +1233,7 @@ Filters the configuration array for the story chapter list filter reel Splide sl
 ---
 
 ### `apply_filters( 'fictioneer_filter_fonts', $fonts )`
-Filters the return array of the `fictioneer_get_fonts()` function, used to set up the chapter font options.
+Filters the return array of the `\Fictioneer\Utils::get_fonts()` function, used to set up the chapter font options.
 
 **Parameters:**
 * $fonts (array) – Numeric array of font items with CSS name (`css`), display name (`name`), and fallbacks (`alt`).

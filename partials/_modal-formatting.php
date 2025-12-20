@@ -79,7 +79,7 @@ defined( 'ABSPATH' ) OR exit;
       <div class="select-wrapper">
         <select id="reader-settings-font-select" name="fonts">
           <?php
-            $fonts = fictioneer_get_fonts();
+            $fonts = \fictioneer\Utils::get_fonts();
             $length = count( $fonts );
 
             for ( $i = 0; $i < $length; $i++ ) {

@@ -1117,7 +1117,7 @@ function fictioneer_build_dynamic_scripts() {
 
   // --- Fonts -----------------------------------------------------------------
 
-  $scripts .= "var fictioneer_fonts = " . json_encode( fictioneer_get_fonts() ) . ";";
+  $scripts .= "var fictioneer_fonts = " . json_encode( Utils::get_fonts() ) . ";";
 
   // --- Colors ----------------------------------------------------------------
 

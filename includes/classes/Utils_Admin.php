@@ -551,9 +551,11 @@ class Utils_Admin {
    *
    * @since 5.10.0
    * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @return array Font stack.
    */
 
-  public static function bundle_fonts() : void {
+  public static function bundle_fonts() : array {
     $fonts = apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', self::get_font_data() );
 
     $disabled_fonts = Utils::get_disabled_fonts();
@@ -613,6 +615,8 @@ class Utils_Admin {
     if ( file_put_contents( $save_path, $combined_css ) === false ) {
       error_log( '[Fictioneer] Failed to write bundled fonts CSS: ' . $save_path );
     }
+
+    return $font_stack;
   }
 
   /**

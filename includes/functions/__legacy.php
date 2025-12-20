@@ -921,6 +921,26 @@ if ( ! function_exists( 'fictioneer_minify_css' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
+  /**
+   * [Deprecated] Return array of font items.
+   *
+   * Note: The css string can contain quotes in case of multiple words,
+   * such as "Roboto Mono".
+   *
+   * @since 5.1.1
+   * @since 5.10.0 - Refactor for font manager.
+   * @since 5.12.5 - Add theme mod for chapter body font.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_fonts() instead.
+   *
+   * @return array Font items (css, name, and alt).
+   */
+
+  function fictioneer_get_fonts() {
+    return Utils::get_fonts();
+  }
+}
+
 // =============================================================================
 // GET STORY DATA
 // =============================================================================

@@ -550,6 +550,59 @@ class Utils {
   }
 
   /**
+   * Return array of font items.
+   *
+   * Note: The css string can contain quotes in case of multiple words,
+   * such as "Roboto Mono".
+   *
+   * @since 5.1.1
+   * @since 5.10.0 - Refactor for font manager.
+   * @since 5.12.5 - Add theme mod for chapter body font.
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @return array Font items (css, name, and alt).
+   */
+
+  public static function get_fonts() : array {
+    $custom_fonts = get_option( 'fictioneer_chapter_fonts' );
+
+    if ( ! is_array( $custom_fonts ) ) {
+      $custom_fonts = Utils::bundle_fonts();
+    }
+
+    $primary_css = Utils::get_font_family_value( FICTIONEER_PRIMARY_FONT_CSS );
+    $primary_chapter_font = get_theme_mod( 'chapter_chapter_body_font_family_value', 'default' );
+
+    $fonts = array(
+      array( 'css' => $primary_css, 'name' => FICTIONEER_PRIMARY_FONT_NAME ),
+      array( 'css' => '', 'name' => _x( 'System Font', 'Font name.', 'fictioneer' ) )
+    );
+
+    $seen = array( $primary_css => true, '' => true );
+
+    foreach ( $custom_fonts as $custom_font ) {
+      $css = $custom_font['css'];
+
+      if ( isset( $seen[ $css ] ) ) {
+        continue;
+      }
+
+      $seen[ $css ] = true;
+
+      if (
+        $primary_chapter_font !== 'default' &&
+        strpos( $custom_font['css'], $primary_chapter_font ) !== false
+      ) {
+        array_unshift( $fonts, $custom_font );
+      } else {
+        $fonts[] = $custom_font;
+      }
+    }
+
+    return apply_filters( 'fictioneer_filter_fonts', $fonts );
+  }
+
+  /**
    * Return array of disabled font keys.
    *
    * @since 5.33.2
