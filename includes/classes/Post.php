@@ -83,7 +83,7 @@ class Post {
    * @return mixed Meta value (single).
    */
 
-  public static function get_meta( object $post, string $key, mixed $default = null ) : mixed {
+  public static function get_meta( object $post, string $key, $default = null ) {
     if ( ! ( $post instanceof \WP_Post ) && isset( $post->meta ) ) {
       if ( is_object( $post->meta ) && property_exists( $post->meta, $key ) ) {
         $value = $post->meta->{$key};

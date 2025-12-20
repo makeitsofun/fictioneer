@@ -66,7 +66,7 @@ class Sanitizer {
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer( mixed $value, mixed $default = 0, ?int $min = null, ?int $max = null ) : int {
+  public static function sanitize_integer( $value, $default = 0, ?int $min = null, ?int $max = null ) : int {
     if ( $default instanceof \WP_Customize_Setting ) {
       $default = $default->default;
     }
@@ -107,7 +107,7 @@ class Sanitizer {
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer_one_up( mixed $value, int $default = 1, ?int $max = null ) : int {
+  public static function sanitize_integer_one_up( $value, int $default = 1, ?int $max = null ) : int {
     return self::sanitize_integer( $value, max( 1, $default ), 1, $max  );
   }
 
@@ -122,7 +122,7 @@ class Sanitizer {
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer_words_per_minute( mixed $value ) : int {
+  public static function sanitize_integer_words_per_minute( $value ) : int {
     return self::sanitize_integer( $value, 200, 200 );
   }
 
@@ -138,7 +138,7 @@ class Sanitizer {
    * @return float The sanitized float.
    */
 
-  public static function sanitize_float( mixed $value, mixed $default = 0.0 ) : float {
+  public static function sanitize_float( $value, $default = 0.0 ) : float {
     if ( $default instanceof \WP_Customize_Setting ) {
       $default = $default->default;
     }
@@ -177,7 +177,7 @@ class Sanitizer {
    * @return float The sanitized float.
    */
 
-  public static function sanitize_float_zero_positive( mixed $value, mixed $default = 0.0 ) : float {
+  public static function sanitize_float_zero_positive( $value, $default = 0.0 ) : float {
     $default = self::sanitize_float( $default, 0.0 );
 
     if ( $default < 0 ) {
@@ -200,7 +200,7 @@ class Sanitizer {
    * @return float The sanitized float.
    */
 
-  public static function sanitize_float_zero_positive_def1( mixed $value ) : float {
+  public static function sanitize_float_zero_positive_def1( $value ) : float {
     return self::sanitize_float_zero_positive( $value, 1.0 );
   }
 
@@ -219,7 +219,7 @@ class Sanitizer {
    * @return bool|int Sanitized boolean value.
    */
 
-  public static function sanitize_bool( mixed $value, bool $numeric = false ) : int|bool {
+  public static function sanitize_bool( $value, bool $numeric = false ) {
     if ( is_string( $value ) ) {
       $value = trim( strtolower( $value ) );
     }
@@ -240,7 +240,7 @@ class Sanitizer {
    * @return int Sanitized boolean value as 0/1.
    */
 
-  public static function sanitize_bool_num( mixed $value ) : int {
+  public static function sanitize_bool_num( $value ) : int {
     return self::sanitize_bool( $value, true );
   }
 
@@ -327,7 +327,7 @@ class Sanitizer {
    * @return mixed The sanitized value or default, null if not provided.
    */
 
-  public static function sanitize_selection( $value, $allowed_options, $default = null ) {
+  public static function sanitize_selection( $value, array $allowed_options, $default = null ) {
     return Sanitizer_Admin::sanitize_selection( $value, $allowed_options, $default );
   }
 
@@ -439,7 +439,7 @@ class Sanitizer {
    * @return string|bool Sanitized aspect-ratio or default.
    */
 
-  public static function sanitize_css_aspect_ratio( mixed $value, string|bool $default = false ) : string|bool {
+  public static function sanitize_css_aspect_ratio( $value, $default = false ) {
     if ( $default instanceof \WP_Customize_Setting ) {
       $default = (string) $default->default;
     }
@@ -480,7 +480,7 @@ class Sanitizer {
    * @return int Image ID or 0 if not found.
    */
 
-  public static function sanitize_image_id( mixed $id ) : int {
+  public static function sanitize_image_id( $id ) : int {
     $id = max( 0, (int) $id );
 
     return ( $id && wp_attachment_is_image( $id ) ) ? $id : 0;

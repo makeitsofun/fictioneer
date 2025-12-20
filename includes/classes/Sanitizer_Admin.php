@@ -292,7 +292,7 @@ class Sanitizer_Admin {
    * @return int Valid page ID or -1 if invalid or not a page.
    */
 
-  public static function sanitize_page_id( mixed $input ) : int {
+  public static function sanitize_page_id( $input ) : int {
     if ( ! is_scalar( $input ) ) {
       return -1;
     }
@@ -317,7 +317,7 @@ class Sanitizer_Admin {
    * @return int|string Sanitized integer or an empty string.
    */
 
-  public static function sanitize_absint_or_empty_string( mixed $input ) : int|string {
+  public static function sanitize_absint_or_empty_string( $input ) {
     if ( $input === '' ) {
       return '';
     }
@@ -340,7 +340,7 @@ class Sanitizer_Admin {
    * @return string Sanitized content for the cookie consent banner.
    */
 
-  public static function sanitize_phrase_consent_banner( mixed $input ) : string {
+  public static function sanitize_phrase_consent_banner( $input ) : string {
     $default = __( 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Some features are not available without, but you can limit the site to strictly necessary cookies only. See <a href="[[privacy_policy_url]]" target="_blank" tabindex="1">Privacy Policy</a>.', 'fictioneer' );
 
     if ( ! is_string( $input ) ) {
@@ -374,7 +374,7 @@ class Sanitizer_Admin {
    * @return string Sanitized textarea string.
    */
 
-  public static function sanitize_google_fonts_links( mixed $value ) : string {
+  public static function sanitize_google_fonts_links( $value ) : string {
     $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
 
     if ( $value === '' ) {
@@ -416,7 +416,7 @@ class Sanitizer_Admin {
    * @return string Sanitized textarea string.
    */
 
-  public static function sanitize_preload_font_links( mixed $value ) : string {
+  public static function sanitize_preload_font_links( $value ) : string {
     $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
 
     if ( $value === '' ) {

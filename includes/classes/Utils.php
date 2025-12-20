@@ -104,7 +104,7 @@ class Utils {
    * @return array Tuple of numerator (0) and denominator (1).
    */
 
-  public static function split_aspect_ratio( mixed $value ) : array {
+  public static function split_aspect_ratio( $value ) : array {
     if ( ! is_string( $value ) || ! str_contains( $value, '/' ) ) {
       return [ 1.0, 1.0 ];
     }
@@ -168,7 +168,7 @@ class Utils {
    * @return string|false Encrypted data or false on failure.
    */
 
-  public static function encrypt( mixed $data ) : string|false {
+  public static function encrypt( $data ) {
     $plaintext = json_encode( $data );
 
     if ( $plaintext === false ) {
@@ -214,7 +214,7 @@ class Utils {
    * @return mixed Decrypted data.
    */
 
-  public static function decrypt( string $payload ) : mixed {
+  public static function decrypt( string $payload ) {
     $raw = base64_decode( $payload, true );
 
     if ( $raw === false ) {
@@ -648,7 +648,7 @@ class Utils {
    * @return bool True if the JSON is valid, false if not.
    */
 
-  public static function json_validate( mixed $data ) : string {
+  public static function json_validate( $data ) : string {
     if ( ! is_string( $data ) ) {
       return false;
     }
@@ -706,14 +706,14 @@ class Utils {
    *
    * @since 5.33.2
    *
-   * @param object     $post      Post-like object or WP_Post.
-   * @param string     $key       Meta key.
-   * @param mixed|null $default   Default value if meta does not exist.
+   * @param object $post     Post-like object or WP_Post.
+   * @param string $key      Meta key.
+   * @param mixed  $default  Default value if meta does not exist.
    *
    * @return mixed Meta value (single).
    */
 
-  public static function get_meta( object $post, string $key, mixed $default = null ) : mixed {
+  public static function get_meta( object $post, string $key, $default = null ) {
     return \Fictioneer\Post::get_meta( $post, $key, $default );
   }
 
@@ -744,7 +744,7 @@ class Utils {
    * @return WP_User|false Returns the user or false if not found.
    */
 
-  public static function get_user_by_id_or_email( mixed $id_or_email ) : \WP_User|false {
+  public static function get_user_by_id_or_email( $id_or_email ) {
     if ( is_object( $id_or_email ) && isset( $id_or_email->user_id ) ) {
       $id = (int) $id_or_email->user_id;
       return $id > 0 ? get_user_by( 'id', $id ) : false;
@@ -776,7 +776,7 @@ class Utils {
    * @return array The modified array.
    */
 
-  public static function array_unset_by_value( mixed $value, array $array, bool $strict = false ) : array {
+  public static function array_unset_by_value( $value, array $array, bool $strict = false ) : array {
     if ( $array === [] ) {
       return $array;
     }
