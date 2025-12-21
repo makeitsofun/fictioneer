@@ -91,6 +91,14 @@ class Role {
 
     add_action( 'pre_get_posts', [ self::class, 'limit_posts_to_author' ] );
     add_filter( 'wp_count_posts', [ self::class, 'filter_counts_by_author' ], 10, 2 );
+
+    // === FCN_READ_OTHERS_FILES =================================================
+
+    if ( is_admin() && ! current_user_can( 'fcn_read_others_files' ) ) {
+      add_action( 'admin_head', [ self::class, 'hide_inserter_media_tab_with_css' ] );
+      add_action( 'pre_get_posts', [ self::class, 'limit_media_ajax_query_attachments' ] );
+      add_action( 'pre_get_posts', [ self::class, 'limit_media_list_view' ] );
+    }
   }
 
   /**
@@ -599,5 +607,76 @@ class Role {
     }
 
     return $out;
+  }
+
+  /**
+   * Prevent users from seeing uploaded files of others.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param \WP_Query $query  The queried attachments.
+   */
+
+  public static function limit_media_ajax_query_attachments( \WP_Query $query ) : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'admin-ajax.php' ) {
+      return;
+    }
+
+    if ( ( $_REQUEST['action'] ?? '' ) !== 'query-attachments' ) {
+      return;
+    }
+
+    if ( ( $query->get( 'post_type' ) ?: 'attachment' ) !== 'attachment' ) {
+      return;
+    }
+
+    $query->set( 'author', get_current_user_id() );
+  }
+
+  /**
+   * Prevent users from seeing uploaded files of others in the Media list view.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param \WP_Query $query  The current WP_Query.
+   */
+
+  public static function limit_media_list_view( \WP_Query $query ) : void {
+    if ( ! $query->is_main_query() ) {
+      return;
+    }
+
+    global $pagenow;
+
+    if ( $pagenow !== 'upload.php' ) {
+      return;
+    }
+
+    if ( (string) $query->get( 'post_type' ) !== 'attachment' ) {
+      return;
+    }
+
+    $query->set( 'author', get_current_user_id() );
+  }
+
+  /**
+   * Hide inserter media tab with CSS.
+   *
+   * @since 5.27.3
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function hide_inserter_media_tab_with_css() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+      return;
+    }
+
+    echo '<style type="text/css">.block-editor-tabbed-sidebar #tabs-1-media{display:none!important;}</style>';
   }
 }
