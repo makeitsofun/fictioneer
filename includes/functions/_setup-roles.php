@@ -582,39 +582,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_UPLOAD_RESTRICTION ================================================
-
-  /**
-   * Restrict uploaded file types based on allowed MIME types
-   *
-   * @since 5.6.0
-   *
-   * @param array $file  An array of data for a single uploaded file. Has keys
-   *                     for 'name', 'type', 'tmp_name', 'error', and 'size'.
-   *
-   * @return array Modified array with error message if the MIME type is not allowed.
-   */
-
-  function fictioneer_upload_restrictions( $file ) {
-    // Setup
-    $filetype = wp_check_filetype( $file['name'] );
-    $mime_type = $filetype['type'];
-    $allowed = get_option( 'fictioneer_upload_mime_types' ) ?: FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
-    $allowed = wp_parse_list( $allowed );
-
-    // Limit upload file types
-    if ( ! in_array( $mime_type, $allowed ) ){
-      $file['error'] = __( 'You are not allowed to upload files of this type.', 'fictioneer' );
-    }
-
-    // Continue filter
-    return $file;
-  }
-
-  if ( current_user_can( 'fcn_upload_restrictions' ) ) {
-    add_filter( 'wp_handle_upload_prefilter', 'fictioneer_upload_restrictions' );
-  }
-
   // === FCN_ALL_BLOCKS ========================================================
 
   /**

@@ -142,6 +142,12 @@ class Role {
     if ( current_user_can( 'fcn_upload_limit' ) ) {
       add_filter( 'upload_size_limit', [ self::class, 'upload_size_limit' ] );
     }
+
+    // === FCN_UPLOAD_RESTRICTION ================================================
+
+    if ( current_user_can( 'fcn_upload_restrictions' ) ) {
+      add_filter( 'wp_handle_upload_prefilter', [ self::class, 'upload_restrictions' ] );
+    }
   }
 
   /**
@@ -923,5 +929,46 @@ class Role {
     $limit = $mb * 1024 * 1024;
 
     return min( $bytes, $limit );
+  }
+
+  /**
+   * Restrict uploaded file types based on allowed MIME types.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Refactor and move into Role class.
+   *
+   * @param array $file  An array of data for a single uploaded file. Has keys
+   *                     for 'name', 'type', 'tmp_name', 'error', and 'size'.
+   *
+   * @return array Potentially modified upload data.
+   */
+
+  public static function upload_restrictions( array $file ) : array {
+    if ( ! empty( $file['error'] ) || empty( $file['name'] ) ) {
+      return $file;
+    }
+
+    $filetype = wp_check_filetype( (string) $file['name'] );
+    $mime_type = $filetype['type'] ?? '';
+
+    if ( $mime_type === '' ) {
+      $file['error'] = __( 'You are not allowed to upload files of this type.', 'fictioneer' );
+
+      return $file;
+    }
+
+    static $allowed = null;
+
+    if ( $allowed === null ) {
+      $allowed = get_option( 'fictioneer_upload_mime_types' ) ?: FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
+      $allowed = wp_parse_list( $allowed );
+      $allowed = array_values( array_unique( array_filter( array_map( 'strval', $allowed ) ) ) );
+    }
+
+    if ( ! in_array( $mime_type, $allowed, true ) ) {
+      $file['error'] = __( 'You are not allowed to upload files of this type.', 'fictioneer' );
+    }
+
+    return $file;
   }
 }
