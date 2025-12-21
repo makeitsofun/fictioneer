@@ -152,8 +152,16 @@ class Role {
     // === FCN_ALL_BLOCKS ========================================================
 
     if ( ! current_user_can( 'fcn_all_blocks' ) ) {
-      add_filter( 'allowed_block_types_all', [ self::class, 'restrict_block_types' ], 20, 2 );
+      add_filter( 'allowed_block_types_all', [ self::class, 'restrict_block_types' ], 20 );
       add_filter( 'wp_insert_post_data', [ self::class, 'remove_restricted_block_content' ], 1 );
+    }
+
+    // === FCN_EDIT_PERMALINK ====================================================
+
+    if ( ! current_user_can( 'fcn_edit_permalink' ) ) {
+      add_action( 'admin_head', [ self::class, 'hide_permalink_with_css' ] );
+      add_action( 'admin_footer', [ self::class, 'hide_permalink_with_js' ] );
+      add_filter( 'wp_insert_post_data', [ self::class, 'prevent_permalink_edit' ], 99, 2 );
     }
   }
 
@@ -1023,13 +1031,10 @@ class Role {
    * @since 5.6.0
    * @since 5.33.2 - Moved into Role class.
    *
-   * @param bool|array               $allowed_blocks  Allowed blocks.
-   * @param \WP_Block_Editor_Context $context         Editor context.
-   *
    * @return array Allowed block types.
    */
 
-  public static function restrict_block_types( $allowed_blocks, \WP_Block_Editor_Context $context ) : array {
+  public static function restrict_block_types() : array {
     $allowed = array(
       'core/image',
       'core/paragraph',
@@ -1061,5 +1066,87 @@ class Role {
     }
 
     return $allowed;
+  }
+
+  /**
+   * Prevent user edit of permalink.
+   *
+   * @since 5.6.0
+   * @since 5.8.6 - Fixed duplicate permalinks.
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $data     Array of slashed, sanitized, and processed post data.
+   * @param array $postarr  Array of sanitized (and slashed) but otherwise unmodified post data.
+   *
+   * @return array Post data with enforced permalink.
+   */
+
+  public static function prevent_permalink_edit( array $data, array $postarr ) : array {
+    $post_id = (int) ( $postarr['ID'] ?? 0 );
+
+    if ( $post_id < 1 || empty( $data['post_name'] ) ) {
+      return $data;
+    }
+
+    $current = (string) get_post_field( 'post_name', $post_id );
+
+    if ( $data['post_name'] === $current ) {
+      return $data;
+    }
+
+    $data['post_name'] = wp_unique_post_slug(
+      sanitize_title( (string) ( $data['post_title'] ?? '' ) ),
+      $post_id,
+      (string) ( $data['post_status'] ?? 'draft' ),
+      (string) ( $data['post_type'] ?? 'post' ),
+      (int) ( $data['post_parent'] ?? 0 )
+    );
+
+    return $data;
+  }
+
+  /**
+   * Hide the permalink field with CSS.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function hide_permalink_with_css() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+      return;
+    }
+
+    echo '<style type="text/css" id="fictioneer-hide-permalink">.edit-post-post-url, #edit-slug-buttons {display: none !important;}</style>';
+  }
+
+  /**
+   * Hide the permalink field with JS.
+   *
+   * @since 5.6.2
+   * @since 5.26.1 - Use wp_print_inline_script_tag().
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function hide_permalink_with_js() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+      return;
+    }
+
+    wp_print_inline_script_tag(
+      'document.querySelectorAll("#edit-slug-buttons").forEach(element => {element.remove();});',
+      array(
+        'id' => 'fictioneer-iife-hide-permalink-in-editor',
+        'type' => 'text/javascript',
+        'data-jetpack-boost' => 'ignore',
+        'data-no-optimize' => '1',
+        'data-no-defer' => '1',
+        'data-no-minify' => '1'
+      )
+    );
   }
 }
