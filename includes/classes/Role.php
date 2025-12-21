@@ -121,6 +121,15 @@ class Role {
       add_filter( 'comment_row_actions', [ self::class, 'remove_comment_quick_edit' ] );
       add_action( 'admin_enqueue_scripts', [ self::class, 'hide_private_comment_data' ], 20 );
     }
+
+    // === FCN_REDUCED_PROFILE ===================================================
+
+    if ( current_user_can( 'fcn_reduced_profile' ) ) {
+      add_filter( 'wp_is_application_passwords_available', '__return_false' );
+      add_filter( 'user_contactmethods', '__return_empty_array' );
+      add_action( 'admin_head', [ self::class, 'remove_profile_blocks' ] );
+      remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
+    }
   }
 
   /**
@@ -835,5 +844,37 @@ class Role {
         $('.editcomment tr:nth-child(2)').remove();
       });"
     );
+  }
+
+  /**
+   * Hide subscriber profile blocks in admin panel.
+   *
+   * @since 5.6.0
+   * @since 5.26.1 - Use wp_print_inline_script_tag().
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function remove_profile_blocks() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'profile.php' ) {
+      return;
+    }
+
+    echo '<style type="text/css">.user-url-wrap, .user-description-wrap, .user-first-name-wrap, .user-last-name-wrap, .user-language-wrap, .user-admin-bar-front-wrap, #contextual-help-link-wrap, #your-profile > h2:first-of-type { display: none; }</style>';
+
+    if ( ! get_option( 'fictioneer_show_wp_login_link' ) ) {
+      wp_print_inline_script_tag(
+        'document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll(".user-pass1-wrap,.user-pass2-wrap,.pw-weak,.user-generate-reset-link-wrap").forEach(el=>{el.remove();});});',
+        array(
+          'id' => 'fictioneer-iife-remove-admin-profile-blocks',
+          'type' => 'text/javascript',
+          'data-jetpack-boost' => 'ignore',
+          'data-no-optimize' => '1',
+          'data-no-defer' => '1',
+          'data-no-minify' => '1',
+        )
+      );
+    }
   }
 }

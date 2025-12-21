@@ -582,48 +582,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_REDUCED_PROFILE ===================================================
-
-  /**
-   * Hide subscriber profile blocks in admin panel
-   *
-   * @since 5.6.0
-   * @since 5.26.1 - Use wp_print_inline_script_tag().
-   */
-
-  function fictioneer_remove_profile_blocks() {
-    global $pagenow;
-
-    if ( $pagenow !== 'profile.php' ) {
-      return;
-    }
-
-    // Add CSS to hide blocks...
-    echo '<style type="text/css">.user-url-wrap, .user-description-wrap, .user-first-name-wrap, .user-last-name-wrap, .user-language-wrap, .user-admin-bar-front-wrap, #contextual-help-link-wrap, #your-profile > h2:first-of-type { display: none; }</style>';
-
-    // Remove password options
-    if ( ! get_option( 'fictioneer_show_wp_login_link' ) ) {
-      wp_print_inline_script_tag(
-        'document.addEventListener("DOMContentLoaded", () => {document.querySelectorAll(".user-pass1-wrap, .user-pass2-wrap, .pw-weak, .user-generate-reset-link-wrap").forEach(element => {element.remove();});});',
-        array(
-          'id' => 'fictioneer-iife-remove-admin-profile-blocks',
-          'type' => 'text/javascript',
-          'data-jetpack-boost' => 'ignore',
-          'data-no-optimize' => '1',
-          'data-no-defer' => '1',
-          'data-no-minify' => '1'
-        )
-      );
-    }
-  }
-
-  if ( current_user_can( 'fcn_reduced_profile' ) ) {
-    add_filter( 'wp_is_application_passwords_available', '__return_false' );
-    add_filter( 'user_contactmethods', '__return_empty_array' );
-    add_action( 'admin_head', 'fictioneer_remove_profile_blocks' );
-    remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
-  }
-
   // === FCN_MAKE_STICKY =======================================================
 
   /**
