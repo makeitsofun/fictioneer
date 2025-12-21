@@ -709,7 +709,7 @@ require_once __DIR__ . '/includes/functions/_helpers-query.php';
  * Add role functions.
  */
 
-require_once __DIR__ . '/includes/functions/_setup-roles.php';
+\Fictioneer\Role::initialize();
 
 /**
  * Add API (only for REST requests).
