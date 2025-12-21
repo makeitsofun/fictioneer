@@ -371,7 +371,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | `navigation_markup_template` | `fictioneer_pagination_markup` (10)
 | `nav_menu_link_attributes` | `fictioneer_add_menu_link_attributes` (10)
 | `post_comments_feed_link` | `__return_empty_string` (10)
-| `post_password_required` | `fictioneer_bypass_password` (10), `fictioneer_expire_post_password` (5)
+| `post_password_required` | `\Fictioneer\Role::bypass_password` (10), `fictioneer_expire_post_password` (5)
 | `post_stuck` | `\Fictioneer\Role::prevent_post_sticky` (10)
 | `postbox_classes_{$screen_id}_{$box_id}` | `fictioneer_append_metabox_classes` (10)
 | `pre_comment_user_ip` | `__return_empty_string` (10)

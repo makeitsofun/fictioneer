@@ -15,6 +15,159 @@ class Role {
   );
 
   /**
+   * Initialize theme roles and capabilities.
+   *
+   * @since 5.33.2
+   */
+
+  public static function initialize() : void {
+    add_filter( 'post_password_required', [ self::class, 'bypass_password' ], 10, 2 );
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+      \Fictioneer\Role::add_restrictions();
+    }
+  }
+
+  /**
+   * Bypass for post passwords.
+   *
+   * @since 5.12.3
+   * @since 5.15.0 - Add Patreon checks.
+   * @since 5.16.0 - Add Patreon unlock checks and static variable cache.
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param bool     $required  Whether the user needs to supply a password.
+   * @param \WP_Post $post      Post object.
+   *
+   * @return bool True or false.
+   */
+
+  public static function bypass_password( bool $required, \WP_Post $post ) : bool {
+    // Already unlocked
+    if ( ! $required ) {
+      return $required;
+    }
+
+    // Ensure to skip search, list pages, and nested loops
+    if (
+      ( ! wp_doing_ajax() || ! ( $_GET['post_id'] ?? 0 ) ) &&
+      ( $_REQUEST['action'] ?? 0 ) !== 'fictioneer_ajax_submit_comment' &&
+      ! ( $_REQUEST['comment_post_ID'] ?? 0 )
+    ) {
+      if ( ! is_singular() || get_queried_object_id() != $post->ID ) {
+        return $required;
+      }
+    }
+
+    // Static variable cache
+    static $cache = [];
+
+    $cache_key = $post->ID . '_' . get_current_user_id() . '_' . (int) $required;
+
+    if ( isset( $cache[ $cache_key ] ) ) {
+      return $cache[ $cache_key ];
+    }
+
+    // Default
+    remove_filter( 'post_password_required', 'fictioneer_bypass_password' );
+    $required = post_password_required( $post );
+    add_filter( 'post_password_required', 'fictioneer_bypass_password', 10, 2 );
+
+    // Notify cache plugins to NOT cache the page regardless of access
+    if ( $required ) {
+      fictioneer_disable_caching( 'protected_post' );
+    }
+
+    // Always allow admins
+    if ( current_user_can( 'manage_options' ) ) {
+      $cache[ $cache_key ] = false;
+
+      return false;
+    }
+
+    // Setup
+    $user = wp_get_current_user();
+    $patreon_user_data = fictioneer_get_user_patreon_data( $user->ID ); // Can be an empty array
+
+    // Check capability per post type...
+    switch ( $post->post_type ) {
+      case 'post':
+        $required = current_user_can( 'fcn_ignore_post_passwords' ) ? false : $required;
+        break;
+      case 'page':
+        $required = current_user_can( 'fcn_ignore_page_passwords' ) ? false : $required;
+        break;
+      case 'fcn_story':
+        $required = current_user_can( 'fcn_ignore_fcn_story_passwords' ) ? false : $required;
+        break;
+      case 'fcn_chapter':
+        $required = current_user_can( 'fcn_ignore_fcn_chapter_passwords' ) ? false : $required;
+        break;
+      case 'fcn_collection':
+        $required = current_user_can( 'fcn_ignore_fcn_collection_passwords' ) ? false : $required;
+        break;
+    }
+
+    // Check Patreon tiers
+    if ( $user && $required && get_option( 'fictioneer_enable_patreon_locks' ) && ( $patreon_user_data['valid'] ?? 0 ) ) {
+      $patreon_post_data = fictioneer_get_post_patreon_data( $post );
+
+      // If there is anything to check...
+      if ( $patreon_post_data['gated'] ) {
+        $patreon_check_amount_cents =
+          $patreon_post_data['gate_cents'] < 1 ? 999999999999 : $patreon_post_data['gate_cents'];
+
+        $patreon_check_lifetime_amount_cents =
+          $patreon_post_data['gate_lifetime_cents'] < 1 ? 999999999999 : $patreon_post_data['gate_lifetime_cents'];
+
+        foreach ( $patreon_user_data['tiers'] as $tier ) {
+          $required = ! (
+            in_array( $tier['id'], $patreon_post_data['gate_tiers'] ) ||
+            ( $tier['amount_cents'] ?? -1 ) >= $patreon_check_amount_cents ||
+            ( $patreon_user_data['lifetime_support_cents'] ?? -1 ) >= $patreon_check_lifetime_amount_cents
+          );
+
+          $required = apply_filters( 'fictioneer_filter_patreon_tier_unlock', $required, $post, $user, $patreon_post_data );
+
+          if ( ! $required ) {
+            break;
+          }
+        }
+      }
+    }
+
+    // Check unlocked posts
+    if ( $user && $required ) {
+      $story_id = fictioneer_get_chapter_story_id( $post->ID );
+      $unlocks = get_user_meta( $user->ID, 'fictioneer_post_unlocks', true ) ?: [];
+      $unlocks = is_array( $unlocks ) ? $unlocks : [];
+
+      $lock_gate_amount = get_option( 'fictioneer_patreon_global_lock_unlock_amount', 0 ) ?: 0;
+      $allow_unlocks = ! ( get_option( 'fictioneer_enable_patreon_locks' ) && $lock_gate_amount );
+
+      // Check Patreon unlock gate
+      if ( ! $allow_unlocks && ( $patreon_user_data['valid'] ?? 0 ) ) {
+        foreach ( $patreon_user_data['tiers'] as $tier ) {
+          if ( ( $tier['amount_cents'] ?? -1 ) >= $lock_gate_amount ) {
+            $allow_unlocks = true;
+            break;
+          }
+        }
+      }
+
+      if ( $allow_unlocks && $unlocks && array_intersect( [ $post->ID, $story_id ], $unlocks ) ) {
+        $required = false;
+      }
+    }
+
+    // Cache
+    $cache[ $cache_key ] = $required;
+
+    // Continue filter
+    return $required;
+  }
+
+  /**
    * Add capability restrictions.
    *
    * @since 5.33.2
