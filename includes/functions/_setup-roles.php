@@ -582,27 +582,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_MAKE_STICKY =======================================================
-
-  /**
-   * Unstick a post
-   *
-   * @since 5.6.0
-   *
-   * @param int $post_id  The post ID.
-   */
-
-  function fictioneer_prevent_post_sticky( $post_id ) {
-    unstick_post( $post_id );
-
-    // Only do this for the trigger post or bad things can happen!
-    remove_action( 'post_stuck', 'fictioneer_prevent_post_sticky' );
-  }
-
-  if ( ! current_user_can( 'fcn_make_sticky' ) ) {
-    add_action( 'post_stuck', 'fictioneer_prevent_post_sticky' );
-  }
-
   // === FCN_UPLOAD_LIMIT ======================================================
 
   /**

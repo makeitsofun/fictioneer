@@ -130,6 +130,12 @@ class Role {
       add_action( 'admin_head', [ self::class, 'remove_profile_blocks' ] );
       remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
     }
+
+    // === FCN_MAKE_STICKY =======================================================
+
+    if ( ! current_user_can( 'fcn_make_sticky' ) ) {
+      add_action( 'post_stuck', [ self::class, 'prevent_post_sticky' ] );
+    }
   }
 
   /**
@@ -876,5 +882,20 @@ class Role {
         )
       );
     }
+  }
+
+  /**
+   * Prevent making posts sticky.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param int $post_id The post ID.
+   */
+
+  public static function prevent_post_sticky( int $post_id ) : void {
+    unstick_post( $post_id );
+
+    remove_action( 'post_stuck', [ self::class, 'prevent_post_sticky' ] );
   }
 }
