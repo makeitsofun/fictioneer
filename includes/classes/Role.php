@@ -99,6 +99,12 @@ class Role {
       add_action( 'pre_get_posts', [ self::class, 'limit_media_ajax_query_attachments' ] );
       add_action( 'pre_get_posts', [ self::class, 'limit_media_list_view' ] );
     }
+
+    // === FCN_EDIT_OTHERS_FILES =================================================
+
+    if ( ! current_user_can( 'fcn_edit_others_files' ) ) {
+      add_filter( 'map_meta_cap', [ self::class, 'prevent_editing_others_attachments' ], 10, 4 );
+    }
   }
 
   /**
@@ -610,7 +616,7 @@ class Role {
   }
 
   /**
-   * Prevent users from seeing uploaded files of others.
+   * Prevent users from seeing attachments uploaded by others.
    *
    * @since 5.6.0
    * @since 5.33.2 - Moved into Role class.
@@ -637,7 +643,7 @@ class Role {
   }
 
   /**
-   * Prevent users from seeing uploaded files of others in the Media list view.
+   * Prevent users from seeing attachments uploaded by others in the Media list view.
    *
    * @since 5.6.0
    * @since 5.33.2 - Moved into Role class.
@@ -678,5 +684,43 @@ class Role {
     }
 
     echo '<style type="text/css">.block-editor-tabbed-sidebar #tabs-1-media{display:none!important;}</style>';
+  }
+
+  /**
+   * Prevent users from editing attachments uploaded by others.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array  $caps     Primitive capabilities required of the user.
+   * @param string $cap      Capability being checked.
+   * @param int    $user_id  The user ID.
+   * @param array  $args     Context (typically starts with an object ID).
+   *
+   * @return array Modified primitive caps.
+   */
+
+  public static function prevent_editing_others_attachments( array $caps, string $cap, int $user_id, array $args ) : array {
+    if ( $cap !== 'edit_post' ) {
+      return $caps;
+    }
+
+    $post_id = (int) ( $args[0] ?? 0 );
+
+    if ( $post_id < 1 ) {
+      return $caps;
+    }
+
+    $post = get_post( $post_id );
+
+    if ( ! $post || $post->post_type !== 'attachment' ) {
+      return $caps;
+    }
+
+    if ( (int) $post->post_author === $user_id ) {
+      return $caps;
+    }
+
+    return ['do_not_allow'];
   }
 }
