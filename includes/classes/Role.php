@@ -105,6 +105,12 @@ class Role {
     if ( ! current_user_can( 'fcn_edit_others_files' ) ) {
       add_filter( 'map_meta_cap', [ self::class, 'prevent_editing_others_attachments' ], 10, 4 );
     }
+
+    // === FCN_DELETE_OTHERS_FILES ===============================================
+
+    if ( ! current_user_can( 'fcn_delete_others_files' ) ) {
+      add_filter( 'map_meta_cap', [ self::class, 'prevent_deleting_others_attachments' ], 9999, 4 );
+    }
   }
 
   /**
@@ -722,5 +728,43 @@ class Role {
     }
 
     return ['do_not_allow'];
+  }
+
+  /**
+   * Prevent users from deleting attachments uploaded by others.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array  $caps     Primitive capabilities required of the user.
+   * @param string $cap      Capability being checked.
+   * @param int    $user_id  The user ID.
+   * @param array  $args     Context (typically starts with an object ID).
+   *
+   * @return array Modified primitive caps.
+   */
+
+  public static function prevent_deleting_others_attachments( array $caps, string $cap, int $user_id, array $args ) : array {
+    if ( $cap !== 'delete_post' ) {
+      return $caps;
+    }
+
+    $post_id = (int) ( $args[0] ?? 0 );
+
+    if ( $post_id < 1 ) {
+      return $caps;
+    }
+
+    $post = get_post( $post_id );
+
+    if ( ! $post || $post->post_type !== 'attachment' ) {
+      return $caps;
+    }
+
+    if ( (int) $post->post_author === $user_id ) {
+      return $caps;
+    }
+
+    return [ 'do_not_allow' ];
   }
 }
