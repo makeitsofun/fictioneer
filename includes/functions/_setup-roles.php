@@ -582,31 +582,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_UPLOAD_LIMIT ======================================================
-
-  /**
-   * Limit the default upload size in MB (minimum 1 MB)
-   *
-   * @since 5.6.0
-   *
-   * @param int $bytes  Default limit value in bytes.
-   *
-   * @return int Modified maximum upload file size in bytes.
-   */
-
-  function fictioneer_upload_size_limit( $bytes ) {
-    // Setup
-    $mb = absint( get_option( 'fictioneer_upload_size_limit', 5 ) ?: 5 );
-    $mb = max( $mb, 1 ); // 1 MB minimum
-
-    // Return maximum upload file size
-    return 1024 * 1024 * $mb;
-  }
-
-  if ( current_user_can( 'fcn_upload_limit' ) ) {
-    add_filter( 'upload_size_limit', 'fictioneer_upload_size_limit' );
-  }
-
   // === FCN_UPLOAD_RESTRICTION ================================================
 
   /**

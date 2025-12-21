@@ -398,7 +398,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | `theme_templates` | `\Fictioneer\Role::disallow_page_template_select` (1)
 | `tiny_mce_plugins` | `fictioneer_disable_tiny_mce_emojis` (10)
 | `update_post_metadata` | `\Fictioneer\Role::prevent_page_template_update` (1)
-| `upload_size_limit` | `fictioneer_upload_size_limit` (10)
+| `upload_size_limit` | `\Fictioneer\Role::upload_size_limit` (10)
 | `use_block_editor_for_post_type` | `__return_false` (10)
 | `user_contactmethods` | `fictioneer_user_contact_methods` (10)
 | `user_has_cap` | `\Fictioneer\Role::edit_only_comments` (10)

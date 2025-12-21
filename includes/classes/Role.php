@@ -136,6 +136,12 @@ class Role {
     if ( ! current_user_can( 'fcn_make_sticky' ) ) {
       add_action( 'post_stuck', [ self::class, 'prevent_post_sticky' ] );
     }
+
+    // === FCN_UPLOAD_LIMIT ======================================================
+
+    if ( current_user_can( 'fcn_upload_limit' ) ) {
+      add_filter( 'upload_size_limit', [ self::class, 'upload_size_limit' ] );
+    }
   }
 
   /**
@@ -897,5 +903,25 @@ class Role {
     unstick_post( $post_id );
 
     remove_action( 'post_stuck', [ self::class, 'prevent_post_sticky' ] );
+  }
+
+  /**
+   * Limit the upload size in MB (minimum 1 MB).
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Respect WP limit and moved into Role class.
+   *
+   * @param int $bytes  Current limit in bytes.
+   *
+   * @return int Modified maximum upload file size in bytes.
+   */
+
+  public static function upload_size_limit( int $bytes ) : int {
+    $mb = (int) get_option( 'fictioneer_upload_size_limit', 5 );
+    $mb = max( 1, $mb );
+
+    $limit = $mb * 1024 * 1024;
+
+    return min( $bytes, $limit );
   }
 }
