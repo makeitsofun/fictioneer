@@ -163,6 +163,12 @@ class Role {
       add_action( 'admin_footer', [ self::class, 'hide_permalink_with_js' ] );
       add_filter( 'wp_insert_post_data', [ self::class, 'prevent_permalink_edit' ], 99, 2 );
     }
+
+    // === FCN_EDIT_DATE =========================================================
+
+    if ( ! current_user_can( 'fcn_edit_date' ) ) {
+      add_filter( 'wp_insert_post_data', [ self::class, 'prevent_publish_date_update' ], 1, 2 );
+    }
   }
 
   /**
@@ -1148,5 +1154,37 @@ class Role {
         'data-no-minify' => '1'
       )
     );
+  }
+
+  /**
+   * Prevent updating the publish date after the post has been published once.
+   *
+   * Note: The date can be edited until the post has been published once, so you
+   * can still schedule a post or change the target date. But once it is published,
+   * the date cannot be changed.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $data     Array of slashed, sanitized, and processed post data.
+   * @param array $postarr  Array of sanitized (and slashed) but otherwise unmodified post data.
+   *
+   * @return array Potentially modified post data.
+   */
+
+  public static function prevent_publish_date_update( array $data, array $postarr ) : array {
+    $post_id = (int) ( $postarr['ID'] ?? 0 );
+
+    if ( $post_id < 1 || ( $postarr['post_status'] ?? '' ) === 'auto-draft' || empty( $postarr['post_date_gmt'] ) ) {
+      return $data;
+    }
+
+    $current_gmt = get_post_time( 'Y-m-d H:i:s', true, $post_id );
+
+    if ( isset( $data['post_date_gmt'] ) && $current_gmt !== $data['post_date_gmt'] ) {
+      unset( $data['post_date'], $data['post_date_gmt'] );
+    }
+
+    return $data;
   }
 }

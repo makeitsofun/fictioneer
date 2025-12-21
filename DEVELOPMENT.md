@@ -404,7 +404,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | `user_has_cap` | `\Fictioneer\Role::edit_only_comments` (10)
 | `wp_list_comments_args` | `fictioneer_comment_list_args` (10)
 | `wp_handle_upload_prefilter` | `\Fictioneer\Role::upload_restrictions` (10)
-| `wp_insert_post_data` | `Fictioneer\Role::remove_restricted_block_content` (1), `\Fictioneer\Role::strip_shortcodes_on_save` (1), `fictioneer_see_some_evil` (1), `fictioneer_prevent_publish_date_update` (1), `\Fictioneer\Role::prevent_parent_and_order_update` (1), `fictioneer_prevent_track_and_ping_updates` (1), `\Fictioneer\Role::prevent_permalink_edit` (99)
+| `wp_insert_post_data` | `Fictioneer\Role::remove_restricted_block_content` (1), `\Fictioneer\Role::strip_shortcodes_on_save` (1), `fictioneer_see_some_evil` (1), `Fictioneer\Role::prevent_publish_date_update` (1), `\Fictioneer\Role::prevent_parent_and_order_update` (1), `fictioneer_prevent_track_and_ping_updates` (1), `\Fictioneer\Role::prevent_permalink_edit` (99)
 | `wp_is_application_passwords_available` | `__return_false` (10)
 | `wp_resource_hints` | `fictioneer_remove_emoji_resource_hint` (10)
 | `wp_robots` | `wp_robots_no_robots` (10), `fictioneer_meta_robots` (10)

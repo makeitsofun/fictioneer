@@ -576,50 +576,15 @@ function fictioneer_bypass_password( $required, $post ) {
 }
 add_filter( 'post_password_required', 'fictioneer_bypass_password', 10, 2 );
 
+// Apply restrictions except for administrators
 if ( ! current_user_can( 'manage_options' ) ) {
   \Fictioneer\Role::add_restrictions();
 }
 
+
+
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_EDIT_DATE =========================================================
-
-  /**
-   * Prevents the update of the publish date
-   *
-   * Note: The date can be edited until the post has been published once, so you
-   * can still schedule a post or change the target date. But once it is published,
-   * the date cannot be changed.
-   *
-   * @param array $data     An array of slashed, sanitized, and processed post data.
-   * @param array $postarr  An array of sanitized (and slashed) but otherwise unmodified post data.
-   *
-   * @return array The potentially modified post data.
-   */
-
-  function fictioneer_prevent_publish_date_update( $data, $postarr ) {
-    // New post?
-    if ( empty( $postarr['ID'] ) || $postarr['post_status'] === 'auto-draft' || empty( $postarr['post_date_gmt'] ) ) {
-      return $data;
-    }
-
-    // Setup
-    $current_post_date_gmt = get_post_time( 'Y-m-d H:i:s', 1, $postarr['ID'] );
-
-    // Remove from update array if already published once
-    if ( $current_post_date_gmt !== $data['post_date_gmt'] ) {
-      unset( $data['post_date'] );
-      unset( $data['post_date_gmt'] );
-    }
-
-    // Continue filter
-    return $data;
-  }
-
-  if ( ! current_user_can( 'fcn_edit_date' ) ) {
-    add_filter( 'wp_insert_post_data', 'fictioneer_prevent_publish_date_update', 1, 2 );
-  }
-
   // === FCN_CLASSIC_EDITOR ====================================================
 
   /**
