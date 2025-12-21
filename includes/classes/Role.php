@@ -111,6 +111,16 @@ class Role {
     if ( ! current_user_can( 'fcn_delete_others_files' ) ) {
       add_filter( 'map_meta_cap', [ self::class, 'prevent_deleting_others_attachments' ], 9999, 4 );
     }
+
+    // === FCN_PRIVACY_CLEARANCE =================================================
+
+    if ( ! current_user_can( 'fcn_privacy_clearance' ) ) {
+      add_filter( 'comment_email', '__return_false' );
+      add_filter( 'get_comment_author_IP', '__return_empty_string' );
+      add_filter( 'manage_users_columns', [ self::class, 'hide_users_columns' ] );
+      add_filter( 'comment_row_actions', [ self::class, 'remove_comment_quick_edit' ] );
+      add_action( 'admin_enqueue_scripts', [ self::class, 'hide_private_comment_data' ], 20 );
+    }
   }
 
   /**
@@ -765,6 +775,65 @@ class Role {
       return $caps;
     }
 
-    return [ 'do_not_allow' ];
+    return ['do_not_allow'];
+  }
+
+  /**
+   * Remove email and name columns from user table.
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $column_headers  Columns to show in the user table.
+   *
+   * @return array Reduced columns.
+   */
+
+  public static function hide_users_columns( array $column_headers ) : array {
+    unset( $column_headers['email'], $column_headers['name'] );
+
+    return $column_headers;
+  }
+
+  /**
+   * Remove quick edit from comments table.
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $actions  Actions per row in the comments table.
+   *
+   * @return array Reduced actions per row.
+   */
+
+  public static function remove_comment_quick_edit( array $actions ) : array {
+    unset( $actions['quickedit'] );
+
+    return $actions;
+  }
+
+  /**
+   * Hide URL and email fields from comment edit page.
+   *
+   * Note: Best we can do, unfortunately.
+   *
+   * @since 4.7.0
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function hide_private_comment_data() : void {
+    $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+    if ( ! $screen || $screen->id !== 'comment' ) {
+      return;
+    }
+
+    wp_add_inline_script(
+      'fictioneer-admin-script',
+      "jQuery(function($){
+        $('.editcomment tr:nth-child(3)').remove();
+        $('.editcomment tr:nth-child(2)').remove();
+      });"
+    );
   }
 }
