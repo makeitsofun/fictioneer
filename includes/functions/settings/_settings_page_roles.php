@@ -60,7 +60,6 @@ $advanced_caps = array(
   'fcn_dashboard_access',
   'fcn_show_badge',
   'upload_files',
-  'edit_files',
   'fcn_moderate_post_comments',
   'fcn_allow_self_delete',
   'read'

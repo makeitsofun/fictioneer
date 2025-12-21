@@ -831,7 +831,6 @@ function fcntr_admin( $key, $escape = false ) {
       'fcn_dashboard_access' => _x( 'Dashboard Access', 'Capability translation', 'fictioneer' ),
       'fcn_show_badge' => _x( 'Show Badge', 'Capability translation', 'fictioneer' ),
       'upload_files' => _x( 'Upload Files', 'Capability translation', 'fictioneer' ),
-      'edit_files' => _x( 'Edit Files', 'Capability translation', 'fictioneer' ),
       'fcn_moderate_post_comments' => _x( 'Moderate Post Comments', 'Capability translation', 'fictioneer' ),
       'fcn_allow_self_delete' => _x( 'Allow Self Delete', 'Capability translation', 'fictioneer' ),
       'read' => _x( 'Read', 'Capability translation', 'fictioneer' ),
