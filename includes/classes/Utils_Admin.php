@@ -83,7 +83,7 @@ class Utils_Admin {
    * @return string Sanitized random username.
    */
 
-  public static function get_random_username( bool $unique = true ) : string {
+  public static function get_random_username( $unique = true ) : string {
     $adjectives = Utils_Admin::get_username_adjectives();
     $nouns = Utils_Admin::get_username_nouns();
 
@@ -161,7 +161,7 @@ class Utils_Admin {
    * @return string Requested color code or '#ff6347' (tomato) if not found.
    */
 
-  public static function get_theme_color( string $mod, ?string $default = null ) : string {
+  public static function get_theme_color( $mod, $default = null ) : string {
     $colors = self::get_theme_colors();
     $default = $default ?? $colors[ $mod ]['hex'] ?? '#ff6347'; // Tomato
 
@@ -183,7 +183,7 @@ class Utils_Admin {
    * @return array|bool RGB values as array or false on failure.
    */
 
-  public static function hex_to_rgb( string $value ) {
+  public static function hex_to_rgb( $value ) {
     if ( substr( trim( $value ), 0, 1 ) === '#' ) {
       $value = substr( $value, 1 );
     }
@@ -229,7 +229,7 @@ class Utils_Admin {
    * @return array HSL values as array.
    */
 
-  public static function rgb_to_hsl( array $value, int $precision = 0 ) : array {
+  public static function rgb_to_hsl( $value, $precision = 0 ) : array {
     $r = max( min( intval( $value[0], 10 ) / 255, 1 ), 0 );
     $g = max( min( intval( $value[1], 10 ) / 255, 1 ), 0 );
     $b = max( min( intval( $value[2], 10 ) / 255, 1 ), 0 );
@@ -267,7 +267,7 @@ class Utils_Admin {
    * @return string Converted HSL code.
    */
 
-  public static function get_hsl_code( string $hex, string $output = 'default' ) : string {
+  public static function get_hsl_code( $hex, $output = 'default' ) : string {
     if ( ! is_string( $hex ) || ! preg_match( '/^#?(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$/', $hex ) ) {
       return $hex;
     }
@@ -302,7 +302,7 @@ class Utils_Admin {
    * @return string Converted HSL font code.
    */
 
-  public static function get_hsl_font_code( string $hex ) : string {
+  public static function get_hsl_font_code( $hex ) : string {
     $hsl_array = self::rgb_to_hsl( self::hex_to_rgb( $hex ) ?: [0, 0, 0], 2 );
 
     $deg = 'calc(' . $hsl_array[0] . 'deg + var(--hue-rotate))';
@@ -325,7 +325,7 @@ class Utils_Admin {
    * @return string Ready to use font family value.
    */
 
-  public static function get_font_family( string $option, string $font_default, string $mod_default ) : string {
+  public static function get_font_family( $option, $font_default, $mod_default ) : string {
     $selection = get_theme_mod( $option, $mod_default );
     $family = $font_default;
 
@@ -355,7 +355,7 @@ class Utils_Admin {
    *                          null if not a valid Google Fonts link.
    */
 
-  public static function extract_font_from_google_link( string $link ) {
+  public static function extract_font_from_google_link( $link ) {
     $link = trim( $link );
 
     if ( preg_match( '#^https://fonts\.googleapis\.com/css2(?:\?|$)#i', $link ) !== 1 ) {
@@ -630,7 +630,7 @@ class Utils_Admin {
    * @return bool True if the URL exists and false otherwise. Probably.
    */
 
-  public static function url_exists( string $url ) : bool {
+  public static function url_exists( $url ) : bool {
     if ( empty( $url ) ) {
       return false;
     }
@@ -659,7 +659,7 @@ class Utils_Admin {
    * @return int The word count.
    */
 
-  public static function count_words( int $post_id, ?string $content = null ) : int {
+  public static function count_words( $post_id, $content = null ) : int {
     // Prepare
     $content = $content ?? get_post_field( 'post_content', $post_id ) ?: '';
     $content = strip_shortcodes( $content );

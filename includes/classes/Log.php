@@ -15,7 +15,7 @@ class Log {
    * @param WP_User|null $user     The user who did it. Defaults to current user.
    */
 
-  public static function add( string $message, $current_user = null ) : void {
+  public static function add( $message, $current_user = null ) : void {
     $current_user = $current_user ?? wp_get_current_user();
     $username = _x( 'System', 'Default name in logs.', 'fictioneer' );
     $log_hash = self::get_log_hash();

@@ -16,7 +16,7 @@ class Customizer {
    * @return string CSS string from the file.
    */
 
-  public static function get_css_snippet( string $snippet ) : string {
+  public static function get_css_snippet( $snippet ) : string {
     $snippet = sanitize_key( $snippet );
 
     if ( $snippet === '' ) {
@@ -56,13 +56,7 @@ class Customizer {
    * @return string Linear-gradient value.
    */
 
-  public static function get_fading_gradient(
-    float $start_opacity,
-    int $start,
-    int $end,
-    string $direction,
-    string $hsl = '0 0% 0%'
-  ) : string {
+  public static function get_fading_gradient( $start_opacity, $start, $end, $direction, $hsl = '0 0% 0%' ) : string {
     $alpha_values = [0.987, 0.951, 0.896, 0.825, 0.741, 0.648, 0.55, 0.45, 0.352, 0.259, 0.175, 0.104, 0.049, 0.013, 0];
     $num_stops = count( $alpha_values );
 
@@ -103,7 +97,7 @@ class Customizer {
    * @return string Calculated clamp.
    */
 
-  public static function get_clamp( int $min, int $max, int $wmin, int $wmax, string $unit = 'vw' ) : string {
+  public static function get_clamp( $min, $max, $wmin, $wmax, $unit = 'vw' ) : string {
     $vw = ( $min - $max ) / ( ( $wmin / 100 ) - ( $wmax / 100 ) );
     $offset = $min - $vw * ( $wmin / 100 );
 
@@ -319,7 +313,7 @@ class Customizer {
    *                              for example 'preview' for the Customizer.
    */
 
-  public static function build_customizer_css( ?string $context = null ) : void {
+  public static function build_customizer_css( $context = null ) : void {
     if ( $context === 'preview' ) {
       $file_path = Utils::get_cache_dir( 'preview' ) . 'customize-preview.css';
     } else {

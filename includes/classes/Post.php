@@ -17,7 +17,7 @@ class Post {
    * @return string Permalink.
    */
 
-  public static function get_permalink( object $chapter, string $story_id, bool $leavename = false ) : string {
+  public static function get_permalink( $chapter, $story_id, $leavename = false ) : string {
     if ( $chapter instanceof \WP_Post ) {
       return get_permalink( $chapter, $leavename );
     }
@@ -82,7 +82,7 @@ class Post {
    * @return mixed Meta value (single).
    */
 
-  public static function get_meta( object $post, string $key, $default = null ) {
+  public static function get_meta( $post, $key, $default = null ) {
     if ( ! ( $post instanceof \WP_Post ) && isset( $post->meta ) ) {
       if ( is_object( $post->meta ) && property_exists( $post->meta, $key ) ) {
         $value = $post->meta->{$key};

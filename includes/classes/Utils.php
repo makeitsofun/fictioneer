@@ -75,11 +75,12 @@ class Utils {
    * @since 5.33.2
    *
    * @param array|string $input_list  List of values.
+   * @param string|null  $sanitizer   Optional. Name of sanitizer function.
    *
    * @return array Array of values.
    */
 
-  public static function parse_list( array|string $input_list, string|null $sanitizer = null ) : array {
+  public static function parse_list( $input_list, $sanitizer = null ) : array {
     $values = wp_parse_list( $input_list ?? '' );
 
     if ( $sanitizer && is_callable( $sanitizer ) ) {
@@ -212,7 +213,7 @@ class Utils {
    * @return mixed Decrypted data.
    */
 
-  public static function decrypt( string $payload ) {
+  public static function decrypt( $payload ) {
     $raw = base64_decode( $payload, true );
 
     if ( $raw === false ) {
@@ -264,7 +265,7 @@ class Utils {
    * @return string Element HTML with the class added.
    */
 
-  public static function add_class_to_element( string $html, string $class ) : string {
+  public static function add_class_to_element( $html, $class ) : string {
     if ( $html === '' || $class === '' ) {
       return $html;
     }
@@ -305,7 +306,7 @@ class Utils {
    * @return string The icon HTML.
    */
 
-  public static function get_theme_icon( string $name, ?string $default = '', ?array $args = [] ) : string {
+  public static function get_theme_icon( $name, $default = '', $args = [] ) : string {
     static $cache = [];
 
     $id = isset( $args['id'] ) ? (string) $args['id'] : '';
@@ -385,7 +386,7 @@ class Utils {
    * @return string Requested color code or '#ff6347' (tomato) if not found.
    */
 
-  public static function get_theme_color( string $mod, ?string $default = null ) : string {
+  public static function get_theme_color( $mod, $default = null ) : string {
     return Utils_Admin::get_theme_color( $mod, $default );
   }
 
@@ -404,7 +405,7 @@ class Utils {
    * @return array|bool RGB values as array or false on failure.
    */
 
-  public static function hex_to_rgb( string $value ) {
+  public static function hex_to_rgb( $value ) {
     return Utils_Admin::hex_to_rgb( $value );
   }
 
@@ -424,7 +425,7 @@ class Utils {
    * @return array HSL values as array.
    */
 
-  public static function rgb_to_hsl( array $value, int $precision = 0 ) : array {
+  public static function rgb_to_hsl( $value, $precision = 0 ) : array {
     return Utils_Admin::rgb_to_hsl( $value, $precision );
   }
 
@@ -440,7 +441,7 @@ class Utils {
    * @return string Converted HSL code.
    */
 
-  public static function get_hsl_code( string $hex, string $output = 'default' ) : string {
+  public static function get_hsl_code( $hex, $output = 'default' ) : string {
     return Utils_Admin::get_hsl_code( $hex, $output );
   }
 
@@ -455,7 +456,7 @@ class Utils {
    * @return string Converted HSL font code.
    */
 
-  public static function get_hsl_font_code( string $hex ) : string {
+  public static function get_hsl_font_code( $hex ) : string {
     return Utils_Admin::get_hsl_font_code( $hex );
   }
 
@@ -472,7 +473,7 @@ class Utils {
    * @return string Ready to use font family value.
    */
 
-  public static function get_font_family( string $option, string $font_default, string $mod_default ) : string {
+  public static function get_font_family( $option, $font_default, $mod_default ) : string {
     return Fonts::get_font_family( $option, $font_default, $mod_default );
   }
 
@@ -488,7 +489,7 @@ class Utils {
    * @return string Ready to use font-family value.
    */
 
-  public static function get_font_family_value( string $font_value, string $quote = '"' ) : string {
+  public static function get_font_family_value( $font_value, $quote = '"' ) : string {
     return Fonts::get_font_family_value( $font_value, $quote );
   }
 
@@ -504,7 +505,7 @@ class Utils {
    *                          null if not a valid Google Fonts link.
    */
 
-  public static function extract_font_from_google_link( string $link ) {
+  public static function extract_font_from_google_link( $link ) {
     return Fonts::extract_font_from_google_link( $link );
   }
 
@@ -584,7 +585,7 @@ class Utils {
    * @return string Minified CSS.
    */
 
-  public static function minify_css( string $css ) : string {
+  public static function minify_css( $css ) : string {
     if ( ! $css || $css === '' ) {
       return '';
     }
@@ -677,7 +678,7 @@ class Utils {
    * @return string HTML of the status icon.
    */
 
-  public static function get_story_status_icon( string $status ) : string {
+  public static function get_story_status_icon( $status ) : string {
     $icon = Utils::get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
 
     if ( $status !== 'Ongoing' ) {
@@ -711,7 +712,7 @@ class Utils {
    * @return mixed Meta value (single).
    */
 
-  public static function get_meta( object $post, string $key, $default = null ) {
+  public static function get_meta( $post, $key, $default = null ) {
     return \Fictioneer\Post::get_meta( $post, $key, $default );
   }
 
@@ -727,7 +728,7 @@ class Utils {
    * @return string Permalink.
    */
 
-  public static function get_permalink( object $chapter, string $story_id, bool $leavename = false ) : string {
+  public static function get_permalink( $chapter, $story_id, $leavename = false ) : string {
     return \Fictioneer\Post::get_permalink( $chapter, $story_id, $leavename );
   }
 
@@ -774,7 +775,7 @@ class Utils {
    * @return array The modified array.
    */
 
-  public static function array_unset_by_value( $value, array $array, bool $strict = false ) : array {
+  public static function array_unset_by_value( $value, $array, $strict = false ) : array {
     if ( $array === [] ) {
       return $array;
     }

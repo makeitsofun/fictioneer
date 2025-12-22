@@ -16,7 +16,7 @@ class Sanitizer {
    * @return string The sanitized value.
    */
 
-  public static function sanitize_date_format( string $format ) : string {
+  public static function sanitize_date_format( $format ) : string {
     if ( ! $format ) {
       return '';
     }
@@ -62,7 +62,7 @@ class Sanitizer {
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer( $value, $default = 0, ?int $min = null, ?int $max = null ) : int {
+  public static function sanitize_integer( $value, $default = 0, $min = null, $max = null ) : int {
     if ( $default instanceof \WP_Customize_Setting ) {
       $default = $default->default;
     }
@@ -103,7 +103,7 @@ class Sanitizer {
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer_one_up( $value, int $default = 1, ?int $max = null ) : int {
+  public static function sanitize_integer_one_up( $value, $default = 1, $max = null ) : int {
     return self::sanitize_integer( $value, max( 1, $default ), 1, $max  );
   }
 
@@ -215,7 +215,7 @@ class Sanitizer {
    * @return bool|int Sanitized boolean value.
    */
 
-  public static function sanitize_bool( $value, bool $numeric = false ) {
+  public static function sanitize_bool( $value, $numeric = false ) {
     if ( is_string( $value ) ) {
       $value = trim( strtolower( $value ) );
     }
@@ -253,7 +253,7 @@ class Sanitizer {
    * @return string The sanitized URL or an empty string if invalid.
    */
 
-  public static function sanitize_url( ?string $url, ?string $prefix = null, ?string $pattern = null ) : string {
+  public static function sanitize_url( $url, $prefix = null, $pattern = null ) : string {
     if ( $url === null || $url === '' ) {
       return '';
     }
@@ -291,7 +291,7 @@ class Sanitizer {
    * @return string The sanitized URL or an empty string if invalid.
    */
 
-  public static function sanitize_url_https( ?string $url, ?string $pattern = null ) : string {
+  public static function sanitize_url_https( $url, $pattern = null ) : string {
     return self::sanitize_url( $url, 'https://', $pattern );
   }
 
@@ -306,7 +306,7 @@ class Sanitizer {
    * @return string The sanitized URL or an empty string if invalid.
    */
 
-  public static function sanitize_url_patreon( ?string $url, ?string $pattern = null ) : string {
+  public static function sanitize_url_patreon( $url, $pattern = null ) : string {
     return self::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
   }
 
@@ -323,7 +323,7 @@ class Sanitizer {
    * @return mixed The sanitized value or default, null if not provided.
    */
 
-  public static function sanitize_selection( $value, array $allowed_options, $default = null ) {
+  public static function sanitize_selection( $value, $allowed_options, $default = null ) {
     return Sanitizer_Admin::sanitize_selection( $value, $allowed_options, $default );
   }
 
@@ -334,12 +334,12 @@ class Sanitizer {
    * @since 5.27.4 - Unslash string.
    * @since 5.33.2 - Moved into Sanitizer class.
    *
-   * @param string $css  CSS to be sanitized. Expects slashed string.
+   * @param string|null $css  CSS to be sanitized. Expects slashed string.
    *
    * @return string The sanitized string.
    */
 
-  public static function sanitize_css( string $css ) : string {
+  public static function sanitize_css( $css ) : string {
     return Sanitizer_Admin::sanitize_css( $css );
   }
 
@@ -357,9 +357,7 @@ class Sanitizer {
    * @return string The sanitized (lowercase) query variable.
    */
 
-  public static function sanitize_query_var(
-    string $var, array $allowed, ?string $default = null, array $args = [] ) : ?string
-  {
+  public static function sanitize_query_var( $var, $allowed, $default = null, $args = [] ) : ?string {
     if ( ! is_scalar( $var ) ) {
       return $default;
     }
@@ -388,7 +386,7 @@ class Sanitizer {
    * @return string The sanitized post type.
    */
 
-  public static function sanitize_post_type( string $post_type ) : string {
+  public static function sanitize_post_type( $post_type ) : string {
     $post_type = sanitize_key( $post_type );
 
     static $types = array(
@@ -418,7 +416,7 @@ class Sanitizer {
    * @return string Sanitized content.
    */
 
-  public static function sanitize_meta_field_editor( string $content ) : string {
+  public static function sanitize_meta_field_editor( $content ) : string {
     return Sanitizer_Admin::sanitize_meta_field_editor( $content );
   }
 
@@ -493,7 +491,7 @@ class Sanitizer {
    * @return string Sanitized icon HTML.
    */
 
-  public static function sanitize_icon_html( string $html ): string {
+  public static function sanitize_icon_html( $html ): string {
     return Sanitizer_Admin::sanitize_icon_html( $html );
   }
 
@@ -510,7 +508,7 @@ class Sanitizer {
    * @return string The sanitized title.
    */
 
-  public static function sanitize_safe_title( string $title, string $date, string $time ) : string {
+  public static function sanitize_safe_title( $title, $date, $time ) : string {
     $title = wp_strip_all_tags( $title );
 
     if ( empty( $title ) ) {

@@ -38,12 +38,12 @@ class Sanitizer_Admin {
    * @since 5.27.4 - Unslash string.
    * @since 5.33.2 - Moved into Sanitizer class.
    *
-   * @param string $css  CSS to be sanitized.
+   * @param string|null $css  CSS to be sanitized.
    *
    * @return string The sanitized string.
    */
 
-  public static function sanitize_css( string $css ) : string {
+  public static function sanitize_css( $css ) : string {
     $css = (string) ( $css ?? '' );
     $css = wp_kses_no_null( $css );
     $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
@@ -119,12 +119,12 @@ class Sanitizer_Admin {
    * @since 5.7.4
    * @since 5.33.2 - Moved into Sanitizer class.
    *
-   * @param string $content  Content to be sanitized.
+   * @param string|null $content  Content to be sanitized.
    *
    * @return string Sanitized content.
    */
 
-  public static function sanitize_meta_field_editor( string $content ) : string {
+  public static function sanitize_meta_field_editor( $content ) : string {
     if ( $content === null || $content === '' ) {
       return '';
     }
@@ -154,12 +154,12 @@ class Sanitizer_Admin {
    * @since 5.32.0
    * @since 5.33.2 - Moved into Sanitizer class.
    *
-   * @param string $html  Icon HTML.
+   * @param string|null $html  Icon HTML.
    *
    * @return string Sanitized icon HTML.
    */
 
-  public static function sanitize_icon_html( string $html ) : string {
+  public static function sanitize_icon_html( $html ) : string {
     $html = trim( wp_unslash( $html ?? '' ) );
 
     if ( $html === '' ) {

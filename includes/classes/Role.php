@@ -37,7 +37,7 @@ class Role {
    * @return bool True or false.
    */
 
-  public static function bypass_password( bool $required, $post ) : bool {
+  public static function bypass_password( $required, $post ) : bool {
     // Already unlocked
     if ( ! $required || ! $post ) {
       return $required;
@@ -262,7 +262,7 @@ class Role {
    * @return int Modified maximum upload file size in bytes.
    */
 
-  public static function upload_size_limit( int $bytes ) : int {
+  public static function upload_size_limit( $bytes ) : int {
     $mb = (int) get_option( 'fictioneer_upload_size_limit', 5 );
     $mb = max( 1, $mb );
 
@@ -283,7 +283,7 @@ class Role {
    * @return array Potentially modified upload data.
    */
 
-  public static function upload_restrictions( array $file ) : array {
+  public static function upload_restrictions( $file ) : array {
     if ( ! empty( $file['error'] ) || empty( $file['name'] ) ) {
       return $file;
     }

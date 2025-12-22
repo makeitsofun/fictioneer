@@ -18,7 +18,7 @@ class Fonts {
    * @return string Ready to use font family value.
    */
 
-  public static function get_font_family( string $option, string $font_default, string $mod_default ) : string {
+  public static function get_font_family( $option, $font_default, $mod_default ) : string {
     return Utils_Admin::get_font_family( $option, $font_default, $mod_default );
   }
 
@@ -34,7 +34,7 @@ class Fonts {
    * @return string Ready to use font-family value.
    */
 
-  public static function get_font_family_value( string $font_value, string $quote = '"' ) : string {
+  public static function get_font_family_value( $font_value, $quote = '"' ) : string {
     $font_value = trim( $font_value );
 
     if ( $font_value === '' ) {
@@ -64,7 +64,7 @@ class Fonts {
    *                          null if not a valid Google Fonts link.
    */
 
-  public static function extract_font_from_google_link( string $link ) {
+  public static function extract_font_from_google_link( $link ) {
     return Utils_Admin::extract_font_from_google_link( $link );
   }
 

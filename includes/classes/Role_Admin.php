@@ -106,7 +106,7 @@ class Role_Admin {
    * @param bool $force  Optional. Whether to force initialization.
    */
 
-  public static function initialize_roles( ?bool $force = false ) : void {
+  public static function initialize_roles( $force = false ) : void {
     $administrator = get_role( 'administrator' );
 
     // If this capability is missing, the roles have not yet been initialized.
@@ -714,7 +714,7 @@ class Role_Admin {
    * @return array Potentially modified post data.
    */
 
-  public static function prevent_publish_date_update( array $data, array $postarr ) : array {
+  public static function prevent_publish_date_update( $data, $postarr ) : array {
     $post_id = (int) ( $postarr['ID'] ?? 0 );
 
     if ( $post_id < 1 || ( $postarr['post_status'] ?? '' ) === 'auto-draft' || empty( $postarr['post_date_gmt'] ) ) {
@@ -743,7 +743,7 @@ class Role_Admin {
    * @return array Post data with enforced permalink.
    */
 
-  public static function prevent_permalink_edit( array $data, array $postarr ) : array {
+  public static function prevent_permalink_edit( $data, $postarr ) : array {
     $post_id = (int) ( $postarr['ID'] ?? 0 );
 
     if ( $post_id < 1 || empty( $data['post_name'] ) ) {
@@ -823,7 +823,7 @@ class Role_Admin {
    * @return array Modified post data.
    */
 
-  public static function remove_restricted_block_content( array $data ) : array {
+  public static function remove_restricted_block_content( $data ) : array {
     if ( empty( $data['post_content'] ) || ! is_string( $data['post_content'] ) ) {
       // Only do this for the trigger post or bad things can happen!
       remove_filter( 'wp_insert_post_data', [ self::class, 'remove_restricted_block_content' ], 1 );
@@ -902,7 +902,7 @@ class Role_Admin {
    * @param int $post_id The post ID.
    */
 
-  public static function prevent_post_sticky( int $post_id ) : void {
+  public static function prevent_post_sticky( $post_id ) : void {
     unstick_post( $post_id );
 
     remove_action( 'post_stuck', [ self::class, 'prevent_post_sticky' ] );
@@ -951,7 +951,7 @@ class Role_Admin {
    * @return array Reduced columns.
    */
 
-  public static function hide_users_columns( array $column_headers ) : array {
+  public static function hide_users_columns( $column_headers ) : array {
     unset( $column_headers['email'], $column_headers['name'] );
 
     return $column_headers;
@@ -968,7 +968,7 @@ class Role_Admin {
    * @return array Reduced actions per row.
    */
 
-  public static function remove_comment_quick_edit( array $actions ) : array {
+  public static function remove_comment_quick_edit( $actions ) : array {
     unset( $actions['quickedit'] );
 
     return $actions;
@@ -1013,7 +1013,7 @@ class Role_Admin {
    * @return array Modified primitive caps.
    */
 
-  public static function prevent_deleting_others_attachments( array $caps, string $cap, int $user_id, array $args ) : array {
+  public static function prevent_deleting_others_attachments( $caps, $cap, $user_id, $args ) : array {
     if ( $cap !== 'delete_post' ) {
       return $caps;
     }
@@ -1051,7 +1051,7 @@ class Role_Admin {
    * @return array Modified primitive caps.
    */
 
-  public static function prevent_editing_others_attachments( array $caps, string $cap, int $user_id, array $args ) : array {
+  public static function prevent_editing_others_attachments( $caps, $cap, $user_id, $args ) : array {
     if ( $cap !== 'edit_post' ) {
       return $caps;
     }
@@ -1084,7 +1084,7 @@ class Role_Admin {
    * @param \WP_Query $query  The queried attachments.
    */
 
-  public static function limit_media_ajax_query_attachments( \WP_Query $query ) : void {
+  public static function limit_media_ajax_query_attachments( $query ) : void {
     global $pagenow;
 
     if ( $pagenow !== 'admin-ajax.php' ) {
@@ -1111,7 +1111,7 @@ class Role_Admin {
    * @param \WP_Query $query  The current WP_Query.
    */
 
-  public static function limit_media_list_view( \WP_Query $query ) : void {
+  public static function limit_media_list_view( $query ) : void {
     if ( ! $query->is_main_query() ) {
       return;
     }
@@ -1155,7 +1155,7 @@ class Role_Admin {
    * @param \WP_Query $query The WP_Query instance (passed by reference).
    */
 
-  public static function limit_posts_to_author( \WP_Query $query ) : void {
+  public static function limit_posts_to_author( $query ) : void {
     global $pagenow;
 
     if ( ! is_admin() || ! $query->is_main_query() || $pagenow !== 'edit.php' ) {
@@ -1244,7 +1244,7 @@ class Role_Admin {
    * @return array Modified post data with shortcodes removed.
    */
 
-  public static function strip_shortcodes_on_save( array $data ) : array {
+  public static function strip_shortcodes_on_save( $data ) : array {
     if (
       current_user_can( 'fcn_shortcodes' ) ||
       get_current_user_id() !== (int) ( $data['post_author'] ?? 0 )
@@ -1279,7 +1279,7 @@ class Role_Admin {
    * @return array Updated tags to be removed.
    */
 
-  public static function exempt_shortcodes_from_removal( array $tags_to_remove ) : array {
+  public static function exempt_shortcodes_from_removal( $tags_to_remove ) : array {
     $exempt = ['fictioneer_fa', 'fcnt'];
 
     foreach ( $exempt as $tag ) {
@@ -1392,7 +1392,7 @@ class Role_Admin {
    * @return array Potentially modified post data.
    */
 
-  public static function prevent_parent_and_order_update( array $data ) : array {
+  public static function prevent_parent_and_order_update( $data ) : array {
     unset( $data['post_parent'], $data['menu_order'] );
 
     return $data;
@@ -1409,7 +1409,7 @@ class Role_Admin {
    * @return array Allowed templates.
    */
 
-  public static function disallow_page_template_select( array $templates ) : array {
+  public static function disallow_page_template_select( $templates ) : array {
     return array_intersect_key( $templates, FICTIONEER_ALLOWED_PAGE_TEMPLATES ) ?: [];
   }
 
@@ -1430,7 +1430,7 @@ class Role_Admin {
    * @return mixed Null if allowed (yes), literally anything else if not.
    */
 
-  public static function prevent_page_template_update( $check, int $object_id, string $meta_key, $meta_value ) {
+  public static function prevent_page_template_update( $check, $object_id, $meta_key, $meta_value ) {
     if ( $meta_key !== '_wp_page_template' ) {
       return $check;
     }
@@ -1482,7 +1482,7 @@ class Role_Admin {
    * @return array Modified table column.
    */
 
-  public static function remove_comments_column( array $columns ) : array {
+  public static function remove_comments_column( $columns ) : array {
     if ( isset( $columns['comments'] ) ) {
       unset( $columns['comments'] );
     }
@@ -1503,7 +1503,7 @@ class Role_Admin {
    * @return array The still allowed primitive capabilities of the user.
    */
 
-  public static function disallow_edit_comment( array $caps, string $cap, int $user_id ) : array {
+  public static function disallow_edit_comment( $caps, $cap, $user_id ) : array {
     if ( $cap !== 'edit_comment' ) {
       return $caps;
     }
@@ -1530,7 +1530,7 @@ class Role_Admin {
    * @return array Modified capabilities array.
    */
 
-  public static function edit_only_comments( array $all_caps, array $caps, array $args ) : array {
+  public static function edit_only_comments( $all_caps, $caps, $args ) : array {
     if ( wp_doing_ajax() || wp_doing_cron() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
       return $all_caps;
     }
@@ -1586,7 +1586,7 @@ class Role_Admin {
    * @param \WP_Screen $screen  Current screen object.
    */
 
-  public static function block_admin_only_screens( \WP_Screen $screen ) : void {
+  public static function block_admin_only_screens( $screen ) : void {
     if ( ! is_object( $screen ) || empty( $screen->id ) ) {
       return;
     }

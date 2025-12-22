@@ -22,7 +22,7 @@ class Story {
    * @return array|bool Data of the story or false if invalid.
    */
 
-  public static function get_data( int|string $story_id, bool $show_comments = true, array $args = [] ) {
+  public static function get_data( $story_id, $show_comments = true, $args = [] ) {
     $story_id = fictioneer_validate_id( $story_id, 'fcn_story' );
 
     if ( ! $story_id ) {
@@ -68,7 +68,7 @@ class Story {
    * @return int Number of affected rows.
    */
 
-  public static function fix_chapter_parents( int|string $story_id, ?array $chapter_ids = null, ?int $limit = null ) : int {
+  public static function fix_chapter_parents( $story_id, $chapter_ids = null, $limit = null ) : int {
     global $wpdb;
 
     $story_id = fictioneer_validate_id( $story_id, 'fcn_story' );
@@ -125,7 +125,7 @@ class Story {
    * @since 5.22.3 - Refactored.
    * @since 5.33.2 - Optimized and moved into Story class.
    *
-   * @param int        $story_id  ID of the story.
+   * @param int|string $story_id  ID of the story.
    * @param array|null $args      Optional. Additional query arguments.
    * @param bool|null  $full      Optional. Whether to not reduce the posts. Default false.
    * @param bool|null  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
@@ -133,12 +133,7 @@ class Story {
    * @return array Array of chapter posts or empty.
    */
 
-  public static function get_chapter_posts(
-    int $story_id,
-    ?array $args = [],
-    ?bool $full = false,
-    ?bool $slow = false
-  ) : array {
+  public static function get_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) : array {
     // Static variable cache
     static $cached_results = [];
 
@@ -231,7 +226,7 @@ class Story {
    * @return array Array of post-like objects in order (keyed by ID).
    */
 
-  public static function get_fast_chapter_posts( int|string $story_id, array $args = [], bool $full = false ) : array {
+  public static function get_fast_chapter_posts( $story_id, $args = [], $full = false ) : array {
     global $wpdb;
 
     $story_id = fictioneer_validate_id( $story_id, 'fcn_story' );
@@ -399,7 +394,7 @@ class Story {
    * @param array $meta_keys  Meta keys to load and attach.
    */
 
-  protected static function attach_meta_for_posts( array $by_id, array $meta_keys ) : void {
+  protected static function attach_meta_for_posts( $by_id, $meta_keys ) : void {
     global $wpdb;
 
     $ids = array_values( array_map( 'intval', array_keys( $by_id ) ) );
@@ -441,7 +436,7 @@ class Story {
    * @return array|null Story data or null.
    */
 
-  protected static function get_cached_data_if_fresh( int $story_id ) : ?array {
+  protected static function get_cached_data_if_fresh( $story_id ) : ?array {
     if ( ! defined( 'FICTIONEER_ENABLE_STORY_DATA_META_CACHE' ) || ! FICTIONEER_ENABLE_STORY_DATA_META_CACHE ) {
       return null;
     }
@@ -475,7 +470,7 @@ class Story {
    * @return bool True if refresh is required, false otherwise.
    */
 
-  protected static function comment_count_refresh_required( array $cache, int $now, array $args ) : bool {
+  protected static function comment_count_refresh_required( $cache, $now, $args ) : bool {
     $delay = (int) ( $cache['comment_count_timestamp'] ?? 0 ) + (int) FICTIONEER_STORY_COMMENT_COUNT_TIMEOUT;
     return $delay < $now || ! empty( $args['refresh_comment_count'] );
   }
@@ -492,7 +487,7 @@ class Story {
    * @return array Cached story data with updated comment count.
    */
 
-  protected static function refresh_comment_count( int $story_id, array $cache, int $now ) : array {
+  protected static function refresh_comment_count( $story_id, $cache, $now ) : array {
     $comment_count = (int) ( $cache['comment_count'] ?? 0 );
     $chapter_ids = $cache['chapter_ids'] ?? [];
 
@@ -537,7 +532,7 @@ class Story {
    * @return int Number of comments.
    */
 
-  public static function get_story_comment_count( int $story_id, ?array $chapter_ids = null ) : int {
+  public static function get_story_comment_count( $story_id, $chapter_ids = null ) : int {
     $comment_count = 0;
     $chapter_ids = $chapter_ids ?? fictioneer_get_story_chapter_ids( $story_id );
 
@@ -578,7 +573,7 @@ class Story {
    * @return array Story data.
    */
 
-  protected static function build_story_data( int $story_id, int $now ) : array {
+  protected static function build_story_data( $story_id, $now ) : array {
     $status = get_post_meta( $story_id, 'fictioneer_story_status', true );
     $icon = Utils::get_story_status_icon( $status );
     $chapter_ids = fictioneer_get_story_chapter_ids( $story_id );
@@ -676,7 +671,7 @@ class Story {
    * @return array Chapter data keyed by ID (unordered).
    */
 
-  protected static function query_chapter_aggregates( array $chapter_ids, array $queried_statuses, int $story_id ) : array {
+  protected static function query_chapter_aggregates( $chapter_ids, $queried_statuses, $story_id ) : array {
     if ( ! $queried_statuses ) {
       return [];
     }
@@ -702,11 +697,7 @@ class Story {
    * @return array Chapter data keyed by ID (unordered).
    */
 
-  protected static function query_chapter_aggregates_small(
-    array $chapter_ids,
-    array $queried_statuses,
-    int $story_id
-  ) : array {
+  protected static function query_chapter_aggregates_small( $chapter_ids, $queried_statuses, $story_id ) : array {
     global $wpdb;
 
     $ids_placeholder = implode( ',', array_fill( 0, count( $chapter_ids ), '%d' ) );
@@ -748,11 +739,7 @@ class Story {
    * @return array Chapter data keyed by ID (unordered).
    */
 
-  protected static function query_chapter_aggregates_large(
-    array $chapter_ids,
-    array $statuses,
-    int $story_id
-  ) : array {
+  protected static function query_chapter_aggregates_large( $chapter_ids, $statuses, $story_id ) : array {
     global $wpdb;
 
     $limit = (int) apply_filters( 'fictioneer_filter_get_story_data_batch_limit', 800, $story_id );
@@ -827,7 +814,7 @@ class Story {
    * @return array The grouped and prepared chapters.
    */
 
-  public static function prepare_chapter_groups( int $story_id, array $chapters ) : array {
+  public static function prepare_chapter_groups( $story_id, $chapters ) : array {
     // Any chapters?
     if ( empty( $chapters ) ) {
       return [];
@@ -913,7 +900,7 @@ class Story {
    * @param bool  $show_comments  Whether the comment count is needed.
    */
 
-  protected static function persist_story_data( int $story_id, array $data, bool $show_comments ) : void {
+  protected static function persist_story_data( $story_id, $data, $show_comments ) : void {
     // Cache
     if ( defined( 'FICTIONEER_ENABLE_STORY_DATA_META_CACHE' ) && FICTIONEER_ENABLE_STORY_DATA_META_CACHE ) {
       update_post_meta( $story_id, self::META_CACHE_KEY, $data );
@@ -974,7 +961,7 @@ class Story {
    * @param int $story_id  Story ID.
    */
 
-  public static function bump_story_chapter_cache_version( int $story_id ) : void {
+  public static function bump_story_chapter_cache_version( $story_id ) : void {
     if ( ! $story_id ) {
       return;
     }
@@ -999,7 +986,7 @@ class Story {
    * @return int Cache version.
    */
 
-  protected static function get_story_chapter_cache_version( int $story_id ) : int {
+  protected static function get_story_chapter_cache_version( $story_id ) : int {
     $group = 'fictioneer_fast_chapter_posts';
     $key = 'v:' . $story_id;
 
