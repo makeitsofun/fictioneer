@@ -1097,3 +1097,26 @@ if ( ! function_exists( 'fictioneer_get_validated_ajax_user' ) ) {
     return Utils_Admin::get_validated_ajax_user( $nonce_name, $nonce_value );
   }
 }
+
+if ( ! function_exists( 'fictioneer_bulk_update_post_meta' ) ) {
+  /**
+   * [Deprecated] Update post meta fields in bulk for a post.
+   *
+   * If the meta value is truthy, the meta field is updated as normal.
+   * If not, the meta field is deleted instead to keep the database tidy.
+   * Fires default WP hooks where possible.
+   *
+   * @since 5.27.4
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::bulk_update_post_meta() instead.
+   * @link https://developer.wordpress.org/reference/functions/update_metadata/
+   * @link https://developer.wordpress.org/reference/functions/add_metadata/
+   * @link https://developer.wordpress.org/reference/functions/delete_metadata/
+   *
+   * @param int   $post_id  Post ID.
+   * @param array $fields   Associative array of field keys and sanitized (!) values.
+   */
+
+  function fictioneer_bulk_update_post_meta( $post_id, $fields ) {
+    Utils_Admin::bulk_update_post_meta( $post_id, $fields );
+  }
+}
