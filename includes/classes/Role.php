@@ -75,9 +75,9 @@ class Role {
     }
 
     // Default
-    remove_filter( 'post_password_required', 'fictioneer_bypass_password' );
+    remove_filter( 'post_password_required', [ self::class, 'bypass_password' ] );
     $required = post_password_required( $post );
-    add_filter( 'post_password_required', 'fictioneer_bypass_password', 10, 2 );
+    add_filter( 'post_password_required', [ self::class, 'bypass_password' ], 10, 2 );
 
     // Notify cache plugins to NOT cache the page regardless of access
     if ( $required ) {
