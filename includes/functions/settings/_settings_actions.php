@@ -277,7 +277,7 @@ function fictioneer_tools_add_moderator_role() {
   fictioneer_verify_admin_action( 'fictioneer_add_moderator_role' );
 
   // Relay
-  if ( \Fictioneer\Role::add_moderator_role() ) {
+  if ( \Fictioneer\Role_Admin::add_moderator_role() ) {
     $notice = ['fictioneer-added-moderator-role', 'success'];
 
     // Log
@@ -302,7 +302,7 @@ function fictioneer_tools_initialize_roles() {
   fictioneer_verify_admin_action( 'fictioneer_initialize_roles' );
 
   // Force role initialization
-  \Fictioneer\Role::initialize_roles( true );
+  \Fictioneer\Role_Admin::initialize_roles( true );
 
   // Log
   Log::add(
