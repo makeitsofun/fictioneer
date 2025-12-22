@@ -438,7 +438,7 @@ function fictioneer_ajax_edit_comment() {
 
   // Setup
   $comment_id = isset( $_POST['comment_id'] ) ? fictioneer_validate_id( $_POST['comment_id'] ) : false;
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   // Validations
   if ( ! $user || ! $comment_id || ! isset( $_POST['content'] ) ) {
@@ -574,7 +574,7 @@ function fictioneer_ajax_delete_my_comment() {
 
   // Setup
   $comment_id = (int) ( $_POST['comment_id'] ?? 0 );
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   // Validations
   if ( ! $user || ! $comment_id || $comment_id < 1 ) {

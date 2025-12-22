@@ -552,7 +552,7 @@ function fictioneer_ajax_mark_alert_read() {
   fictioneer_check_rate_limit( 'fictioneer_ajax_mark_alert_read' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

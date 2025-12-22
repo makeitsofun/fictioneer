@@ -134,7 +134,7 @@ add_action( 'wp_ajax_nopriv_fictioneer_ajax_get_user_data', 'fictioneer_ajax_get
 function fictioneer_ajax_delete_my_account() {
   // Setup
   $sender_id = isset( $_POST['id'] ) ? fictioneer_validate_id( $_POST['id'] ) : false;
-  $current_user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_delete_account' );
+  $current_user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_delete_account' );
 
   // Extra validations
   if (
@@ -186,7 +186,7 @@ if ( current_user_can( 'fcn_allow_self_delete' ) ) {
 
 function fictioneer_ajax_clear_my_comment_subscriptions() {
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_clear_comment_subscriptions' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_comment_subscriptions' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -216,7 +216,7 @@ add_action( 'wp_ajax_fictioneer_ajax_clear_my_comment_subscriptions', 'fictionee
 
 function fictioneer_ajax_clear_my_comments() {
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_clear_comments' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_comments' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -279,7 +279,7 @@ function fictioneer_ajax_unset_my_oauth() {
   // Setup
   $sender_id = fictioneer_validate_id( $_POST['id'] ?? 0 ) ?: false;
   $channel = sanitize_text_field( $_POST['channel'] ?? 0 ) ?: false;
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_unset_oauth' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_unset_oauth' );
 
   // Validations
   if (
@@ -328,7 +328,7 @@ add_action( 'wp_ajax_fictioneer_ajax_unset_my_oauth', 'fictioneer_ajax_unset_my_
 
 function fictioneer_ajax_clear_cookies() {
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error(
@@ -385,7 +385,7 @@ function fictioneer_ajax_save_bookmarks() {
   }
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

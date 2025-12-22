@@ -1687,7 +1687,7 @@ if ( ! wp_doing_ajax() ) {
 
 function fictioneer_ajax_get_chapter_group_options() {
   // Validate
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_nonce' );
+  $user = Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_nonce' );
   $story_id = isset( $_GET['story_id'] ) ? fictioneer_validate_id( $_GET['story_id'], 'fcn_story' ) : null;
 
   if ( ! is_admin() || ! wp_doing_ajax() ) {

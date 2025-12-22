@@ -1374,7 +1374,7 @@ add_filter( 'block_editor_settings_all', 'fictioneer_disable_font_library' );
 /**
  * Accelerate AJAX requests by exiting early
  *
- * Note: Requests are validated with fictioneer_get_validated_ajax_user(),
+ * Note: Requests are validated with \Fictioneer\Utils_Admin::get_validated_ajax_user(),
  * making sure that AJAX functions without "_nopriv" are not executed for
  * unauthenticated users.
  *

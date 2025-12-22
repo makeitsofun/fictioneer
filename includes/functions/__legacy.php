@@ -1079,3 +1079,21 @@ function fictioneer_get_log() {
 function fictioneer_get_wp_debug_log() {
   return \Fictioneer\Log::get_debug();
 }
+
+if ( ! function_exists( 'fictioneer_get_validated_ajax_user' ) ) {
+  /**
+   * [Deprecated] Get the current user after performing AJAX validations
+   *
+   * @since 5.0.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_validated_ajax_user() instead.
+   *
+   * @param string $nonce_name   Optional. The name of the nonce. Default 'nonce'.
+   * @param string $nonce_value  Optional. The value of the nonce. Default 'fictioneer_nonce'.
+   *
+   * @return boolean|WP_User False if not valid, the current user object otherwise.
+   */
+
+  function fictioneer_get_validated_ajax_user( $nonce_name = 'nonce', $nonce_value = 'fictioneer_nonce' ) {
+    return Utils_Admin::get_validated_ajax_user( $nonce_name, $nonce_value );
+  }
+}

@@ -23,7 +23,7 @@ function fictioneer_ajax_save_skins() {
 
   fictioneer_check_rate_limit( 'fictioneer_ajax_save_skins', 5 );
 
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -111,7 +111,7 @@ function fictioneer_ajax_get_skins() {
   fictioneer_check_rate_limit( 'fictioneer_ajax_get_skins', 5 );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

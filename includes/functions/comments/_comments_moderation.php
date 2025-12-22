@@ -456,7 +456,7 @@ function fictioneer_ajax_moderate_comment() {
   }
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -560,7 +560,7 @@ if ( get_option( 'fictioneer_enable_ajax_comment_moderation' ) ) {
 // =============================================================================
 
 /**
- * Adds user to a comment's reports list via AJAX
+ * AJAX: Add user to a comment's reports list.
  *
  * @since 4.7.0
  * @link  https://developer.wordpress.org/reference/functions/wp_send_json_success/
@@ -577,7 +577,7 @@ function fictioneer_ajax_report_comment() {
   }
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

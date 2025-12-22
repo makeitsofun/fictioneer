@@ -1745,14 +1745,14 @@ function fictioneer_admin_profile_post_unlocks( $profile_user ) {
 add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_post_unlocks', 9 );
 
 /**
- * Searches for posts to unlock via AJAX
+ * AJAX: Searches for posts to unlock.
  *
  * @since 5.16.0
  */
 
 function fictioneer_ajax_search_posts_to_unlock() {
   // Validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'search_posts' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'search_posts' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

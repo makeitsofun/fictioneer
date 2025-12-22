@@ -100,6 +100,7 @@ if ( ! function_exists( 'fictioneer_get_author_statistics' ) ) {
     // Meta cache?
     if ( FICTIONEER_ENABLE_AUTHOR_STATS_META_CACHE ) {
       $meta_cache = get_user_meta( $author_id, 'fictioneer_author_statistics', true );
+
       if ( $meta_cache && ( $meta_cache['valid_until'] ?? 0 ) > time() ) {
         return $meta_cache;
       }
@@ -410,38 +411,6 @@ if ( ! function_exists( 'fictioneer_nonce_plausibility' ) ) {
     }
 
     return false;
-  }
-}
-
-// =============================================================================
-// GET VALIDATED AJAX USER
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_validated_ajax_user' ) ) {
-  /**
-   * Get the current user after performing AJAX validations
-   *
-   * @since 5.0.0
-   *
-   * @param string $nonce_name   Optional. The name of the nonce. Default 'nonce'.
-   * @param string $nonce_value  Optional. The value of the nonce. Default 'fictioneer_nonce'.
-   *
-   * @return boolean|WP_User False if not valid, the current user object otherwise.
-   */
-
-  function fictioneer_get_validated_ajax_user( $nonce_name = 'nonce', $nonce_value = 'fictioneer_nonce' ) {
-    // Setup
-    $user = wp_get_current_user();
-
-    // Validate
-    if (
-      ! $user->exists() ||
-      ! check_ajax_referer( $nonce_value, $nonce_name, false )
-    ) {
-      return false;
-    }
-
-    return $user;
   }
 }
 

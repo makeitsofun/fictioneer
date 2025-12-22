@@ -675,4 +675,29 @@ class Utils_Admin {
 
     return count( $matches[0] );
   }
+
+  /**
+   * Get the current user after performing AJAX validations.
+   *
+   * @since 5.0.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param string $nonce_name   Optional. The name of the nonce. Default 'nonce'.
+   * @param string $nonce_value  Optional. The value of the nonce. Default 'fictioneer_nonce'.
+   *
+   * @return boolean|WP_User False if not valid, the current user object otherwise.
+   */
+
+  public static function get_validated_ajax_user( $nonce_name = 'nonce', $nonce_value = 'fictioneer_nonce' ) {
+    $user = wp_get_current_user();
+
+    if (
+      ! $user->exists() ||
+      ! check_ajax_referer( $nonce_value, $nonce_name, false )
+    ) {
+      return false;
+    }
+
+    return $user;
+  }
 }

@@ -117,7 +117,7 @@ if ( ! wp_doing_ajax() ) {
 // =============================================================================
 
 /**
- * Toggle Follow for a story via AJAX
+ * AJAX: Toggle Follow for a story.
  *
  * @since 4.3.0
  */
@@ -127,7 +127,7 @@ function fictioneer_ajax_toggle_follow() {
   fictioneer_check_rate_limit( 'fictioneer_ajax_toggle_follow' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -182,7 +182,7 @@ if ( get_option( 'fictioneer_enable_follows' ) ) {
 // =============================================================================
 
 /**
- * Clears a user's Follows via AJAX
+ * AJAX: Clears a user's Follows.
  *
  * @since 5.0.0
  */
@@ -192,7 +192,7 @@ function fictioneer_ajax_clear_my_follows() {
   fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_follows' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_clear_follows' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_follows' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -215,14 +215,14 @@ if ( get_option( 'fictioneer_enable_follows' ) ) {
 // =============================================================================
 
 /**
- * Sends the HTML for list of followed stories via AJAX
+ * AJAX: Sends the HTML for list of followed stories.
  *
  * @since 4.3.0
  */
 
 function fictioneer_ajax_get_follows_list() {
   // Validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! is_user_logged_in() ) {
     wp_send_json_error( array( 'error' => 'You must be logged in.' ) );
