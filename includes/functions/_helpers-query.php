@@ -402,60 +402,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // SPECIFIC SQL QUERIES
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
-  /**
-   * Filter out non-valid story page array IDs.
-   *
-   * Note: This is a lot faster than using WP_Query().
-   *
-   * @since 5.26.0
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int   $author_id  Author ID for the pages.
-   * @param int[] $page_ids   Array of page IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_page_ids( $author_id, $page_ids ) {
-    global $wpdb;
-
-    // Prepare
-    $page_ids = wp_parse_id_list( $page_ids );
-    $page_ids = array_values( array_filter( $page_ids ) );
-
-    if ( empty( $page_ids ) || FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY < 1 ) {
-      return [];
-    }
-
-    $page_ids = array_slice( $page_ids, 0, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY );
-
-    // Prepare placeholders
-    $placeholders = implode( ',', array_fill( 0, count( $page_ids ), '%d' ) );
-
-    // Prepare SQL query
-    $sql =
-      "SELECT p.ID
-      FROM {$wpdb->posts} p
-      WHERE p.post_type = 'page'
-        AND p.ID IN ($placeholders)
-        AND p.post_author = %d
-      LIMIT %d";
-
-    $query = $wpdb->prepare(
-      $sql,
-      ...array_merge( $page_ids, [ $author_id, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY ] )
-    );
-
-    // Execute
-    $filtered_page_ids = $wpdb->get_col( $query );
-
-    // Restore order and return
-    return array_values( array_intersect( $page_ids, $filtered_page_ids ) );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
   /**
    * Filter out non-valid story page array IDs.

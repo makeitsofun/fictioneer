@@ -1188,3 +1188,23 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
     return Sanitizer_Admin::filter_valid_chapter_ids( $story_id, $chapter_ids );
   }
 }
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_page_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $author_id  Author ID for the pages.
+   * @param int[] $page_ids   Array of page IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_page_ids( $author_id, $page_ids ) {
+    return Sanitizer_Admin::filter_valid_page_ids( $author_id, $page_ids );
+  }
+}

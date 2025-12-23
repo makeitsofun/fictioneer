@@ -2623,7 +2623,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     current_user_can( 'fcn_story_pages', $post_id )
   ) {
     // Filter out non-valid page IDs
-    $page_ids = fictioneer_sql_filter_valid_page_ids( $post_author_id, $_POST['fictioneer_story_custom_pages'] );
+    $page_ids = Sanitizer_Admin::filter_valid_page_ids( $post_author_id, $_POST['fictioneer_story_custom_pages'] );
 
     if ( empty( $page_ids ) ) {
       $fields['fictioneer_story_custom_pages'] = []; // Ensure empty meta is removed

@@ -521,4 +521,50 @@ class Sanitizer_Admin {
 
     return array_values( array_intersect( $chapter_ids, $filtered_ids ) );
   }
+
+  /**
+   * Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $author_id  Author ID for the pages.
+   * @param int[] $page_ids   Array of page IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_page_ids( $author_id, $page_ids ) : array {
+    global $wpdb;
+
+    $page_ids = wp_parse_id_list( $page_ids );
+    $page_ids = array_values( array_filter( $page_ids ) );
+
+    if ( empty( $page_ids ) || FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY < 1 ) {
+      return [];
+    }
+
+    $page_ids = array_slice( $page_ids, 0, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY );
+
+    $placeholders = implode( ',', array_fill( 0, count( $page_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.post_type = 'page'
+        AND p.ID IN ($placeholders)
+        AND p.post_author = %d
+      LIMIT %d";
+
+    $query = $wpdb->prepare(
+      $sql,
+      ...array_merge( $page_ids, [ $author_id, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY ] )
+    );
+
+    $filtered_page_ids = $wpdb->get_col( $query );
+
+    return array_values( array_intersect( $page_ids, $filtered_page_ids ) );
+  }
 }
