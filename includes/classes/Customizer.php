@@ -691,6 +691,16 @@ class Customizer {
       $css .= self::get_css_snippet( 'footer-style-isolated' );
     }
 
+    // --- Fix image URLs --------------------------------------------------------
+
+    $img_path = untrailingslashit( get_template_directory_uri() );
+
+    $css = str_replace(
+      '{{img_path}}',
+      esc_url_raw( $img_path ),
+      $css
+    );
+
     return $css;
   }
 }

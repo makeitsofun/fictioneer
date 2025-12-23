@@ -7,9 +7,9 @@
     border-radius: 0 !important;
 
     &__wrapper {
-      --mi-full: url('../img/grunge-frame-a/top-left.png'), url('../img/grunge-frame-a/top.png'), url('../img/grunge-frame-a/top-right.png'), url('../img/grunge-frame-a/right.png'), url('../img/grunge-frame-a/bottom-right.png'), url('../img/grunge-frame-a/bottom.png'), url('../img/grunge-frame-a/bottom-left.png'), url('../img/grunge-frame-a/left.png'), var(--data-image-2x2-black);
+      --mi-full: url('{{img_path}}/img/grunge-frame-a/top-left.png'), url('{{img_path}}/img/grunge-frame-a/top.png'), url('{{img_path}}/img/grunge-frame-a/top-right.png'), url('{{img_path}}/img/grunge-frame-a/right.png'), url('{{img_path}}/img/grunge-frame-a/bottom-right.png'), url('{{img_path}}/img/grunge-frame-a/bottom.png'), url('{{img_path}}/img/grunge-frame-a/bottom-left.png'), url('{{img_path}}/img/grunge-frame-a/left.png'), var(--data-image-2x2-black);
       --g: #{get_clamp(-8, 0, 375, 768)};
-      --mi: url('../img/grunge-frame-a/top.png'), url('../img/grunge-frame-a/bottom.png'), var(--data-image-2x2-black);
+      --mi: url('{{img_path}}/img/grunge-frame-a/top.png'), url('{{img_path}}/img/grunge-frame-a/bottom.png'), var(--data-image-2x2-black);
       --ms: 100% 32px, 100% 32px, 100% calc(100% - var(--g) - 62px);
       --mp: top var(--g) left 0, bottom left, top calc(31px + var(--g)) left 0;
       border-radius: 0 !important;
@@ -25,7 +25,7 @@
 
 :root.header-image-style-mask-grunge-frame-a-small:not(.inset-header-image) {
   .header-background__wrapper {
-    --mi: url('../img/grunge-frame-a/top.png'), url('../img/grunge-frame-a/bottom.png'), var(--data-image-2x2-black);
+    --mi: url('{{img_path}}/img/grunge-frame-a/top.png'), url('{{img_path}}/img/grunge-frame-a/bottom.png'), var(--data-image-2x2-black);
     --ms: 100% 32px, 100% 32px, 100% calc(100% - 62px);
     --mp: top left, bottom left, top 31px left 0;
   }
