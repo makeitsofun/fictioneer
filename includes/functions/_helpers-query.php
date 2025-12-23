@@ -402,50 +402,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // SPECIFIC SQL QUERIES
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
-  /**
-   * Filter out non-valid featured array IDs.
-   *
-   * Note: This is a lot faster than using WP_Query().
-   *
-   * @since 5.26.0
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int[] $post_ids  Array of featured post IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-  function fictioneer_sql_filter_valid_featured_ids( $post_ids ) {
-    global $wpdb;
-
-    // Prepare
-    $post_ids = wp_parse_id_list( $post_ids );
-    $post_ids = array_values( array_filter( $post_ids ) );
-
-    if ( empty( $post_ids ) ) {
-      return [];
-    }
-
-    // Prepare placeholders
-    $placeholders = implode( ',', array_fill( 0, count( $post_ids ), '%d' ) );
-
-    // Prepare SQL query
-    $sql =
-      "SELECT p.ID
-      FROM {$wpdb->posts} p
-      WHERE p.ID IN ($placeholders)
-        AND p.post_type IN ('post', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation')
-        AND p.post_status = 'publish'";
-
-    // Execute
-    $filtered_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$post_ids ) );
-
-    // Restore order and return
-    return array_values( array_intersect( $post_ids, $filtered_ids ) );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
   /**
    * Filter out non-valid blog story array IDs.

@@ -572,6 +572,7 @@ class Sanitizer_Admin {
    * Filter out non-valid story page array IDs.
    *
    * @since 5.26.0
+   * @since 5.33.2 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -622,5 +623,42 @@ class Sanitizer_Admin {
     $filtered_item_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$item_ids ) );
 
     return array_values( array_intersect( $item_ids, $filtered_item_ids ) );
+  }
+
+  /**
+   * Filter out non-valid featured array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $post_ids  Array of featured post IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_featured_ids( $post_ids ) : array {
+    global $wpdb;
+
+    $post_ids = wp_parse_id_list( $post_ids );
+    $post_ids = array_values( array_filter( $post_ids ) );
+
+    if ( empty( $post_ids ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $post_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        AND p.post_type IN ('post', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation')
+        AND p.post_status = 'publish'";
+
+    $filtered_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$post_ids ) );
+
+    return array_values( array_intersect( $post_ids, $filtered_ids ) );
   }
 }

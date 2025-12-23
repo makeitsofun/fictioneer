@@ -1227,3 +1227,22 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
     return Sanitizer_Admin::filter_valid_collection_ids( $item_ids );
   }
 }
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
+  /**
+   * Filter out non-valid featured array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $post_ids  Array of featured post IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_featured_ids( $post_ids ) {
+    return Sanitizer_Admin::filter_valid_featured_ids( $post_ids );
+  }
+}

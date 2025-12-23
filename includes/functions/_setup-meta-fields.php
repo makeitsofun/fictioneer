@@ -4134,7 +4134,7 @@ function fictioneer_save_post_metaboxes( $post_id ) {
 
   // Featured posts
   if ( isset( $_POST['fictioneer_post_featured'] ) ) {
-    $item_ids = fictioneer_sql_filter_valid_featured_ids( $_POST['fictioneer_post_featured'] );
+    $item_ids = Sanitizer_Admin::filter_valid_featured_ids( $_POST['fictioneer_post_featured'] );
 
     if ( empty( $item_ids ) ) {
       $fields['fictioneer_post_featured'] = []; // Ensure empty meta is removed
