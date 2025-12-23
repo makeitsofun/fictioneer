@@ -1028,7 +1028,7 @@ Filters the form fields of the `fictioneer_contact_form` shortcode.
 ---
 
 ### `apply_filters( 'fictioneer_filter_co_authored_ids', $story_ids, $author_id )`
-Filters the array of story IDs co-authored by the specified author ID, as queried and returned by the `fictioneer_sql_get_co_authored_story_ids()` function. These IDs are used to query selectable story chapters and validate permissions for chapter assignment and appending.
+Filters the array of story IDs co-authored by the specified author ID, as queried and returned by the `\Fictioneer\Utils_Admin::get_co_authored_story_ids()` function. These IDs are used to query selectable story chapters and validate permissions for chapter assignment and appending.
 
 **Parameters:**
 * $story_ids (int[]) – Array of story IDs.

@@ -900,4 +900,43 @@ class Utils_Admin {
 
     return ! empty( $new_chapters );
   }
+
+  /**
+   * Return story IDs where the user is a co-author.
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $author_id  User ID.
+   *
+   * @return int[] Array of story IDs.
+   */
+
+  public static function get_co_authored_story_ids( $author_id ) : array {
+    static $cache = [];
+
+    if ( isset( $cache[ $author_id ] ) ) {
+      return $cache[ $author_id ];
+    }
+
+    global $wpdb;
+
+    $story_ids = $wpdb->get_col(
+      $wpdb->prepare(
+        "SELECT post_id
+        FROM {$wpdb->postmeta}
+        WHERE meta_key = 'fictioneer_story_co_authors'
+        AND meta_value LIKE %s",
+        '%:"' . $author_id . '";%'
+      )
+    );
+
+    $story_ids = apply_filters( 'fictioneer_filter_co_authored_ids', $story_ids, $author_id );
+
+    $cache[ $author_id ] = $story_ids;
+
+    return $story_ids;
+  }
 }

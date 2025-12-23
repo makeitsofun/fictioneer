@@ -1142,6 +1142,25 @@ if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
+  /**
+   * [Deprecated] Return story IDs where the user is a co-author.
+   *
+   * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_co_authored_story_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $author_id  User ID.
+   *
+   * @return int[] Array of story IDs.
+   */
+
+  function fictioneer_sql_get_co_authored_story_ids( $author_id ) {
+    return Utils_Admin::get_co_authored_story_ids( $author_id );
+  }
+}
+
 // =============================================================================
 // SEARCH DELEGATES
 // =============================================================================

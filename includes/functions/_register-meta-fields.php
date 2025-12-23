@@ -1224,7 +1224,7 @@ function fictioneer_register_chapter_meta_fields() {
         }
 
         if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
-          $co_authored_ids = fictioneer_sql_get_co_authored_story_ids( $user_id );
+          $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
 
           if (
             $story_author_id != $user_id &&

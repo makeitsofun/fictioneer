@@ -1,5 +1,6 @@
 <?php
 
+use Fictioneer\Utils_Admin;
 use Fictioneer\Sanitizer;
 use Fictioneer\Sanitizer_Admin;
 
@@ -402,46 +403,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // SPECIFIC SQL QUERIES
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
-  /**
-   * Return story IDs where the user is a co-author.
-   *
-   * @since 5.26.0
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int $author_id  User ID.
-   *
-   * @return int[] Array of story IDs.
-   */
-
-  function fictioneer_sql_get_co_authored_story_ids( $author_id ) {
-    static $cache = [];
-
-    if ( isset( $cache[ $author_id ] ) ) {
-      return $cache[ $author_id ];
-    }
-
-    global $wpdb;
-
-    $story_ids = $wpdb->get_col(
-      $wpdb->prepare(
-        "SELECT post_id
-        FROM {$wpdb->postmeta}
-        WHERE meta_key = 'fictioneer_story_co_authors'
-        AND meta_value LIKE %s",
-        '%:"' . $author_id . '";%'
-      )
-    );
-
-    $story_ids = apply_filters( 'fictioneer_filter_co_authored_ids', $story_ids, $author_id );
-
-    $cache[ $author_id ] = $story_ids;
-
-    return $story_ids;
-  }
-}
-
 if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
   /**
    * Return selectable stories for chapter assignments.
@@ -478,7 +439,7 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
       $sql .= " AND p.post_author = %d";
       $values[] = $post_author_id;
 
-      $co_authored_stories = fictioneer_sql_get_co_authored_story_ids( $post_author_id );
+      $co_authored_stories = Utils_Admin::get_co_authored_story_ids( $post_author_id );
 
       if ( ! empty( $co_authored_stories ) ) {
         $placeholders = implode( ',', array_fill( 0, count( $co_authored_stories ), '%d' ) );
