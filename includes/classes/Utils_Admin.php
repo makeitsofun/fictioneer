@@ -9,7 +9,7 @@ class Utils_Admin {
    * Return array of adjectives for randomized username generation.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return string[] Array of adjectives.
    */
@@ -42,7 +42,7 @@ class Utils_Admin {
    * Return array of nouns for randomized username generation.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return string[] Array of nouns.
    */
@@ -76,7 +76,7 @@ class Utils_Admin {
    * Return randomized username.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param bool $unique  Optional. Whether the username must be unique. Default true.
    *
@@ -104,7 +104,7 @@ class Utils_Admin {
    * Notes: Considers both parent and child theme.
    *
    * @since 5.21.2
-   * @since 5.33.2 - Refactored and moved into Utils_Admin class.
+   * @since 5.34.0 - Refactored and moved into Utils_Admin class.
    *
    * @return array Associative array of theme colors.
    */
@@ -153,7 +153,7 @@ class Utils_Admin {
    *
    * @since 5.12.0
    * @since 5.21.2 - Refactored with theme colors helper function.
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string      $mod      Requested theme color.
    * @param string|null $default  Optional. Default color code.
@@ -175,7 +175,7 @@ class Utils_Admin {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param string $value  The to be converted hex (six digits).
@@ -220,7 +220,7 @@ class Utils_Admin {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param array $value      To be converted RGB array (r, g, b).
@@ -259,7 +259,7 @@ class Utils_Admin {
    * Convert a hex color to a Fictioneer HSL code.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $hex     Hex color.
    * @param string $output  Switch output style. Default 'default'.
@@ -295,7 +295,7 @@ class Utils_Admin {
    * Convert a hex color to an HSL font code.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $hex  Hex color.
    *
@@ -316,7 +316,7 @@ class Utils_Admin {
    * Return a font family value.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $option        Name of the theme mod.
    * @param string $font_default  Fallback font.
@@ -347,7 +347,7 @@ class Utils_Admin {
    * Return fonts data from a Google Fonts link.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $link  Google Fonts link.
    *
@@ -452,7 +452,7 @@ class Utils_Admin {
    * be added to the result array and therefore removed from the site.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return array Array of font data. Keys: skip, chapter, version, key, name,
    *               family, type, styles, weights, charsets, formats, about, note,
@@ -550,7 +550,7 @@ class Utils_Admin {
    * Build bundled font stylesheet.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return array Font stack.
    */
@@ -623,7 +623,7 @@ class Utils_Admin {
    * Check whether an URL exists.
    *
    * @since 4.0.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $url  The URL to check.
    *
@@ -651,7 +651,7 @@ class Utils_Admin {
    *
    * @since 5.25.0
    * @since 5.30.0 - Fixed for accuracy (hopefully).
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param int         $post_id  ID of the post to count the words of.
    * @param string|null $content  Optional. The post content. Queries the field by default.
@@ -680,7 +680,7 @@ class Utils_Admin {
    * Get the current user after performing AJAX validations.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $nonce_name   Optional. The name of the nonce. Default 'nonce'.
    * @param string $nonce_value  Optional. The value of the nonce. Default 'fictioneer_nonce'.
@@ -709,7 +709,7 @@ class Utils_Admin {
    * Fires default WP hooks where possible.
    *
    * @since 5.27.4
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    * @link https://developer.wordpress.org/reference/functions/update_metadata/
    * @link https://developer.wordpress.org/reference/functions/add_metadata/
    * @link https://developer.wordpress.org/reference/functions/delete_metadata/
@@ -855,7 +855,7 @@ class Utils_Admin {
    * Check whether there any added chapters are to be considered "new".
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -905,7 +905,7 @@ class Utils_Admin {
    * Return story IDs where the user is a co-author.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -944,7 +944,7 @@ class Utils_Admin {
    * Return selectable stories for chapter assignments.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1050,7 +1050,7 @@ class Utils_Admin {
    * Update the comment count of a post.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *

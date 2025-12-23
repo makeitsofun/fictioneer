@@ -1870,7 +1870,7 @@ add_filter( 'robots_txt', 'fictioneer_robots_txt_exclusions', 10, 2 );
  * Note: Stores an associative array with 'post' (array),
  * 'meta' (array), and 'timestamp' (int).
  *
- * @since 5.33.2
+ * @since 5.34.0
  *
  * @param int     $post_id  Post ID.
  * @param WP_Post $post     Post object.
@@ -1911,7 +1911,7 @@ add_action( 'post_updated', 'fictioneer_snapshot_post', 1, 3 );
 /**
  * Fire unified transition hook with old/new post + old/new meta.
  *
- * @since 5.33.2
+ * @since 5.34.0
  *
  * @param int     $post_id  Post ID.
  * @param WP_Post $post     Post object.
@@ -1954,7 +1954,7 @@ function fictioneer_post_transition( $post_id, $post, $update ) {
   /**
    * Fires after a post transitions from old to new state.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int     $post_id   Post ID.
    * @param array   $old_post  Old post fields snapshot.

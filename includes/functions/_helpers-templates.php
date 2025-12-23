@@ -312,7 +312,7 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
    * @since 4.7.0
    * @since 5.12.0 - Added $context and $args parameters.
    * @since 5.26.0 - Split off fictioneer_sanitize_safe_title().
-   * @since 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
+   * @since 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
    *
    * @param int|WP_Post $post     The post or post ID to get the title for.
    * @param string|null $context  Optional. Context regarding where and how the title is used.
@@ -1312,7 +1312,7 @@ if ( ! function_exists( 'fictioneer_get_chapter_micro_menu' ) ) {
  * Return HTML for the chapter index list of a story.
  *
  * @since 5.25.0
- * @since 5.33.2 - Updated for fast chapter posts query.
+ * @since 5.34.0 - Updated for fast chapter posts query.
  *
  * @param int $story_id  The story ID.
  *

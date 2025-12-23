@@ -951,7 +951,7 @@ add_action( 'customize_save_after', 'fictioneer_regenerate_cache_bust' );
  *
  * @since 1.0.0
  * @since 4.7.0 - Split stylesheets into separate concerns.
- * @since 5.33.2 - Merged most stylesheet back together.
+ * @since 5.34.0 - Merged most stylesheet back together.
  */
 
 function fictioneer_style_queue() {

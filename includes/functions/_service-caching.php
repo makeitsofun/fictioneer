@@ -231,7 +231,7 @@ function fictioneer_enable_menu_transients( $location ) {
 /**
  * Helper to invalidate the story chapter posts cache.
  *
- * @since 5.33.2
+ * @since 5.34.0
  *
  * @param int $post_id  Post ID.
  */
@@ -260,7 +260,7 @@ add_action( 'before_delete_post', 'fictioneer_invalidate_story_chapter_posts_cac
 /**
  * Watch transitions of story and chapter posts.
  *
- * @since 5.33.2
+ * @since 5.34.0
  *
  * @param int     $post_id   Post ID.
  * @param array   $old_post  Post fields before update.

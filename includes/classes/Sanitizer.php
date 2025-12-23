@@ -8,7 +8,7 @@ class Sanitizer {
   /**
    * Sanitize a date format string.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    * @link https://www.php.net/manual/en/datetime.format.php
    *
    * @param string $format  The string to be sanitized.
@@ -52,7 +52,7 @@ class Sanitizer {
    * Sanitize an integer with options for default, minimum, and maximum.
    *
    * @since 4.0.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed    $value    The value to be sanitized.
    * @param mixed    $default  Optional. Fallback value. Default 0.
@@ -94,7 +94,7 @@ class Sanitizer {
    * Sanitize an integer to be 1+ with options for default and maximum.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed    $value    The value to be sanitized.
    * @param int      $default  Optional. Fallback value. Default 1.
@@ -110,8 +110,8 @@ class Sanitizer {
   /**
    * Sanitize words per minute setting (min 200).
    *
-   * @since 5.33.2
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value  The value to be sanitized.
    *
@@ -126,7 +126,7 @@ class Sanitizer {
    * Sanitize a float.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value    Value to be sanitized.
    * @param mixed $default  Optional. Default if invalid. Default 0.0.
@@ -165,7 +165,7 @@ class Sanitizer {
    * Sanitize a float as positive or zero number.
    *
    * @since 5.9.4
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value    Value to be sanitized.
    * @param mixed $default  Optional. Default if invalid or negative. Default 0.0.
@@ -189,7 +189,7 @@ class Sanitizer {
    * Sanitize a float as positive or zero number with default 1.0.
    *
    * @since 5.10.1
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value  Value to be sanitized.
    *
@@ -206,7 +206,7 @@ class Sanitizer {
    * Note: Accepts common truthy/falsy representations and normalizes them.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    * @link https://www.php.net/manual/en/function.filter-var.php
    *
    * @param mixed $value    Raw value.
@@ -229,7 +229,7 @@ class Sanitizer {
   /**
    * Sanitize a boolean value to 0/1.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param mixed $value  Raw value.
    *
@@ -244,7 +244,7 @@ class Sanitizer {
    * Sanitize an URL.
    *
    * @since 5.19.1
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string|null $url      Raw URL value.
    * @param string|null $prefix   Optional. URL must start with this string.
@@ -283,7 +283,7 @@ class Sanitizer {
    * Sanitize an URL starting with `https://`.
    *
    * @since 5.19.1
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string|null $url      Raw URL value.
    * @param string|null $pattern  Optional. Pattern the URL must match.
@@ -298,8 +298,8 @@ class Sanitizer {
   /**
    * Sanitize a Patreon URL.
    *
-   * @since 5.33.2
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string|null $url  Raw URL value.
    *
@@ -314,7 +314,7 @@ class Sanitizer {
    * Sanitize a selected option.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value            Value to be sanitized.
    * @param array $allowed_options  Allowed values to be checked against.
@@ -332,7 +332,7 @@ class Sanitizer {
    *
    * @since 5.7.4
    * @since 5.27.4 - Unslash string.
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string|null $css  CSS to be sanitized. Expects slashed string.
    *
@@ -347,7 +347,7 @@ class Sanitizer {
    * Sanitize a query variable.
    *
    * @since 5.14.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string      $var      Query variable to sanitize.
    * @param string[]    $allowed  Array of allowed strings (lowercase).
@@ -379,7 +379,7 @@ class Sanitizer {
    * registered post type, such as 'fcn_story'.
    *
    * @since 5.33.5
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string $post_type  Post type to be sanitized.
    *
@@ -409,7 +409,7 @@ class Sanitizer {
    * Removes malicious HTML, shortcodes, and blocks.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string $content  Content to be sanitized.
    *
@@ -425,7 +425,7 @@ class Sanitizer {
    *
    * @since 5.14.0
    * @since 5.23.0 - Refactored to accept fractional values.
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed       $value    Value to be sanitized.
    * @param string|bool $default  Optional. Default value if invalid. Default false.
@@ -467,7 +467,7 @@ class Sanitizer {
    * Return sanitized and existing image ID or 0.
    *
    * @since 5.30.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $id  Image ID.
    *
@@ -484,7 +484,7 @@ class Sanitizer {
    * Return sanitized icon HTML.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string $html  Icon HTML.
    *
@@ -499,7 +499,7 @@ class Sanitizer {
    * Return sanitized safe title.
    *
    * @since 5.7.1
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string $title  Post title.
    * @param string $date   The date.

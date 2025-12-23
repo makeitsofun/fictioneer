@@ -8,7 +8,7 @@ class Post {
   /**
    * Get permalink via get_permalink() or custom build for post-like data.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param object $chapter    Post-like object with ->ID, ->post_name, ->post_type.
    * @param int    $story_id   Used to get story slug to fill %story_slug% (if enabled).
@@ -73,7 +73,7 @@ class Post {
    * Note: Checks whether the given post is a WP_Post, otherwise
    * it checks whether the object responds to `->meta`.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param object     $post      Post-like object or WP_Post.
    * @param string     $key       Meta key.

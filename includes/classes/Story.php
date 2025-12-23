@@ -12,7 +12,7 @@ class Story {
    *
    * @since 4.3.0
    * @since 5.25.0 - Refactored with custom SQL query.
-   * @since 5.33.2 - Refactored, split up, and moved into Story class.
+   * @since 5.34.0 - Refactored, split up, and moved into Story class.
    *
    * @param int|string $story_id       ID of the story.
    * @param bool       $show_comments  Optional. Whether the comment count is needed.
@@ -57,7 +57,7 @@ class Story {
   /**
    * Backfill parent ID for chapters that belong to a story.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int|string $story_id     ID of the story.
    * @param array|null $chapter_ids  Optional. Chapter IDs associated with the story.
@@ -123,7 +123,7 @@ class Story {
    *
    * @since 5.9.2
    * @since 5.22.3 - Refactored.
-   * @since 5.33.2 - Optimized and moved into Story class.
+   * @since 5.34.0 - Optimized and moved into Story class.
    *
    * @param int|string $story_id  ID of the story.
    * @param array|null $args      Optional. Additional query arguments.
@@ -217,7 +217,7 @@ class Story {
   /**
    * Return array of chapter post-like objects for a story using fast SQL.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int|string $story_id  ID of the story.
    * @param array      $args      Optional. Additional query arguments (WP_Query-like).
@@ -388,7 +388,7 @@ class Story {
   /**
    * Attach selected post meta to post-like objects as `->meta[key]`.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array $by_id      Chapter objects keyed by ID.
    * @param array $meta_keys  Meta keys to load and attach.
@@ -429,7 +429,7 @@ class Story {
   /**
    * Get cached story data if fresh.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int $story_id  ID of the story.
    *
@@ -461,7 +461,7 @@ class Story {
   /**
    * Check whether comment count must be updated.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array $cache  Cached story data (if any).
    * @param int   $now    Unix timestamp in seconds.
@@ -478,7 +478,7 @@ class Story {
   /**
    * Refresh comment count.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int   $story_id  ID of the story.
    * @param array $cache     Cached story data (if any).
@@ -524,7 +524,7 @@ class Story {
    *
    * @since 5.22.2
    * @since 5.22.3 - Switched to SQL query.
-   * @since 5.33.2 - Mnd moved into Story class.
+   * @since 5.34.0 - Mnd moved into Story class.
    *
    * @param int        $story_id     ID of the story.
    * @param array|null $chapter_ids  Optional. Array of chapter IDs.
@@ -565,7 +565,7 @@ class Story {
   /**
    * Aggregate story data.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int $story_id  ID of the story.
    * @param int $now       Unix timestamp in seconds.
@@ -662,7 +662,7 @@ class Story {
   /**
    * Query aggregated data of chapters (delegate).
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -688,7 +688,7 @@ class Story {
   /**
    * Query aggregated chapter data using multi-joins.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -730,7 +730,7 @@ class Story {
   /**
    * Query aggregated chapter data using a chunked, ID-scoped query.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -806,7 +806,7 @@ class Story {
    * within the 'all_chapters' group.
    *
    * @since 5.25.0
-   * @since 5.33.2 - Moved into Story class.
+   * @since 5.34.0 - Moved into Story class.
    *
    * @param int   $story_id  ID of the story.
    * @param array $chapters  Array of WP_Post or post-like objects.
@@ -893,7 +893,7 @@ class Story {
   /**
    * Cache and save story data.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int   $story_id       ID of the story.
    * @param array $data           Story data.
@@ -930,7 +930,7 @@ class Story {
   /**
    * Return cache TTL for chapter posts.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return int TTL in seconds.
    */
@@ -942,7 +942,7 @@ class Story {
   /**
    * Return cache TTL for chapter posts cache version keys (2x TTL).
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return int TTL in seconds.
    */
@@ -956,7 +956,7 @@ class Story {
   /**
    * Bump cache version for a story's chapter posts cache.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int $story_id  Story ID.
    */
@@ -979,7 +979,7 @@ class Story {
   /**
    * Return cache version for a story's chapter posts cache.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param int $story_id  Story ID.
    *

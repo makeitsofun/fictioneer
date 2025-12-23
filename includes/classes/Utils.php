@@ -11,7 +11,7 @@ class Utils {
    * Return directory path of the theme cache.
    *
    * @since 5.23.1
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string|null $context  Optional. Context of the call. Default null.
    *
@@ -52,7 +52,7 @@ class Utils {
    * Return theme cache URI.
    *
    * @since 5.23.1
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string|null $context  The context of the call. Default null.
    *
@@ -72,7 +72,7 @@ class Utils {
   /**
    * Wrapper for wp_parse_list() with optional sanitizer.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array|string $input_list  List of values.
    * @param string|null  $sanitizer   Optional. Name of sanitizer function.
@@ -96,7 +96,7 @@ class Utils {
    * Extract aspect ratio values from string.
    *
    * @since 5.14.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param mixed $value  Aspect-ratio value (e.g. '16/9, '1.5/1').
    *
@@ -124,7 +124,7 @@ class Utils {
    * Return URL without query arguments or page number.
    *
    * @since 5.4.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @return string Clean URL.
    */
@@ -144,7 +144,7 @@ class Utils {
    * Return current main pagination page.
    *
    * @since 5.32.4
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @return int Current page or 1.
    */
@@ -160,7 +160,7 @@ class Utils {
    * Encrypt data.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param mixed $data  Data to encrypt.
    *
@@ -206,7 +206,7 @@ class Utils {
    * Decrypt data.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $payload  Data to decrypt.
    *
@@ -257,7 +257,7 @@ class Utils {
    * Add class to element HTML string.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $html   HTML of the element.
    * @param string $class  CSS class string to be added.
@@ -293,7 +293,7 @@ class Utils {
    * Return theme icon HTML set in the Customizer.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string      $name     Name of the icon.
    * @param string|null $default  Optional. Fallback icon, defaults to empty string.
@@ -364,7 +364,7 @@ class Utils {
    * Notes: Considers both parent and child theme.
    *
    * @since 5.21.2
-   * @since 5.33.2 - Refactored and moved into Utils_Admin class.
+   * @since 5.34.0 - Refactored and moved into Utils_Admin class.
    *
    * @return array Associative array of theme colors.
    */
@@ -378,7 +378,7 @@ class Utils {
    *
    * @since 5.12.0
    * @since 5.21.2 - Refactored with theme colors helper function.
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string      $mod      Requested theme color.
    * @param string|null $default  Optional. Default color code.
@@ -397,7 +397,7 @@ class Utils {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param string $value  The to be converted hex (six digits).
@@ -416,7 +416,7 @@ class Utils {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param array $value      To be converted RGB array (r, g, b).
@@ -433,7 +433,7 @@ class Utils {
    * [Delegate] Convert a hex color to a Fictioneer HSL code.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $hex     Hex color.
    * @param string $output  Switch output style. Default 'default'.
@@ -449,7 +449,7 @@ class Utils {
    * [Delegate] Convert a hex color to an HSL font code.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $hex  Hex color.
    *
@@ -464,7 +464,7 @@ class Utils {
    * [Delegate] Return a font family value.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $option        Name of the theme mod.
    * @param string $font_default  Fallback font.
@@ -481,7 +481,7 @@ class Utils {
    * [Delegate] Return a CSS font-family value, quoted if required.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Fonts class.
+   * @since 5.34.0 - Moved into Fonts class.
    *
    * @param string $font_value  Font family name (single family, no commas).
    * @param string $quote       Optional. Wrapping character. Default '"'.
@@ -497,7 +497,7 @@ class Utils {
    * [Delegate] Return fonts data from a Google Fonts link.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $link  Google Fonts link.
    *
@@ -516,7 +516,7 @@ class Utils {
    * be added to the result array and therefore removed from the site.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return array Array of font data. Keys: skip, chapter, version, key, name,
    *               family, type, styles, weights, charsets, formats, about, note,
@@ -531,7 +531,7 @@ class Utils {
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    */
 
   public static function bundle_fonts() : void {
@@ -547,7 +547,7 @@ class Utils {
    * @since 5.1.1
    * @since 5.10.0 - Refactor for font manager.
    * @since 5.12.5 - Add theme mod for chapter body font.
-   * @since 5.33.2 - Moved into Fonts class.
+   * @since 5.34.0 - Moved into Fonts class.
    *
    * @return array Font items (css, name, and alt).
    */
@@ -559,7 +559,7 @@ class Utils {
   /**
    * [Delegate] Return array of disabled font keys.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return array Disabled font keys.
    */
@@ -576,7 +576,7 @@ class Utils {
    * @author lots0logs https://stackoverflow.com/users/2639936/lots0logs
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    * @link https://stackoverflow.com/a/15195752/17140970
    * @link https://stackoverflow.com/a/44350195/17140970
    *
@@ -640,7 +640,7 @@ class Utils {
    *
    * @since 4.0.0
    * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $data  JSON string hopeful.
    *
@@ -671,7 +671,7 @@ class Utils {
   /**
    * Get story status icon HTML.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param string $status  Status of the story.
    *
@@ -703,7 +703,7 @@ class Utils {
    * Note: Checks whether the given post is a WP_Post, otherwise
    * it checks whether the object responds to `->meta`.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param object $post     Post-like object or WP_Post.
    * @param string $key      Meta key.
@@ -719,7 +719,7 @@ class Utils {
   /**
    * [Delegate] Get permalink via get_permalink() or custom build for post-like data.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param object $chapter    Post-like object with ->ID, ->post_name, ->post_type.
    * @param int    $story_id   Used to get story slug to fill %story_slug% (if enabled).
@@ -736,7 +736,7 @@ class Utils {
    * Get user by ID or email.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Refactored and moved into Utils class.
+   * @since 5.34.0 - Refactored and moved into Utils class.
    *
    * @param mixed $id_or_email  User ID or email address.
    *
@@ -766,7 +766,7 @@ class Utils {
    * Unset the first occurrence of a value from an array.
    *
    * @since 5.7.5
-   * @since 5.33.2 - Refactored and moved into Utils class.
+   * @since 5.34.0 - Refactored and moved into Utils class.
    *
    * @param mixed $value   The value to look for.
    * @param array $array   The array to be modified.

@@ -9,7 +9,7 @@ class Fonts {
    * [Delegate] Return a font family value.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $option        Name of the theme mod.
    * @param string $font_default  Fallback font.
@@ -26,7 +26,7 @@ class Fonts {
    * Return a CSS font-family value, quoted if required.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $font_value  Font family name (single family, no commas).
    * @param string $quote       Optional. Wrapping character. Default '"'.
@@ -56,7 +56,7 @@ class Fonts {
    * [Delegate] Return fonts data from a Google Fonts link.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @param string $link  Google Fonts link.
    *
@@ -75,7 +75,7 @@ class Fonts {
    * be added to the result array and therefore removed from the site.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return array Array of font data. Keys: skip, chapter, version, key, name,
    *               family, type, styles, weights, charsets, formats, about, note,
@@ -90,7 +90,7 @@ class Fonts {
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    */
 
   public static function bundle_fonts() : void {
@@ -106,7 +106,7 @@ class Fonts {
    * @since 5.1.1
    * @since 5.10.0 - Refactor for font manager.
    * @since 5.12.5 - Add theme mod for chapter body font.
-   * @since 5.33.2 - Moved into Utils_Admin class.
+   * @since 5.34.0 - Moved into Utils_Admin class.
    *
    * @return array Font items (css, name, and alt).
    */
@@ -153,7 +153,7 @@ class Fonts {
   /**
    * Return array of disabled font keys.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return array Disabled font keys.
    */

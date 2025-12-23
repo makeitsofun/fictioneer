@@ -9,7 +9,7 @@ class Customizer {
    * Return the CSS loaded from a snippet file.
    *
    * @since 5.11.1
-   * @since 5.33.2 - Refactored and moved into Customizer class.
+   * @since 5.34.0 - Refactored and moved into Customizer class.
    *
    * @param string $snippet  Name of the snippet file without file ending.
    *
@@ -45,7 +45,7 @@ class Customizer {
    * Return an eased fading linear-gradient value.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Customizer class.
+   * @since 5.34.0 - Moved into Customizer class.
    *
    * @param float  $start_opacity  Starting opacity of the gradient in percentage.
    * @param int    $start          Starting point of the gradient in percentage.
@@ -86,7 +86,7 @@ class Customizer {
    * Return a high-precision CSS clamp.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Customizer class.
+   * @since 5.34.0 - Moved into Customizer class.
    *
    * @param int    $min   Minimum value.
    * @param int    $max   Maximum value.
@@ -107,7 +107,7 @@ class Customizer {
   /**
    * Return CSS for dark mode :root properties.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return string CSS :root properties.
    */
@@ -208,7 +208,7 @@ class Customizer {
   /**
    * Return CSS for light mode :root properties.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return string CSS :root properties.
    */
@@ -307,7 +307,7 @@ class Customizer {
   /**
    * Build and save customization stylesheet.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param string|null $context  Optional. In which context the stylesheet created,
    *                              for example 'preview' for the Customizer.
@@ -333,7 +333,7 @@ class Customizer {
   /**
    * Return compiled customization styles.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return string Compiled customization styles.
    */

@@ -9,7 +9,7 @@ class Log {
    * Log a message to the theme log file.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Log class.
+   * @since 5.34.0 - Moved into Log class.
    *
    * @param string       $message  What has been updated
    * @param WP_User|null $user     The user who did it. Defaults to current user.
@@ -68,7 +68,7 @@ class Log {
    * Retrieve the log entries and returns an HTML representation.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Log class.
+   * @since 5.34.0 - Moved into Log class.
    *
    * @return string The HTML representation of the log entries.
    */
@@ -99,7 +99,7 @@ class Log {
    * Retrieve the debug log entries and returns an HTML representation.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Log class.
+   * @since 5.34.0 - Moved into Log class.
    *
    * @return string HTML representation of the log entries.
    */
@@ -129,7 +129,7 @@ class Log {
    * Return (or creates) secret log hash used to obscure the log file name.
    *
    * @since 5.24.1
-   * @since 5.33.2 - Moved into Log class.
+   * @since 5.34.0 - Moved into Log class.
    *
    * @return string The log hash.
    */

@@ -16,7 +16,7 @@ use Fictioneer\Story;
  * [Deprecated] Sanitize an integer with options for default, minimum, and maximum.
  *
  * @since 4.0.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_integer() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_integer() instead.
  *
  * @param mixed    $value    The value to be sanitized.
  * @param mixed    $default  Optional. Fallback value. Default 0.
@@ -34,7 +34,7 @@ function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = 
  * [Deprecated] Sanitize integer to be 1 or more.
  *
  * @since 4.6.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_integer_one_up() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_integer_one_up() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -48,7 +48,7 @@ function fictioneer_sanitize_integer_one_up( $input ) {
  * [Deprecated] Sanitize the 'words per minute' setting with fallback.
  *
  * @since 4.0.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::fictioneer_sanitize_words_per_minute() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::fictioneer_sanitize_words_per_minute() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -63,7 +63,7 @@ function fictioneer_sanitize_words_per_minute( $input ) {
  * [Deprecated] Sanitize callback with float or default 0.
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float() instead.
  *
  * @param mixed $value  The value to be sanitized.
  *
@@ -78,7 +78,7 @@ function fictioneer_sanitize_float( $value ) {
  * [Deprecated] Sanitizes a float as positive number.
  *
  * @since 5.9.4
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive() instead.
  *
  * @param mixed $value    The value to be sanitized.
  * @param float $default  Default value if an invalid float is provided. Default 0.0.
@@ -94,7 +94,7 @@ function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
  * [Deprecated] Sanitize callback with positive float or default 1.0.
  *
  * @since 5.10.1
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive_def1() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive_def1() instead.
  *
  * @param mixed $value  The value to be sanitized.
  *
@@ -109,7 +109,7 @@ function fictioneer_sanitize_positive_float_def1( $value ) {
  * [Deprecated] Sanitize a checkbox value into true or false.
  *
  * @since 4.7.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_bool() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_bool() instead.
  *
  * @param string|boolean $value  The checkbox value to be sanitized.
  *
@@ -124,7 +124,7 @@ function fictioneer_sanitize_checkbox( $value ) {
  * [Deprecated] Explode string into an array.
  *
  * @since 5.1.3
- * @deprecated 5.33.2 - Use wp_parse_list() instead.
+ * @deprecated 5.34.0 - Use wp_parse_list() instead.
  *
  * @param string $string  The string to explode.
  *
@@ -139,7 +139,7 @@ function fictioneer_explode_list( $string ) {
  * [Deprecated] Sanitize (and transform) a comma-separated list into an array.
  *
  * @since 5.15.0
- * @deprecated 5.33.2 - Use wp_parse_list() instead.
+ * @deprecated 5.34.0 - Use wp_parse_list() instead.
  *
  * @param string     $input  The comma-separated list.
  * @param array|null $args   Deprecated.
@@ -155,7 +155,7 @@ function fictioneer_sanitize_list_into_array( $input, $args = []  ) {
  * [Deprecated] Sanitize comma-separated list of IDs.
  *
  * @since 5.32.0
- * @deprecated 5.33.2 - Use wp_parse_id_list() instead.
+ * @deprecated 5.34.0 - Use wp_parse_id_list() instead.
  *
  * @param string $input  List of IDs.
  *
@@ -171,7 +171,7 @@ function fictioneer_sanitize_comma_separated_ids( $input ) {
  *
  * @since 5.15.0
  * @since 5.32.0 - Changed to alias for generic sanitizer.
- * @deprecated 5.33.2 - Use wp_parse_id_list() instead.
+ * @deprecated 5.34.0 - Use wp_parse_id_list() instead.
  *
  * @param string $input  The comma-separated list.
  *
@@ -186,7 +186,7 @@ function fictioneer_sanitize_global_patreon_tiers( $input ) {
  * [Deprecated] Sanitize an URL.
  *
  * @since 5.19.1
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
  *
  * @param string      $url         The URL entered.
  * @param string|null $match       Optional. URL must start with this string.
@@ -204,7 +204,7 @@ function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
  *
  * @since 5.15.0
  * @since 5.19.1 - Split up into two functions.
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
  *
  * @param string $url  The URL entered.
  *
@@ -219,7 +219,7 @@ function fictioneer_sanitize_patreon_url( $url ) {
  * [Deprecated] Sanitize a selected option.
  *
  * @since 5.7.4
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_selection() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_selection() instead.
  *
  * @param mixed $value            The selected value to be sanitized.
  * @param array $allowed_options  The allowed values to be checked against.
@@ -237,7 +237,7 @@ function fictioneer_sanitize_selection( $value, $allowed_options, $default = nul
  *
  * @since 5.7.4
  * @since 5.27.4 - Unslash string.
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_css() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_css() instead.
  *
  * @param string $css  The CSS string to be sanitized. Expects slashed string.
  *
@@ -252,7 +252,7 @@ function fictioneer_sanitize_css( $css ) {
  * [Deprecated] Sanitize a query variable.
  *
  * @since 5.14.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_query_var() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_query_var() instead.
  *
  * @param string      $var      Query variable to sanitize.
  * @param array       $allowed  Array of allowed string (lowercase).
@@ -278,7 +278,7 @@ function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args =
  * registered post type, such as 'fcn_story'.
  *
  * @since 5.33.5
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_post_type() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_post_type() instead.
  *
  * @param string $post_type  The string to be sanitized.
  *
@@ -295,7 +295,7 @@ function fictioneer_sanitize_post_type( $post_type ) {
  * Removes malicious HTML, magic quote slashes, shortcodes, and blocks.
  *
  * @since 5.7.4
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_meta_field_editor() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_meta_field_editor() instead.
  *
  * @param string $content  The content to be sanitized.
  *
@@ -310,7 +310,7 @@ function fictioneer_sanitize_editor( $content ) {
  * [Deprecated] Return sanitized image ID that must exist.
  *
  * @since 5.30.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_image_id() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_image_id() instead.
  *
  * @param int|string $id  Image ID.
  *
@@ -327,7 +327,7 @@ function fictioneer_sanitize_image_id( $id ) {
  * @since 5.32.0
  *
  * @param string $html  Icon HTML.
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_icon_html() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_icon_html() instead.
  *
  * @return string Sanitized icon HTML.
  */
@@ -340,7 +340,7 @@ function fictioneer_sanitize_icon_html( $html ) {
  * [Deprecated] Return sanitized safe title.
  *
  * @since 5.7.1
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
  *
  * @param string $title  Post title.
  * @param string $date   The date.
@@ -357,7 +357,7 @@ function fictioneer_sanitize_safe_title( $title, $date, $time ) {
  * [Deprecated] Sanitize a page ID and checks whether it is valid.
  *
  * @since 4.6.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::sanitize_page_id() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_page_id() instead.
  *
  * @param mixed $input  The page ID to be sanitized.
  *
@@ -372,7 +372,7 @@ function fictioneer_sanitize_page_id( $input ) {
  * [Deprecated] Sanitize with absint() unless it is an empty string.
  *
  * @since 5.15.0
- * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -395,7 +395,7 @@ if ( ! function_exists( 'fictioneer_hex_to_rgb' ) ) {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::hex_to_rgb() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::hex_to_rgb() instead.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param string $input  The to be converted hex (six digits).
@@ -416,7 +416,7 @@ if ( ! function_exists( 'fictioneer_rgb_to_hsl' ) ) {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::rgb_to_hsl() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::rgb_to_hsl() instead.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param array $input      The to be converted RGB.
@@ -435,7 +435,7 @@ if ( ! function_exists( 'fictioneer_get_css_clamp' ) ) {
    * [Deprecated] Generate a high-precision CSS clamp.
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_clamp() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Customizer::get_clamp() instead.
    *
    * @param int    $min   The minimum value.
    * @param int    $max   The maximum value.
@@ -456,7 +456,7 @@ if ( ! function_exists( 'fictioneer_hsl_code' ) ) {
    * [Deprecated] Convert a hex color to a Fictioneer HSL code.
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_hsl_code() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_hsl_code() instead.
    *
    * @param string $hex     The color as hex.
    * @param string $output  Switch output style. Default 'default'.
@@ -474,7 +474,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
    * [Deprecated] Convert a hex color to a Fictioneer HSL font code.
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_hsl_font_code() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_hsl_font_code() instead.
    * @see fictioneer_hsl_code( $hex, $output )
    *
    * @param string $hex  The color as hex.
@@ -491,7 +491,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
  * [Deprecated] Helper that returns a font family value.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_family() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Fonts::get_font_family() instead.
  *
  * @param string $option        Name of the theme mod.
  * @param string $font_default  Fallback font.
@@ -508,7 +508,7 @@ function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
  * [Deprecated] Return the CSS loaded from a snippet file.
  *
  * @since 5.11.1
- * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_css_snippet() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Customizer::get_css_snippet() instead.
  *
  * @param string $snippet      Name of the snippet file without file ending.
  * @param string|null $filter  Optional. Part of the generated filter, defaulting
@@ -540,7 +540,7 @@ function fictioneer_get_theme_colors_array() {
  *
  * @since 5.12.0
  * @since 5.21.2 - Refactored with theme colors helper function.
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_theme_color() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_theme_color() instead.
  *
  * @param string $mod           The requested theme color.
  * @param string|null $default  Optional. Default color code.
@@ -556,7 +556,7 @@ function fictioneer_get_theme_color( $mod, $default = null ) {
  * [Deprecated] Build the customization stylesheet.
  *
  * @since 5.11.0
- * @deprecated 5.33.2 - Use \Fictioneer\Customizer::build_customizer_css() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Customizer::build_customizer_css() instead.
  *
  * @param string|null $context  Optional. In which context the stylesheet created,
  *                              for example 'preview' for the Customizer.
@@ -571,7 +571,7 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
    * [Deprecated] Return an eased fading linear-gradient CSS.
    *
    * @since 5.11.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_fading_gradient() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Customizer::get_fading_gradient() instead.
    *
    * @param float  $start_opacity  The starting opacity of the gradient in percentage.
    * @param int    $start          The starting point of the gradient in percentage.
@@ -591,7 +591,7 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
  * [Deprecated] Build bundled font stylesheet.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Fonts::bundle_fonts() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Fonts::bundle_fonts() instead.
  */
 
 function fictioneer_build_bundled_fonts() : void {
@@ -602,7 +602,7 @@ function fictioneer_build_bundled_fonts() : void {
  * [Deprecated] Return fonts data from a Google Fonts link.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Fonts::extract_font_from_google_link() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Fonts::extract_font_from_google_link() instead.
  *
  * @param string $link  Google Fonts link.
  *
@@ -621,7 +621,7 @@ function fictioneer_extract_font_from_google_link( $link ) {
  * be added to the result array and therefore removed from the site.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_data() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Fonts::get_font_data() instead.
  *
  * @return array Array of font data. Keys: skip, chapter, version, key, name,
  *               family, type, styles, weights, charsets, formats, about, note,
@@ -640,7 +640,7 @@ function fictioneer_get_font_data() : array {
  * [Deprecated] Return directory path of the theme cache.
  *
  * @since 5.23.1
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_cache_dir() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_cache_dir() instead.
  *
  * @param string|null $context  Optional. Context of the call. Default null.
  *
@@ -655,7 +655,7 @@ function fictioneer_get_theme_cache_dir( $context = null ) {
  * [Deprecated] Return theme cache URI.
  *
  * @since 5.23.1
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_cache_uri() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_cache_uri() instead.
  *
  * @param string|null $context  The context of the call. Default null.
  *
@@ -670,7 +670,7 @@ function fictioneer_get_theme_cache_uri( $context = null ) {
  * [Deprecated] Return aspect ratio values as tuple.
  *
  * @since 5.14.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::split_aspect_ratio() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::split_aspect_ratio() instead.
  *
  * @param string $css  Aspect-ratio CSS value.
  *
@@ -685,7 +685,7 @@ function fictioneer_get_split_aspect_ratio( $css ) {
  * [Deprecated] Return array of adjectives for randomized username generation.
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
  *
  * @return array Array of adjectives.
  */
@@ -698,7 +698,7 @@ function fictioneer_get_username_adjectives() {
  * [Deprecated] Return array of nouns for randomized username generation
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_username_nouns() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_nouns() instead.
  *
  * @return array Array of nouns.
  */
@@ -711,7 +711,7 @@ function fictioneer_get_username_nouns() {
  * [Deprecated] Return randomized username.
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
  *
  * @param bool $unique  Optional. Whether the username must be unique. Default true.
  *
@@ -727,7 +727,7 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
    * [Deprecated] Return URL without query arguments or page number.
    *
    * @since 5.4.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_clean_url() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_clean_url() instead.
    *
    * @return string The clean URL.
    */
@@ -741,7 +741,7 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
  * [Deprecated] Encrypt data.
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::encrypt() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::encrypt() instead.
  *
  * @param mixed $data  The data to encrypt.
  *
@@ -756,7 +756,7 @@ function fictioneer_encrypt( $data ) {
  * [Deprecated] Decrypt data.
  *
  * @since 5.19.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::decrypt() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::decrypt() instead.
  *
  * @param string $data  The data to decrypt.
  *
@@ -771,7 +771,7 @@ function fictioneer_decrypt( $data ) {
  * [Deprecated] Add or prepend class to element HTML string.
  *
  * @since 5.32.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::add_class_to_element() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::add_class_to_element() instead.
  *
  * @param string $html   HTML of the element.
  * @param string $class  CSS class string to be added.
@@ -787,7 +787,7 @@ function fictioneer_add_class_to_element( $html, $class ) {
  * [Deprecated] Return theme icon HTML set in the Customizer.
  *
  * @since 5.32.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_theme_icon() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_theme_icon() instead.
  *
  * @param string      $name     Name of the icon.
  * @param string|null $default  Optional. Fallback icon, defaults to empty string.
@@ -808,7 +808,7 @@ function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
  * [Deprecated] Return current main pagination page.
  *
  * @since 5.32.4
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_global_page() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_global_page() instead.
  *
  * @return int Current page or 1.
  */
@@ -821,7 +821,7 @@ function fictioneer_get_global_page() {
  * [Deprecated] Return a CSS font-family value, quoted if required.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_family_value() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Fonts::get_font_family_value() instead.
  *
  * @param string $font_value  The font family value.
  * @param string $quote       Optional. The wrapping character. Default '"'.
@@ -838,7 +838,7 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
    * [Deprecated] Check whether an URL exists.
    *
    * @since 4.0.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::url_exists() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::url_exists() instead.
    *
    * @param string $url  The URL to check.
    *
@@ -855,7 +855,7 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
  *
  * @since 4.0.0
  * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::json_validate() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::json_validate() instead.
  *
  * @param string $data  JSON string hopeful.
  *
@@ -871,7 +871,7 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
    * [Deprecated] Get user by ID or email.
    *
    * @since 4.6.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_user_by_id_or_email() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_user_by_id_or_email() instead.
    *
    * @param mixed $id_or_email  User ID or email address.
    *
@@ -887,7 +887,7 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
  * [Deprecated] Unset the first occurrence of a value from an array.
  *
  * @since 5.7.5
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::array_unset_by_value() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::array_unset_by_value() instead.
  *
  * @param mixed $value   The value to look for.
  * @param array $array   The array to be modified.
@@ -909,7 +909,7 @@ if ( ! function_exists( 'fictioneer_minify_css' ) ) {
    * @author lots0logs https://stackoverflow.com/users/2639936/lots0logs
    *
    * @since 4.7.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::minify_css() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::minify_css() instead.
    * @link https://stackoverflow.com/a/15195752/17140970
    * @link https://stackoverflow.com/a/44350195/17140970
    *
@@ -933,7 +933,7 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
    * @since 5.1.1
    * @since 5.10.0 - Refactor for font manager.
    * @since 5.12.5 - Add theme mod for chapter body font.
-   * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_fonts() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Fonts::get_fonts() instead.
    *
    * @return array Font items (css, name, and alt).
    */
@@ -949,7 +949,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
    *
    * @since 4.3.0
    * @since 5.25.0 - Refactored with custom SQL query.
-   * @deprecated 5.33.2 - Use \Fictioneer\Story::get_data() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Story::get_data() instead.
    *
    * @param int     $story_id       ID of the story.
    * @param boolean $show_comments  Optional. Whether the comment count is needed.
@@ -969,7 +969,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
  *
  * @since 5.9.2
  * @since 5.22.3 - Refactored.
- * @deprecated 5.33.2 - Use \Fictioneer\Story::get_chapter_posts() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Story::get_chapter_posts() instead.
  *
  * @param int        $story_id  ID of the story.
  * @param array|null $args      Optional. Additional query arguments.
@@ -990,7 +990,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
  * within the 'all_chapters' group.
  *
  * @since 5.25.0
- * @deprecated 5.33.2 - Use \Fictioneer\Story::prepare_chapter_groups() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Story::prepare_chapter_groups() instead.
  *
  * @param int   $story_id  ID of the story.
  * @param array $chapters  Array of WP_Post or post-like objects.
@@ -1009,7 +1009,7 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
  *
  * @since 5.22.2
  * @since 5.22.3 - Switched to SQL query.
- * @deprecated 5.33.2 - Use \Fictioneer\Story::get_story_comment_count() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Story::get_story_comment_count() instead.
  *
  * @param int        $story_id     ID of the story.
  * @param array|null $chapter_ids  Optional. Array of chapter IDs.
@@ -1027,7 +1027,7 @@ if ( ! function_exists( 'fictioneer_count_words' ) ) {
    *
    * @since 5.25.0
    * @since 5.30.0 - Fixed for accuracy (hopefully).
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::count_words() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::count_words() instead.
    *
    * @param int         $post_id  ID of the post to count the words of.
    * @param string|null $content  Optional. The post content. Queries the field by default.
@@ -1044,7 +1044,7 @@ if ( ! function_exists( 'fictioneer_count_words' ) ) {
  * [Deprecated] Log a message to the theme log file.
  *
  * @since 5.0.0
- * @deprecated 5.33.2 - Use \Fictioneer\Log::add() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Log::add() instead.
  *
  * @param string       $message  What has been updated
  * @param WP_User|null $user     The user who did it. Defaults to current user.
@@ -1058,7 +1058,7 @@ function fictioneer_log( $message, $current_user = null ) {
  * [Deprecated] Retrieve the log entries and returns an HTML representation.
  *
  * @since 5.0.0
- * @deprecated 5.33.2 - Use \Fictioneer\Log::get() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Log::get() instead.
  *
  * @return string The HTML representation of the log entries.
  */
@@ -1071,7 +1071,7 @@ function fictioneer_get_log() {
  * [Deprecated] Retrieve the debug log entries and returns an HTML representation.
  *
  * @since 5.0.0
- * @deprecated 5.33.2 - Use \Fictioneer\Log::get_debug() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Log::get_debug() instead.
  *
  * @return string HTML representation of the log entries.
  */
@@ -1085,7 +1085,7 @@ if ( ! function_exists( 'fictioneer_get_validated_ajax_user' ) ) {
    * [Deprecated] Get the current user after performing AJAX validations
    *
    * @since 5.0.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_validated_ajax_user() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_validated_ajax_user() instead.
    *
    * @param string $nonce_name   Optional. The name of the nonce. Default 'nonce'.
    * @param string $nonce_value  Optional. The value of the nonce. Default 'fictioneer_nonce'.
@@ -1107,7 +1107,7 @@ if ( ! function_exists( 'fictioneer_bulk_update_post_meta' ) ) {
    * Fires default WP hooks where possible.
    *
    * @since 5.27.4
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::bulk_update_post_meta() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::bulk_update_post_meta() instead.
    * @link https://developer.wordpress.org/reference/functions/update_metadata/
    * @link https://developer.wordpress.org/reference/functions/add_metadata/
    * @link https://developer.wordpress.org/reference/functions/delete_metadata/
@@ -1126,7 +1126,7 @@ if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
    * [Deprecated] Check whether there any added chapters are to be considered "new".
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::has_new_story_chapters() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::has_new_story_chapters() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1147,7 +1147,7 @@ if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
    * [Deprecated] Return story IDs where the user is a co-author.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_co_authored_story_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_co_authored_story_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1166,7 +1166,7 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
    * [Deprecated] Return selectable stories for chapter assignments.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_chapter_story_selection() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_chapter_story_selection() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1185,7 +1185,7 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
  * [Deprecated] Update the comment count of a post.
  *
  * @since 5.26.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::update_comment_count() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::update_comment_count() instead.
  *
  * @global wpdb $wpdb  WordPress database object.
  *
@@ -1206,7 +1206,7 @@ if ( ! function_exists( 'fcn_keyword_search_taxonomies_input' ) ) {
    * [Deprecated] Render taxonomies keyword input field for search form.
    *
    * @since 5.0.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Search::render_search_taxonomies() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_taxonomies() instead.
    *
    * @param array  $taxonomies  Array of WP_Term objects.
    * @param string $type        The taxonomy type.
@@ -1227,7 +1227,7 @@ if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
    * [Deprecated] Render authors keyword input field for search form.
    *
    * @since 5.0.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Search::render_search_authors() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_authors() instead.
    *
    * @param array  $authors    Array of WP_User objects.
    * @param string $query_var  Name of the submitted collection field.
@@ -1250,7 +1250,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
    * [Deprecated] Filter out non-valid chapter array IDs.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1270,7 +1270,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
    * [Deprecated] Filter out non-valid story page array IDs.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_page_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_page_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1290,7 +1290,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
    * [Deprecated] Filter out non-valid story page array IDs.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1309,7 +1309,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
    * [Deprecated] Filter out non-valid featured array IDs.
    *
    * @since 5.26.0
-   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1329,7 +1329,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
    *
    * @since 5.26.0
    * @since 5.30.0 - Refactored for optional author.
-   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *

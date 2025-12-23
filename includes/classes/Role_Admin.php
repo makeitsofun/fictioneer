@@ -86,7 +86,7 @@ class Role_Admin {
   /**
    * Initialize theme roles and capabilities.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function initialize() : void {
@@ -101,7 +101,7 @@ class Role_Admin {
    * Initialize user roles if not already done.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param bool $force  Optional. Whether to force initialization.
    */
@@ -146,7 +146,7 @@ class Role_Admin {
    * Build user roles with custom capabilities.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function setup_roles() : void {
@@ -370,7 +370,7 @@ class Role_Admin {
    * Add/Update custom moderator role.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @return \WP_Role|\WP_Error|null
    */
@@ -461,7 +461,7 @@ class Role_Admin {
   /**
    * Add capability restrictions.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function add_admin_restrictions() : void {
@@ -603,7 +603,7 @@ class Role_Admin {
    * Inject CSS for the classic editor.
    *
    * @since 5.6.2
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function classic_editor_css_restrictions() : void {
@@ -621,7 +621,7 @@ class Role_Admin {
    *
    * @since 5.6.2
    * @since 5.26.1 - Use wp_print_inline_script_tag().
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function classic_editor_js_restrictions() : void {
@@ -648,7 +648,7 @@ class Role_Admin {
    * Restrict metaboxes in the classic editor.
    *
    * @since 5.6.2
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function restrict_classic_metaboxes() : void {
@@ -706,7 +706,7 @@ class Role_Admin {
    * the date cannot be changed.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $data     Array of slashed, sanitized, and processed post data.
    * @param array $postarr  Array of sanitized (and slashed) but otherwise unmodified post data.
@@ -735,7 +735,7 @@ class Role_Admin {
    *
    * @since 5.6.0
    * @since 5.8.6 - Fixed duplicate permalinks.
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $data     Array of slashed, sanitized, and processed post data.
    * @param array $postarr  Array of sanitized (and slashed) but otherwise unmodified post data.
@@ -771,7 +771,7 @@ class Role_Admin {
    * Hide the permalink field with CSS.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function hide_permalink_with_css() : void {
@@ -789,7 +789,7 @@ class Role_Admin {
    *
    * @since 5.6.2
    * @since 5.26.1 - Use wp_print_inline_script_tag().
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function hide_permalink_with_js() : void {
@@ -816,7 +816,7 @@ class Role_Admin {
    * Remove restricted Gutenberg blocks content on save.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $data  Array of slashed, sanitized, and processed post data.
    *
@@ -854,7 +854,7 @@ class Role_Admin {
    * Restrict block types available in the editor.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @return array Allowed block types.
    */
@@ -897,7 +897,7 @@ class Role_Admin {
    * Prevent making posts sticky.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param int $post_id The post ID.
    */
@@ -913,7 +913,7 @@ class Role_Admin {
    *
    * @since 5.6.0
    * @since 5.26.1 - Use wp_print_inline_script_tag().
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_profile_blocks() : void {
@@ -944,7 +944,7 @@ class Role_Admin {
    * Remove email and name columns from user table.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $column_headers  Columns to show in the user table.
    *
@@ -961,7 +961,7 @@ class Role_Admin {
    * Remove quick edit from comments table.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $actions  Actions per row in the comments table.
    *
@@ -980,7 +980,7 @@ class Role_Admin {
    * Note: Best we can do, unfortunately.
    *
    * @since 4.7.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function hide_private_comment_data() : void {
@@ -1003,7 +1003,7 @@ class Role_Admin {
    * Prevent users from deleting attachments uploaded by others.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array  $caps     Primitive capabilities required of the user.
    * @param string $cap      Capability being checked.
@@ -1041,7 +1041,7 @@ class Role_Admin {
    * Prevent users from editing attachments uploaded by others.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array  $caps     Primitive capabilities required of the user.
    * @param string $cap      Capability being checked.
@@ -1079,7 +1079,7 @@ class Role_Admin {
    * Prevent users from seeing attachments uploaded by others.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param \WP_Query $query  The queried attachments.
    */
@@ -1106,7 +1106,7 @@ class Role_Admin {
    * Prevent users from seeing attachments uploaded by others in the Media list view.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param \WP_Query $query  The current WP_Query.
    */
@@ -1133,7 +1133,7 @@ class Role_Admin {
    * Hide inserter media tab with CSS.
    *
    * @since 5.27.3
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function hide_inserter_media_tab_with_css() : void {
@@ -1150,7 +1150,7 @@ class Role_Admin {
    * Limit admin post list-table to only include own posts.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param \WP_Query $query The WP_Query instance (passed by reference).
    */
@@ -1176,7 +1176,7 @@ class Role_Admin {
   /**
    * Filter list-table counts (All/Published/Trash) to only include own posts.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param \stdClass $counts  Post counts.
    * @param string    $type    Post type.
@@ -1237,7 +1237,7 @@ class Role_Admin {
    * usually also cannot edit others posts.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $data  Array of slashed, sanitized, and processed post data.
    *
@@ -1272,7 +1272,7 @@ class Role_Admin {
    *
    * @since 5.14.0
    * @since 5.25.0 - Allowed 'fcnt' shortcode to pass.
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $tags_to_remove  Tags that strip_shortcodes() would remove.
    *
@@ -1295,7 +1295,7 @@ class Role_Admin {
    * Remove update notice.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_update_notice(){
@@ -1306,7 +1306,7 @@ class Role_Admin {
    * Prevent access to the admin panel.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function restrict_admin_panel() : void {
@@ -1334,7 +1334,7 @@ class Role_Admin {
    * Remove admin dashboard widgets.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_dashboard_widgets() : void {
@@ -1356,7 +1356,7 @@ class Role_Admin {
    * Remove the dashboard menu page.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_dashboard_menu() : void {
@@ -1367,7 +1367,7 @@ class Role_Admin {
    * Redirect from dashboard to user profile.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function skip_dashboard() : void {
@@ -1385,7 +1385,7 @@ class Role_Admin {
    * Prevent parent and menu order from being updated.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $data  Array of slashed, sanitized, and processed post data.
    *
@@ -1402,7 +1402,7 @@ class Role_Admin {
    * Filter the page template selection list.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $templates  Array of templates ('name' => 'Display Name').
    *
@@ -1420,7 +1420,7 @@ class Role_Admin {
    * allowed for everyone, block the meta update.
    *
    * @since 5.6.2
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param mixed  $check       Null if allowed, anything else blocks update.
    * @param int    $object_id   ID of the object metadata is for.
@@ -1446,7 +1446,7 @@ class Role_Admin {
    * Remove comments menu.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_comments_menu_page() : void {
@@ -1456,7 +1456,7 @@ class Role_Admin {
   /**
    * Prevent direct access to comment admin screens.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param \WP_Screen $screen  Current screen object.
    */
@@ -1475,7 +1475,7 @@ class Role_Admin {
    * Remove comments column.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $columns  The table columns.
    *
@@ -1494,7 +1494,7 @@ class Role_Admin {
    * Restrict comment editing.
    *
    * @since 5.7.3
-   * @since 5.33.2 - Renamed from fictioneer_edit_comments() and moved into Role class.
+   * @since 5.34.0 - Renamed from fictioneer_edit_comments() and moved into Role class.
    *
    * @param array  $caps     Primitive capabilities required of the user.
    * @param string $cap      Capability being checked.
@@ -1521,7 +1521,7 @@ class Role_Admin {
    * Only allow editing of comments
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $all_caps  An array of all the user's capabilities.
    * @param array $caps      Primitive capabilities that are being checked.
@@ -1557,7 +1557,7 @@ class Role_Admin {
   /**
    * Remove post menu page.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function remove_post_menu_page() : void {
@@ -1568,7 +1568,7 @@ class Role_Admin {
    * Reduce admin panel.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function reduce_admin_panel() : void {
@@ -1581,7 +1581,7 @@ class Role_Admin {
    * Restrict menu access for non-administrators.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param \WP_Screen $screen  Current screen object.
    */

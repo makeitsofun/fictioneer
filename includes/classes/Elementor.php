@@ -10,7 +10,7 @@ class Elementor {
   /**
    * Initialize hooks.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function init() : void {
@@ -27,7 +27,7 @@ class Elementor {
    * Register Elementor locations.
    *
    * @since 5.20.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param object $elementor_theme_manager  The Elementor manager object.
    */
@@ -86,7 +86,7 @@ class Elementor {
    * Add override frontend styles for Elementor.
    *
    * @since 5.20.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function override_styles() : void {
@@ -115,7 +115,7 @@ class Elementor {
    * Add override editor styles for Elementor.
    *
    * @since 5.20.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function override_editor_styles() : void {
@@ -190,7 +190,7 @@ class Elementor {
    * Add Fictioneer font group.
    *
    * @since 5.20.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param array $groups  Array of font groups.
    *

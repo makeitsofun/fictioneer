@@ -10,7 +10,7 @@ trait Singleton_Trait {
   /**
    * Return the singleton instance.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @return static Singleton instance.
    */
@@ -26,7 +26,7 @@ trait Singleton_Trait {
   /**
    * No cloning the class.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   final public function __clone() {}
@@ -34,7 +34,7 @@ trait Singleton_Trait {
   /**
    * No unserializing the class.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   final public function __wakeup() {}

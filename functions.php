@@ -7,9 +7,9 @@
 define( 'FICTIONEER_THEME_DIR', trailingslashit( __DIR__ ) );
 
 // Version
-define( 'FICTIONEER_VERSION', '5.33.2-beta1' );
+define( 'FICTIONEER_VERSION', '5.34.0-beta2' );
 define( 'FICTIONEER_MAJOR_VERSION', '5' );
-define( 'FICTIONEER_RELEASE_TAG', 'v5.33.2-beta1' );
+define( 'FICTIONEER_RELEASE_TAG', 'v5.34.0-beta2' );
 
 if ( ! defined( 'CHILD_VERSION' ) ) {
   define( 'CHILD_VERSION', null );

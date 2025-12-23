@@ -11,7 +11,7 @@ class Search {
    * Render taxonomies keyword input field for search form.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Search class.
+   * @since 5.34.0 - Moved into Search class.
    *
    * @param array  $taxonomies  Array of WP_Term objects.
    * @param string $type        The taxonomy type.
@@ -118,7 +118,7 @@ class Search {
    * Render authors keyword input field for search form.
    *
    * @since 5.0.0
-   * @since 5.33.2 - Moved into Search class.
+   * @since 5.34.0 - Moved into Search class.
    *
    * @param array  $authors    Array of WP_User objects.
    * @param string $query_var  Query variable.
@@ -185,7 +185,7 @@ class Search {
    *
    * @since 5.0.0
    * @since 5.11.0 - Added meta query for story status.
-   * @since 5.33.2 - Moved into Search class.
+   * @since 5.34.0 - Moved into Search class.
    *
    * @param WP_Query $query  The query.
    */

@@ -8,7 +8,7 @@ class Role {
   /**
    * Initialize theme roles and capabilities.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function initialize() : void {
@@ -29,7 +29,7 @@ class Role {
    * @since 5.12.3
    * @since 5.15.0 - Add Patreon checks.
    * @since 5.16.0 - Add Patreon unlock checks and static variable cache.
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    *
    * @param bool          $required  Whether the user needs to supply a password.
    * @param \WP_Post|null $post      Post object.
@@ -165,7 +165,7 @@ class Role {
   /**
    * Add capability restrictions.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function add_frontend_restrictions() : void {
@@ -226,7 +226,7 @@ class Role {
    * Remove comment item from admin bar.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_comments_from_admin_bar() : void {
@@ -240,7 +240,7 @@ class Role {
   /**
    * Remove post menu page.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    */
 
   public static function remove_admin_bar_new_post() : void {
@@ -255,7 +255,7 @@ class Role {
    * Limit the upload size in MB (minimum 1 MB).
    *
    * @since 5.6.0
-   * @since 5.33.2 - Respect WP limit and moved into Role class.
+   * @since 5.34.0 - Respect WP limit and moved into Role class.
    *
    * @param int $bytes  Current limit in bytes.
    *
@@ -275,7 +275,7 @@ class Role {
    * Restrict uploaded file types based on allowed MIME types.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Refactor and move into Role class.
+   * @since 5.34.0 - Refactor and move into Role class.
    *
    * @param array $file  An array of data for a single uploaded file. Has keys
    *                     for 'name', 'type', 'tmp_name', 'error', and 'size'.
@@ -316,7 +316,7 @@ class Role {
    * Remove dashboard from admin bar dropdown.
    *
    * @since 5.6.0
-   * @since 5.33.2 - Moved into Role class.
+   * @since 5.34.0 - Moved into Role class.
    */
 
   public static function remove_dashboard_from_admin_bar() : void {

@@ -9,7 +9,7 @@ class Sanitizer_Admin {
    * Sanitize a selected option.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value            Value to be sanitized.
    * @param array $allowed_options  Allowed values to be checked against.
@@ -36,7 +36,7 @@ class Sanitizer_Admin {
    *
    * @since 5.7.4
    * @since 5.27.4 - Unslash string.
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param string|null $css  CSS to be sanitized.
    *
@@ -117,7 +117,7 @@ class Sanitizer_Admin {
    * Removes malicious HTML, shortcodes, and blocks.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param string|null $content  Content to be sanitized.
    *
@@ -152,7 +152,7 @@ class Sanitizer_Admin {
    * Return sanitized icon HTML.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param string|null $html  Icon HTML.
    *
@@ -281,7 +281,7 @@ class Sanitizer_Admin {
    * Sanitize a page ID and check whether it is valid.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Page ID to be sanitized.
    *
@@ -306,7 +306,7 @@ class Sanitizer_Admin {
    * Sanitize with absint() unless it is an empty string.
    *
    * @since 5.15.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Value to be sanitized.
    *
@@ -329,7 +329,7 @@ class Sanitizer_Admin {
    * problematic HTML.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Content for the cookie consent banner.
    *
@@ -363,7 +363,7 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for Google Fonts links.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value  Textarea string.
    *
@@ -405,7 +405,7 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for preload font links.
    *
    * @since 5.31.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value  Textarea string.
    *
@@ -478,7 +478,7 @@ class Sanitizer_Admin {
    * Filter out non-valid chapter array IDs.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -526,7 +526,7 @@ class Sanitizer_Admin {
    * Filter out non-valid story page array IDs.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -572,7 +572,7 @@ class Sanitizer_Admin {
    * Filter out non-valid story page array IDs.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -629,7 +629,7 @@ class Sanitizer_Admin {
    * Filter out non-valid featured array IDs.
    *
    * @since 5.26.0
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -667,7 +667,7 @@ class Sanitizer_Admin {
    *
    * @since 5.26.0
    * @since 5.30.0 - Refactored for optional author.
-   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
