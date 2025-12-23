@@ -427,8 +427,6 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
       return [];
     }
 
-    $chapter_ids = array_unique( $chapter_ids );
-
     // Prepare placeholders and values
     $placeholders = implode( ',', array_fill( 0, count( $chapter_ids ), '%d' ) );
     $values = $chapter_ids;
@@ -484,7 +482,6 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
       return [];
     }
 
-    $page_ids = array_unique( $page_ids );
     $page_ids = array_slice( $page_ids, 0, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY );
 
     // Prepare placeholders
@@ -535,8 +532,6 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
     if ( empty( $item_ids ) ) {
       return [];
     }
-
-    $item_ids = array_unique( $item_ids );
 
     // Exclude forbidden IDs
     $forbidden = array_unique([
@@ -602,8 +597,6 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
       return [];
     }
 
-    $post_ids = array_unique( $post_ids );
-
     // Prepare placeholders
     $placeholders = implode( ',', array_fill( 0, count( $post_ids ), '%d' ) );
 
@@ -649,8 +642,6 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
     if ( empty( $story_blogs ) ) {
       return [];
     }
-
-    $story_blogs = array_unique( $story_blogs );
 
     // Prepare placeholders
     $placeholders = implode( ',', array_fill( 0, count( $story_blogs ), '%d' ) );
