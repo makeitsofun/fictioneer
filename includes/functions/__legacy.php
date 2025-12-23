@@ -1161,6 +1161,25 @@ if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
+  /**
+   * Return selectable stories for chapter assignments.
+   *
+   * @since 5.26.0
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $post_author_id     Author ID of the current post.
+   * @param int $current_story_id   ID of the currently selected story (if any).
+   *
+   * @return array Associative array with 'stories' (array), 'other_author' (bool), 'co_author' (bool).
+   */
+
+  function fictioneer_sql_get_chapter_story_selection( $post_author_id, $current_story_id = 0 ) {
+    return Utils_Admin::get_chapter_story_selection( $post_author_id, $current_story_id );
+  }
+}
+
 // =============================================================================
 // SEARCH DELEGATES
 // =============================================================================

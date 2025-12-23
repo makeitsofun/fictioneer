@@ -2984,7 +2984,7 @@ function fictioneer_render_chapter_data_metabox( $post ) {
   $output['fictioneer_magic_quote_test'] = fictioneer_get_magic_quote_test();
 
   // Story
-  $story_selection = fictioneer_sql_get_chapter_story_selection( $post_author_id, $current_story_id );
+  $story_selection = Utils_Admin::get_chapter_story_selection( $post_author_id, $current_story_id );
   $stories = $story_selection['stories'];
 
   $author_warning = $story_selection['other_author'] ? ' ' . __( '<strong>Warning:</strong> The selected story belongs to another author. If you change the selection, you cannot go back.', 'fictioneer' ) : '';

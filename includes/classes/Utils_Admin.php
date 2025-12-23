@@ -939,4 +939,110 @@ class Utils_Admin {
 
     return $story_ids;
   }
+
+  /**
+   * Return selectable stories for chapter assignments.
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $post_author_id     Author ID of the current post.
+   * @param int $current_story_id   ID of the currently selected story (if any).
+   *
+   * @return array Associative array with 'stories' (array), 'other_author' (bool), 'co_author' (bool).
+   */
+
+  public static function get_chapter_story_selection( $post_author_id, $current_story_id = 0 ) : array {
+    global $wpdb;
+
+    $stories = array( '0' => _x( '— Unassigned —', 'Chapter story select option.', 'fictioneer' ) );
+    $co_authored_stories = [];
+    $other_author = false;
+    $co_author = false;
+
+    $values = [];
+
+    $sql =
+      "SELECT p.ID, p.post_title, p.post_status, p.post_date, p.post_author
+      FROM {$wpdb->posts} p
+      WHERE p.post_type = 'fcn_story'
+        AND p.post_status IN ('publish', 'private')";
+
+    if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
+      $sql .= " AND p.post_author = %d";
+      $values[] = $post_author_id;
+
+      $co_authored_stories = self::get_co_authored_story_ids( $post_author_id );
+
+      if ( ! empty( $co_authored_stories ) ) {
+        $placeholders = implode( ',', array_fill( 0, count( $co_authored_stories ), '%d' ) );
+        $sql .= " OR p.ID IN ($placeholders)";
+        $values = array_merge( $values, $co_authored_stories );
+        $co_author = true;
+      }
+    }
+
+    $sql .= " ORDER BY p.post_date DESC";
+
+    if ( empty( $values ) ) {
+      $results = $wpdb->get_results( $sql );
+    } else {
+      $results = $wpdb->get_results( $wpdb->prepare( $sql, ...$values ) );
+    }
+
+    foreach ( $results as $story ) {
+      $title = Sanitizer::sanitize_safe_title(
+        $story->post_title,
+        mysql2date( get_option( 'date_format' ), $story->post_date ),
+        mysql2date( get_option( 'time_format' ), $story->post_date )
+      );
+      $suffix = [];
+
+      if ( $story->post_status !== 'publish' ) {
+        $suffix['status'] = fictioneer_get_post_status_label( $story->post_status );
+      }
+
+      if ( in_array( $story->ID, $co_authored_stories ) ) {
+        $suffix['co-authored'] = __( 'Co-Author', 'fictioneer' );
+      }
+
+      if ( empty( $suffix ) ) {
+        $stories[ $story->ID ] = $title;
+      } else {
+        $stories[ $story->ID ] = sprintf(
+          _x( '%1$s (%2$s)', 'Chapter story meta field option with notes.', 'fictioneer' ),
+          $title,
+          implode( ' | ', $suffix )
+        );
+      }
+    }
+
+    if ( $current_story_id && ! array_key_exists( $current_story_id, $stories ) ) {
+      $other_author_id = get_post_field( 'post_author', $current_story_id );
+      $suffix = [];
+
+      if ( $other_author_id != $post_author_id ) {
+        $other_author = true;
+        $suffix['author'] = get_the_author_meta( 'display_name', $other_author_id );
+      }
+
+      if ( get_post_status( $current_story_id ) !== 'publish' ) {
+        $suffix['status'] = fictioneer_get_post_status_label( get_post_status( $current_story_id ) );
+      }
+
+      $stories[ $current_story_id ] = sprintf(
+        _x( '%1$s (%2$s)', 'Chapter story meta field mismatched option with notes.', 'fictioneer' ),
+        fictioneer_get_safe_title( $current_story_id, 'admin-render-chapter-data-metabox-current-suffix' ),
+        ! empty( $suffix ) ? implode( ' | ', $suffix ) : ''
+      );
+    }
+
+    return array(
+      'stories' => $stories,
+      'other_author' => $other_author,
+      'co_author' => $co_author
+    );
+  }
 }
