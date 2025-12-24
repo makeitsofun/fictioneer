@@ -1188,6 +1188,25 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_sql_get_story_chapter_relationship_data' ) ) {
+  /**
+   * [Deprecated] Return chapter objects for a story.
+   *
+   * @since 5.26.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_story_chapter_relationship_data() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $story_id  Story ID.
+   *
+   * @return object[] Array of chapter data object similar to WP_Post.
+   */
+
+  function fictioneer_sql_get_story_chapter_relationship_data( $story_id ) {
+    return Utils_admin::get_story_chapter_relationship_data( $story_id );
+  }
+}
+
 /**
  * [Deprecated] Update the comment count of a post.
  *

@@ -2165,7 +2165,7 @@ function fictioneer_render_story_data_metabox( $post ) {
   $output['fictioneer_story_chapters'] = fictioneer_get_metabox_relationships(
     $post,
     'fictioneer_story_chapters',
-    fictioneer_sql_get_story_chapter_relationship_data( $post->ID ),
+    Utils_admin::get_story_chapter_relationship_data( $post->ID ),
     'fictioneer_callback_relationship_chapters',
     array(
       'label' => _x( 'Chapters', 'Story chapters meta field label.', 'fictioneer' ),
