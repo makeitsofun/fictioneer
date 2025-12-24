@@ -24,7 +24,7 @@ if ( ! get_option( 'fictioneer_enable_oauth' ) ) {
 
 // Setup
 $current_user = $args['user'];
-$patreon_user_data = fictioneer_get_user_patreon_data( $current_user->ID );
+$patreon_user_data =  \Fictioneer\User::get_user_patreon_data( $current_user->ID );
 $oauth_providers = [
   ['discord', 'Discord'],
   ['twitch', 'Twitch'],

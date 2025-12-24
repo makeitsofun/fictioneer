@@ -416,7 +416,7 @@ if ( ! function_exists( 'fictioneer_theme_comment' ) ) {
     $comment_user_id = $comment->user_id; // User ID of comment author or 0
     $comment_author = empty( $comment->comment_author ) ? fcntr( 'anonymous_guest' ) : $comment->comment_author;
     $fingerprint = $comment_user_id ? Utils::get_user_fingerprint( $comment_user_id ) : false;
-    $badge = fictioneer_get_comment_badge( get_user_by( 'id', $comment_user_id ), $comment, $post_author_id );
+    $badge = \Fictioneer\User::get_comment_badge( get_user_by( 'id', $comment_user_id ), $comment, $post_author_id );
 
     // Comment data
     $unapproved_comment_email = wp_get_unapproved_comment_author_email();

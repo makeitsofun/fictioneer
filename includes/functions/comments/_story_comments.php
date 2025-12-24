@@ -42,7 +42,7 @@ if ( ! function_exists( 'fictioneer_build_story_comment' ) ) {
     }
 
     // Get badge (if any)
-    $badge = fictioneer_get_comment_badge( get_user_by( 'id', $comment->user_id ), $comment, $post->post_author );
+    $badge = \Fictioneer\User::get_comment_badge( get_user_by( 'id', $comment->user_id ), $comment, $post->post_author );
 
     // Start HTML ---> ?>
     <div class="fictioneer-comment__header">

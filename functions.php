@@ -641,10 +641,43 @@ function fictioneer_conditional_require_comments() {
 add_action( 'wp', 'fictioneer_conditional_require_comments' );
 
 /**
- * Add helpers for users.
+ * Add user features.
  */
 
-require_once __DIR__ . '/includes/functions/_helpers-users.php';
+/**
+ * Filter the avatar URL.
+ *
+ * @since 4.0.0
+ * @since 5.34.0 - Delegate to User class.
+ *
+ * @param string     $url          The default URL by WordPress.
+ * @param int|string $id_or_email  User ID or email address.
+ * @param WP_User    $args         Additional arguments.
+ *
+ * @return string The avatar URL.
+ */
+
+function fictioneer_get_avatar_url( $url, $id_or_email, $args ) {
+  return \Fictioneer\User::get_avatar_url( $url, $id_or_email, $args );
+}
+add_filter( 'get_avatar_url', 'fictioneer_get_avatar_url', 10, 3 );
+
+/**
+ * Add fallback inline script to avatars.
+ *
+ * @since 5.0.0
+ *
+ * @param string $avatar       HTML for the avatar.
+ * @param string $id_or_email  ID or email of the user.
+ *
+ * @return string HTML with fallback script added.
+ */
+
+function fictioneer_avatar_fallback( $avatar, $id_or_email ) {
+  return str_replace( '<img', '<img onerror="this.src=\''
+    . \Fictioneer\User::get_default_avatar_url()
+    . '\';this.srcset=\'\';this.onerror=\'\';"', $avatar );
+}
 
 /**
  * Add AJAX functions for users.

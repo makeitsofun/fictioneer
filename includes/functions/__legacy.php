@@ -7,6 +7,7 @@ use Fictioneer\Utils_Admin;
 use Fictioneer\Customizer;
 use Fictioneer\Fonts;
 use Fictioneer\Story;
+use Fictioneer\User;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -1395,9 +1396,10 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
 
 if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
   /**
-   * Get custom avatar URL
+   * [Deprecated] Get custom avatar URL.
    *
    * @since 4.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\User::get_custom_avatar_url() instead.
    *
    * @param WP_User $user The user to get the avatar for.
    *
@@ -1405,6 +1407,114 @@ if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
    */
 
   function fictioneer_get_custom_avatar_url( $user ) {
-    return \Fictioneer\User::get_custom_avatar_url( $user );
+    return User::get_custom_avatar_url( $user );
   }
+}
+
+if ( ! function_exists( 'fictioneer_get_default_avatar_url' ) ) {
+  /**
+   * [Deprecated] Get default avatar URL.
+   *
+   * @since 5.5.3
+   * @deprecated 5.34.0 - Use \Fictioneer\User::get_default_avatar_url() instead.
+   *
+   * @return string Default avatar URL.
+   */
+
+  function fictioneer_get_default_avatar_url() {
+    return User::get_default_avatar_url();
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_comment_badge' ) ) {
+  /**
+   * [Deprecated] Get HTML for comment badge.
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\User::get_comment_badge() instead.
+   *
+   * @param WP_User|null    $user            The comment user.
+   * @param WP_Comment|null $comment         Optional. The comment object.
+   * @param int             $post_author_id  Optional. ID of the author of the post
+   *                                         the comment is for.
+   *
+   * @return string Badge HTML or empty string.
+   */
+
+  function fictioneer_get_comment_badge( $user, $comment = null, $post_author_id = 0 ) {
+    return User::get_comment_badge( $user, $comment, $post_author_id );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_override_badge' ) ) {
+  /**
+   * [Deprecated] Get a user's custom badge (if any).
+   *
+   * @since 4.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\User::get_override_badge() instead.
+   *
+   * @param WP_User        $user     The user.
+   * @param string|boolean $default  Default value or false.
+   *
+   * @return string|boolean The badge label, default, or false.
+   */
+
+  function fictioneer_get_override_badge( $user, $default = false ) {
+    return User::get_override_badge( $user, $default );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_patreon_badge' ) ) {
+  /**
+   * [Deprecated] Get a user's Patreon badge (if any).
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\User::get_patreon_badge() instead.
+   *
+   * @param WP_User        $user     The user.
+   * @param string|boolean $default  Default value or false.
+   *
+   * @return string|boolean The badge label, default, or false.
+   */
+
+  function fictioneer_get_patreon_badge( $user, $default = false ) {
+    return User::get_patreon_badge( $user, $default );
+  }
+}
+
+/**
+ * [Deprecated] Check whether the user's Patreon data is still valid.
+ *
+ * Note: Patreon data expires after a set amount of time, one week
+ * by default defined as FICTIONEER_PATREON_EXPIRATION_TIME.
+ *
+ * @since 5.15.0
+ * @deprecated 5.34.0 - Use \Fictioneer\User::patreon_tiers_valid() instead.
+ *
+ * @param int|WP_User|null $user  The user object or user ID. Defaults to current user.
+ *
+ * @return bool True if still valid, false if expired.
+ */
+
+function fictioneer_patreon_tiers_valid( $user = null ) {
+  return User::patreon_tiers_valid( $user );
+}
+
+/**
+ * [Deprecated] Return Patreon data of the user.
+ *
+ * @since 5.17.0
+ * @deprecated 5.34.0 - Use \Fictioneer\User::get_user_patreon_data() instead.
+ *
+ * @param int|WP_User|null $user  The user object or user ID. Defaults to current user.
+ *
+ * @return array Empty array if not a patron, associative array otherwise. Includes the
+ *               keys 'valid', 'lifetime_support_cents', 'last_charge_date',
+ *               'last_charge_status', 'next_charge_date', 'patron_status', and 'tiers'.
+ *               Tiers is an array of tiers with the keys 'id', 'title', 'description',
+ *               'published', 'amount_cents', and 'timestamp'.
+ */
+
+function fictioneer_get_user_patreon_data( $user = null ) {
+  return User::get_user_patreon_data( $user );
 }

@@ -598,7 +598,7 @@ function fictioneer_unlock_with_patreon( $form ) {
 
   // Patreon data
   $patreon_post_data = fictioneer_get_post_patreon_data( $post );
-  $patreon_user_data = fictioneer_get_user_patreon_data();
+  $patreon_user_data =  \Fictioneer\User::get_user_patreon_data();
 
   if ( empty( $patreon_post_data ) ) {
     return $form;

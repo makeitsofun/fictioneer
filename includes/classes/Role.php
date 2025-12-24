@@ -82,7 +82,7 @@ class Role {
 
     // Setup
     $user = wp_get_current_user();
-    $patreon_user_data = fictioneer_get_user_patreon_data( $user->ID ); // Can be an empty array
+    $patreon_user_data = \Fictioneer\User::get_user_patreon_data( $user->ID ); // Can be an empty array
 
     // Check capability per post type...
     switch ( $post->post_type ) {

@@ -1886,7 +1886,7 @@ function fictioneer_admin_profile_patreon( $profile_user ) {
   // Setup
   $editing_user_is_owner = $profile_user->ID === get_current_user_id();
   $editing_user_is_admin = fictioneer_is_admin( get_current_user_id() );
-  $data = fictioneer_get_user_patreon_data( $profile_user );
+  $data =  \Fictioneer\User::get_user_patreon_data( $profile_user );
 
   // Abort conditions...
   if ( ! $editing_user_is_admin && ! $editing_user_is_owner ) {

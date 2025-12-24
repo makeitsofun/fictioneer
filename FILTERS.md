@@ -928,7 +928,7 @@ Filters the intermediate output array of comment actions before it is imploded a
 ---
 
 ### `apply_filters( 'fictioneer_filter_comment_badge', $output, $user, $args )`
-Filters the HTML of the `fictioneer_get_comment_badge( $user, $comment, $post_author_id )` function before it is returned for rendering. The badge class and label are inserted into `<div class="fictioneer-comment__badge CLASS"><span>LABEL</span></div>`. Possible label classes are `is-author`, `is-admin`, `is-moderator`, `is-supporter`, and `badge-override`.
+Filters the HTML of the `\Fictioneer\User::get_comment_badge( $user, $comment, $post_author_id )` function before it is returned for rendering. The badge class and label are inserted into `<div class="fictioneer-comment__badge CLASS"><span>LABEL</span></div>`. Possible label classes are `is-author`, `is-admin`, `is-moderator`, `is-supporter`, and `badge-override`.
 
 **Parameters:**
 * $output (string) – Complete HTML of the comment badge or empty string.
@@ -954,7 +954,7 @@ function child_get_patreon_tier_badge( $badge_html, $user, $args ) {
   }
 
   // Patreon data
-  $membership = fictioneer_get_user_patreon_data( $user );
+  $membership = \Fictioneer\User::get_user_patreon_data( $user );
   $tier_id = array_key_first( $membership['tiers'] ?? [] );
 
   if ( empty( $membership ) || empty( $tier_id ) ) {
