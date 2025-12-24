@@ -125,7 +125,7 @@ function fictioneer_sanitize_checkbox( $value ) {
  * [Deprecated] Explode string into an array.
  *
  * @since 5.1.3
- * @deprecated 5.34.0 - Use wp_parse_list() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list() in comma-mode instead.
  *
  * @param string $string  The string to explode.
  *
@@ -133,14 +133,14 @@ function fictioneer_sanitize_checkbox( $value ) {
  */
 
 function fictioneer_explode_list( $string ) {
-  return wp_parse_list( $string );
+  return Utils::parse_list( $string, null, 'comma' );
 }
 
 /**
  * [Deprecated] Sanitize (and transform) a comma-separated list into an array.
  *
  * @since 5.15.0
- * @deprecated 5.34.0 - Use wp_parse_list() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list() in comma-mode instead.
  *
  * @param string     $input  The comma-separated list.
  * @param array|null $args   Deprecated.
@@ -149,7 +149,13 @@ function fictioneer_explode_list( $string ) {
  */
 
 function fictioneer_sanitize_list_into_array( $input, $args = []  ) {
-  return wp_parse_list( $input );
+  $list = Utils::parse_list( $input, ( $args['absint'] ?? 0 ) ? 'absint' : null, 'comma' );
+
+  if ( $args['unique'] ?? 0 ) {
+    $list = array_values( array_unique( $list ) );
+  }
+
+  return $list;
 }
 
 /**
