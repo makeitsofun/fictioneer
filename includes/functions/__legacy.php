@@ -1287,7 +1287,7 @@ if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
 }
 
 // =============================================================================
-// SPECIFIC SQL QUERIES
+// SQL DELEGATES
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
@@ -1386,5 +1386,25 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
 
   function fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) {
     return Sanitizer_Admin::filter_valid_blog_story_ids( $story_blogs, $story_author_id );
+  }
+}
+
+// =============================================================================
+// USER HELPER DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
+  /**
+   * Get custom avatar URL
+   *
+   * @since 4.0.0
+   *
+   * @param WP_User $user The user to get the avatar for.
+   *
+   * @return string|boolean The custom avatar URL or false.
+   */
+
+  function fictioneer_get_custom_avatar_url( $user ) {
+    return \Fictioneer\User::get_custom_avatar_url( $user );
   }
 }

@@ -7,31 +7,6 @@ use Fictioneer\Utils_Admin;
 // CUSTOM AVATAR
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
-  /**
-   * Get custom avatar URL
-   *
-   * @since 4.0.0
-   *
-   * @param WP_User $user The user to get the avatar for.
-   *
-   * @return string|boolean The custom avatar URL or false.
-   */
-
-  function fictioneer_get_custom_avatar_url( $user ) {
-    // Override default avatar with external avatar if allowed
-    if ( $user && is_object( $user ) && ! $user->fictioneer_enforce_gravatar ) {
-      $avatar_url = empty( $user->fictioneer_external_avatar_url ) ? null : $user->fictioneer_external_avatar_url;
-
-      if ( ! empty( $avatar_url ) ) {
-        return $avatar_url;
-      }
-    }
-
-    return false;
-  }
-}
-
 /**
  * Filter the avatar URL.
  *
@@ -52,7 +27,7 @@ function fictioneer_get_avatar_url( $url, $id_or_email, $args ) {
 
   // Setup
   $user = Utils::get_user_by_id_or_email( $id_or_email );
-  $custom_avatar = fictioneer_get_custom_avatar_url( $user );
+  $custom_avatar = \Fictioneer\User::get_custom_avatar_url( $user );
 
   // Check user and permissions
   if ( $user ) {
