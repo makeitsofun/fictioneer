@@ -698,7 +698,7 @@ function fictioneer_admin_profile_clear_data_node() {
   // Clear data
   switch ( $node ) {
     case 'comments':
-      $result = fictioneer_soft_delete_user_comments( $profile_user_id );
+      $result = \Fictioneer\Utils_Admin::soft_delete_user_comments( $profile_user_id );
       $result = is_array( $result ) ? $result['complete'] : $result;
       break;
     case 'comment-subscriptions':

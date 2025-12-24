@@ -1069,4 +1069,65 @@ class Utils_Admin {
       ['%d']
     );
   }
+
+  /**
+   * Soft delete a user's comments.
+   *
+   * Replace the content and meta data of a user's comments with junk
+   * but leave the comment itself in the database. This preserves the
+   * structure of comment threads.
+   *
+   * @since 5.0.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param int $user_id  User ID to soft delete the comments for.
+   *
+   * @return array|false Detailed results about the database update. Accounts
+   *                     for completeness, partial success, and errors. Includes
+   *                     'complete' (boolean), 'failure' (boolean), 'success' (boolean),
+   *                     'comment_count' (int), and 'updated_count' (int). Or false.
+   */
+
+  public static function soft_delete_user_comments( $user_id ) {
+    $comments = get_comments( array( 'user_id' => $user_id ) );
+    $comment_count = count( $comments );
+    $count = 0;
+    $complete_one = true;
+
+    if ( empty( $comments ) ) {
+      return false;
+    }
+
+    foreach ( $comments as $comment ) {
+      $result_one = wp_update_comment(
+        array(
+          'user_ID' => 0,
+          'comment_type' => 'user_deleted',
+          'comment_author' => _x( 'Deleted', 'Deleted comment author name.', 'fictioneer' ),
+          'comment_ID' => $comment->comment_ID,
+          'comment_content' => __( 'Comment has been deleted by user.', 'fictioneer' ),
+          'comment_author_email' => '',
+          'comment_author_IP' => '',
+          'comment_agent' => '',
+          'comment_author_url' => ''
+        )
+      );
+
+      if ( $result_one ) {
+        $count++;
+      }
+
+      if ( ! $result_one || is_wp_error( $result_one ) ) {
+        $complete_one = false;
+      }
+    }
+
+    return array(
+      'complete' => $complete_one,
+      'failure' => $count == 0,
+      'success' => $count == $comment_count && $complete_one,
+      'comment_count' => $comment_count,
+      'updated_count' => $count
+    );
+  }
 }

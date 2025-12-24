@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // GET USER DATA - AJAX
@@ -216,7 +217,7 @@ add_action( 'wp_ajax_fictioneer_ajax_clear_my_comment_subscriptions', 'fictionee
 
 function fictioneer_ajax_clear_my_comments() {
   // Setup and validations
-  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_comments' );
+  $user = Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_comments' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -231,7 +232,7 @@ function fictioneer_ajax_clear_my_comments() {
   }
 
   // Soft-delete comments
-  $result = fictioneer_soft_delete_user_comments( $user->ID );
+  $result = Utils_Admin::soft_delete_user_comments( $user->ID );
 
   if ( ! $result ) {
     wp_send_json_error( array( 'error' => 'Database error. No comments found.' ) );

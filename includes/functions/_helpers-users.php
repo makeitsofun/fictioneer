@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // CUSTOM AVATAR
@@ -372,76 +373,4 @@ function fictioneer_get_user_patreon_data( $user = null ) {
 
   // Return
   return $membership;
-}
-
-// =============================================================================
-// DELETE USER COMMENTS
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_soft_delete_user_comments' ) ) {
-  /**
-   * Soft delete a user's comments
-   *
-   * Replace the content and meta data of a user's comments with junk
-   * but leave the comment itself in the database. This preserves the
-   * structure of comment threads.
-   *
-   * @since 5.0.0
-   *
-   * @param int $user_id  User ID to soft delete the comments for.
-   *
-   * @return array|false Detailed results about the database update. Accounts
-   *                     for completeness, partial success, and errors. Includes
-   *                     'complete' (boolean), 'failure' (boolean), 'success' (boolean),
-   *                     'comment_count' (int), and 'updated_count' (int). Or false.
-   */
-
-  function fictioneer_soft_delete_user_comments( $user_id ) {
-    // Setup
-    $comments = get_comments( array( 'user_id' => $user_id ) );
-    $comment_count = count( $comments );
-    $count = 0;
-    $complete_one = true;
-
-    // Not found or empty
-    if ( empty( $comments ) ) {
-      return false;
-    }
-
-    // Loop and update comments
-    foreach ( $comments as $comment ) {
-      $result_one = wp_update_comment(
-        array(
-          'user_ID' => 0,
-          'comment_type' => 'user_deleted',
-          'comment_author' => _x( 'Deleted', 'Deleted comment author name.', 'fictioneer' ),
-          'comment_ID' => $comment->comment_ID,
-          'comment_content' => __( 'Comment has been deleted by user.', 'fictioneer' ),
-          'comment_author_email' => '',
-          'comment_author_IP' => '',
-          'comment_agent' => '',
-          'comment_author_url' => ''
-        )
-      );
-
-      // Keep track of updated comments
-      if ( $result_one ) {
-        $count++;
-      }
-
-      // Check whether one or more updates failed
-      if ( ! $result_one || is_wp_error( $result_one ) ) {
-        $complete_one = false;
-      }
-    }
-
-    // Report result
-    return array(
-      'complete' => $complete_one,
-      'failure' => $count == 0,
-      'success' => $count == $comment_count && $complete_one,
-      'comment_count' => $comment_count,
-      'updated_count' => $count
-    );
-  }
 }

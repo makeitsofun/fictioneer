@@ -1218,6 +1218,30 @@ if ( ! function_exists( 'fictioneer_get_user_fingerprint' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_soft_delete_user_comments' ) ) {
+  /**
+   * [Deprecated] Soft delete a user's comments
+   *
+   * Replace the content and meta data of a user's comments with junk
+   * but leave the comment itself in the database. This preserves the
+   * structure of comment threads.
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::soft_delete_user_comments() instead.
+   *
+   * @param int $user_id  User ID to soft delete the comments for.
+   *
+   * @return array|false Detailed results about the database update. Accounts
+   *                     for completeness, partial success, and errors. Includes
+   *                     'complete' (boolean), 'failure' (boolean), 'success' (boolean),
+   *                     'comment_count' (int), and 'updated_count' (int). Or false.
+   */
+
+  function fictioneer_soft_delete_user_comments( $user_id ) {
+    return Utils_Admin::soft_delete_user_comments( $user_id );
+  }
+}
+
 // =============================================================================
 // SEARCH DELEGATES
 // =============================================================================
