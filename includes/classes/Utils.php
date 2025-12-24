@@ -852,7 +852,8 @@ class Utils {
    */
 
   public static function deprecated( $function, $version, $replacement ) {
-    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+    return;
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG && wp_get_environment_type() !== 'production' ) {
       trigger_error(
         sprintf(
           '%s is deprecated since Fictioneer %s; use %s.',
