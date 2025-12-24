@@ -647,7 +647,7 @@ Filters the boolean return value of the `fictioneer_enable_chapter_list_transien
 ---
 
 ### `apply_filters( 'fictioneer_filter_enable_shortcode_transients', $bool, $shortcode )`
-Filters the boolean return value of the `fictioneer_enable_shortcode_transients()` function. By default, this depends on the `FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION` constant being greater than -1 and the `fictioneer_disable_shortcode_transients` option being off. This can conflict with external object caches.
+Filters the boolean return value of the `\Fictioneer\Shortcodes\Base::transients_enabled()` function. By default, this depends on the `FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION` constant being greater than -1 and the `fictioneer_disable_shortcode_transients` option being off. This can conflict with external object caches.
 
 **Parameter:**
 * $bool (boolean) – Whether the Transients are enabled or not.
@@ -1876,7 +1876,7 @@ Filters the WP_Query arguments in the `fictioneer_article_cards` shortcode. The 
 * $author__not_in (array|null) – `$args['excluded_authors']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $no_found_rows (boolean|null) – `true` if `$args['count'] > 0`
 
 **$args:**
@@ -1913,7 +1913,7 @@ Filters the WP_Query arguments in the `fictioneer_blog` shortcode.
 * $tag__not_in (array|null) – `$args['excluded_tags']`
 * $paged (int) – Current main query page number.
 * $posts_per_page (int) – `$args['posts_per_page']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 
 **$args:**
 * $posts_per_page (int) – The number of posts per page. Defaults to WordPress.
@@ -1964,7 +1964,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_chapters` shortcode. Th
 * $tag__not_in (array|null) – `$args['excluded_tags']`
 * $meta_key (string) – `'fictioneer_chapter_hidden'`
 * $meta_value (int) – `0`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 * $update_post_term_cache (boolean) – `false`
 
@@ -2035,7 +2035,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_recommendations` shortc
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2096,7 +2096,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_stories` shortcode. The
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2165,7 +2165,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_updates` shortcode. The
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2242,7 +2242,7 @@ Filters the WP_Query arguments in the `fictioneer_showcase` shortcode. The optio
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Base::tax_query_args( $args )`
 * $update_post_term_cache (boolean) – `false`
 * $no_found_rows (boolean) – `true`
 

@@ -1543,3 +1543,132 @@ function fictioneer_patreon_tiers_valid( $user = null ) {
 function fictioneer_get_user_patreon_data( $user = null ) {
   return User::get_user_patreon_data( $user );
 }
+
+// =============================================================================
+// SHORTCODE DELEGATES
+// =============================================================================
+
+/**
+ * [Deprecated] Whether to enable Transients for shortcodes.
+ *
+ * @since 5.6.3
+ * @since 5.23.1 - Do not turn off with cache plugin.
+ * @since 5.25.0 - Refactored with option.
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::transients_enabled() instead.
+ *
+ * @param string $shortcode  The shortcode in question.
+ *
+ * @return boolean Either true or false.
+ */
+
+function fictioneer_enable_shortcode_transients( $shortcode = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::transients_enabled()' );
+
+  return \Fictioneer\Shortcodes\Base::transients_enabled( $shortcode );
+}
+
+/**
+ * [Deprecated] Default attribute pairs for shortcode_atts().
+ *
+ * @since 5.33.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Attributes::defaults() instead.
+ *
+ * @return array Default attribute pairs.
+ */
+
+function fictioneer_get_shortcode_default_attribute_pairs() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Attributes::defaults()' );
+
+  return \Fictioneer\Shortcodes\Attributes::defaults();
+}
+
+/**
+ * [Deprecated] Parse, sanitize, and normalize shortcode attributes.
+ *
+ * @since 5.7.3
+ * @since 5.33.0 - Added filter.
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Attributes::parse() instead.
+ *
+ * @param array  $attr       Attributes passed to the shortcode.
+ * @param int    $def_count  Optional. Default for the 'count' argument. Default -1.
+ *
+ * @return array Parsed and sanitized arguments.
+ */
+
+function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Attributes::parse()' );
+
+  return \Fictioneer\Shortcodes\Attributes::parse( $attr, 'deprecated_call', $def_count );
+}
+
+/**
+ * [Deprecated] Extract taxonomies from shortcode attributes.
+ *
+ * @since 5.2.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Attributes::get_shortcode_taxonomies() instead.
+ *
+ * @param array $attr  Attributes of the shortcode.
+ *
+ * @return array Array of found taxonomies.
+ */
+
+function fictioneer_get_shortcode_taxonomies( $attr ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Attributes::get_shortcode_taxonomies()' );
+
+  return \Fictioneer\Shortcodes\Attributes::get_shortcode_taxonomies( $attr );
+}
+
+if ( ! function_exists( 'fictioneer_shortcode_query' ) ) {
+  /**
+   * [Deprecated] Return query result for shortcode.
+   *
+   * @since 5.4.9
+   * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::query() instead.
+   *
+   * @param array $args  Query arguments.
+   *
+   * @return WP_Query The query result.
+   */
+
+  function fictioneer_shortcode_query( $args ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::query()' );
+
+    return \Fictioneer\Shortcodes\Base::query( $args );
+  }
+}
+
+/**
+ * [Deprecated] Tax query argument for shortcode.
+ *
+ * @since 5.2.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::tax_query_args() instead.
+ *
+ * @param array $args  Arguments of the shortcode partial.
+ *
+ * @return array Tax query argument.
+ */
+
+function fictioneer_get_shortcode_tax_query( $args ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::tax_query_args()' );
+
+  return \Fictioneer\Shortcodes\Base::tax_query_args( $args );
+}
+
+/**
+ * [Deprecated] Inline script to initialize Splide ASAP.
+ *
+ * Note: The script tag is only returned once in case multiple sliders
+ * are active since only one is needed.
+ *
+ * @since 5.25.0
+ * @since 5.26.1 - Use wp_print_inline_script_tag().
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::splide_inline_script() instead.
+ *
+ * @return string Inline Splide script.
+ */
+
+function fictioneer_get_splide_inline_init() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::splide_inline_script()' );
+
+  return \Fictioneer\Shortcodes\Base::splide_inline_script();
+}

@@ -108,7 +108,7 @@ if ( ! empty( $args['author_ids'] ) ) {
 
 // Taxonomies?
 if ( ! empty( $args['taxonomies'] ) ) {
-  $query_args['tax_query'] = fictioneer_get_shortcode_tax_query( $args );
+  $query_args['tax_query'] = \Fictioneer\Shortcodes\Base::tax_query_args( $args );
 }
 
 // Excluded tags?
@@ -140,7 +140,7 @@ if ( $args['only_protected'] ) {
 $query_args = apply_filters( 'fictioneer_filter_shortcode_latest_updates_query_args', $query_args, $args );
 
 // Query stories
-$entries = fictioneer_shortcode_query( $query_args );
+$entries = \Fictioneer\Shortcodes\Base::query( $query_args );
 
 // Extra attributes
 $attributes = [];

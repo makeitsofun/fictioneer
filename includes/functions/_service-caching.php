@@ -154,31 +154,6 @@ if ( ! defined( 'FICTIONEER_ENABLE_STORY_CARD_CACHING' ) ) {
 // =============================================================================
 
 /**
- * Whether to enable Transients for shortcodes.
- *
- * @since 5.6.3
- * @since 5.23.1 - Do not turn off with cache plugin.
- * @since 5.25.0 - Refactored with option.
- *
- * @param string $shortcode  The shortcode in question.
- *
- * @return boolean Either true or false.
- */
-
-function fictioneer_enable_shortcode_transients( $shortcode = null ) {
-  global $pagenow;
-
-  if ( is_customize_preview() || is_admin() || $pagenow === 'post.php' ) {
-    return false;
-  }
-
-  $bool = FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION > -1 &&
-    ! get_option( 'fictioneer_disable_shortcode_transients' );
-
-  return apply_filters( 'fictioneer_filter_enable_shortcode_transients', $bool, $shortcode );
-}
-
-/**
  * Whether to enable Transients for story chapter lists.
  *
  * @since 5.25.0
