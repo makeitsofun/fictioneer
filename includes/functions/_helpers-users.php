@@ -375,46 +375,6 @@ function fictioneer_get_user_patreon_data( $user = null ) {
 }
 
 // =============================================================================
-// GET UNIQUE USER FINGERPRINT
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_user_fingerprint' ) ) {
-  /**
-   * Returns an unique MD5 hash for the user
-   *
-   * In order to differentiate users on the frontend even if they have the same
-   * display name (which is possible) but without exposing any sensitive data,
-   * a simple cryptic hash is calculated.
-   *
-   * @since 4.7.0
-   *
-   * @param int $user_id  User ID to get the hash for.
-   *
-   * @return string The unique fingerprint hash or empty string if not found.
-   */
-
-  function fictioneer_get_user_fingerprint( $user_id ) {
-    // Setup
-    $user = get_user_by( 'ID', $user_id );
-
-    if ( ! $user ) {
-      return '';
-    }
-
-    $fingerprint = get_user_meta( $user_id, 'fictioneer_user_fingerprint', true );
-
-    // If hash does not yet exist, create one
-    if ( empty( $fingerprint ) ) {
-      $fingerprint = md5( $user->user_login . $user_id );
-      update_user_meta( $user_id, 'fictioneer_user_fingerprint', $fingerprint );
-    }
-
-    // Return hash
-    return $fingerprint;
-  }
-}
-
-// =============================================================================
 // DELETE USER COMMENTS
 // =============================================================================
 

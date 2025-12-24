@@ -26,6 +26,19 @@ function fictioneer_bring_out_legacy_trash() {
       delete_option( $trash );
     }
   }
+
+  // Remove obsolete user meta
+  if ( current_user_can( 'manage_options' ) ) {
+    $user_id = get_current_user_id();
+
+    if ( ! $user_id ) {
+      return;
+    }
+
+    if ( metadata_exists( 'user', $user_id, 'fictioneer_user_fingerprint' ) ) {
+      delete_metadata( 'user', 0, 'fictioneer_user_fingerprint', '', true );
+    }
+  }
 }
 add_action( 'admin_init', 'fictioneer_bring_out_legacy_trash' );
 
@@ -754,7 +767,7 @@ function fictioneer_root_attributes() {
 
   // Fingerprint
   if ( $post_author_id ) {
-    $output['data-author-fingerprint'] = fictioneer_get_user_fingerprint( $post_author_id );
+    $output['data-author-fingerprint'] = Utils::get_user_fingerprint( $post_author_id );
     $output['data-fictioneer-fingerprint-value'] = $output['data-author-fingerprint'];
   }
 
@@ -2290,7 +2303,7 @@ function show_page_optimize_deactivated_notice() {
 
 function fictioneer_set_logged_in_cookie( $logged_in_cookie, $expire, $expiration, $user_id ) {
   $cookie_domain = defined( 'COOKIE_DOMAIN' ) ? COOKIE_DOMAIN : $_SERVER['HTTP_HOST'];
-  $fingerprint = fictioneer_get_user_fingerprint( $user_id );
+  $fingerprint = Utils::get_user_fingerprint( $user_id );
 
   setcookie( 'fcnLoggedIn', $fingerprint, $expire, COOKIEPATH, $cookie_domain, is_ssl(), false );
 }

@@ -229,9 +229,10 @@ function fictioneer_load_checkmarks( $user ) {
 }
 
 /**
- * Return a unique MD5 hash for the user.
+ * Return an unique-enough MD5 hash for the user.
  *
  * @since 5.27.0
+ * @since 5.34.0 - Refactored.
  * @see includes/functions/_helpers-users.php
  *
  * @param stdClass $user  User to get the fingerprint for.
@@ -244,14 +245,7 @@ function fictioneer_get_user_fingerprint( $user ) {
     return '';
   }
 
-  $fingerprint = ffcnr_get_user_meta( $user->ID, 'fictioneer_user_fingerprint', 'fictioneer' );
-
-  if ( empty( $fingerprint ) ) {
-    $fingerprint = md5( $user->user_login . $user->ID );
-    ffcnr_update_user_meta( $user->ID, 'fictioneer_user_fingerprint', $fingerprint );
-  }
-
-  return $fingerprint;
+  return md5( 'fictioneer|' . $user->ID . '|' . $user->user_registered );
 }
 
 /**

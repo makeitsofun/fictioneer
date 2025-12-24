@@ -43,7 +43,7 @@ function fictioneer_ajax_save_skins() {
 
   if ( $skins && Utils::json_validate( wp_unslash( $skins ) ) ) {
     $decoded = json_decode( wp_unslash( $skins ), true );
-    $fingerprint = fictioneer_get_user_fingerprint( $user->ID );
+    $fingerprint = Utils::get_user_fingerprint( $user->ID );
 
     if ( ! $decoded || ! isset( $decoded['data'] ) ) {
       wp_send_json_error( array( 'error' => 'Invalid JSON (SKIN-001).' ) );

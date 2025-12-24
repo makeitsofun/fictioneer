@@ -1072,7 +1072,7 @@ function fictioneer_admin_profile_fields_fingerprint( $profile_user ) {
   <tr class="user-fictioneer-fingerprint-wrap">
     <th><label for="fictioneer_support_message"><?php _e( 'Fingerprint', 'fictioneer' ); ?></label></th>
     <td>
-      <input type="text" value="<?php echo esc_attr( fictioneer_get_user_fingerprint( $profile_user->ID ) ); ?>" class="regular-text" disabled>
+      <input type="text" value="<?php echo esc_attr( Utils::get_user_fingerprint( $profile_user->ID ) ); ?>" class="regular-text" disabled>
       <p class="description"><?php _e( 'Your unique hash. Used to distinguish commenters.', 'fictioneer' ); ?></p>
     </td>
   </tr>

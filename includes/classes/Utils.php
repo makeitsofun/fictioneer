@@ -788,4 +788,43 @@ class Utils {
 
     return $array;
   }
+
+  /**
+   * Return an unique-enough MD5 hash for the user.
+   *
+   * In order to differentiate users on the frontend even if they have the same
+   * display name (which is possible) but without exposing any sensitive data,
+   * a simple cryptic hash is calculated.
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Refactored and moved into Utils class.
+   *
+   * @param int $user_id  User ID to get the hash for.
+   *
+   * @return string Unique fingerprint hash or empty string if not found.
+   */
+
+  public static function get_user_fingerprint( $user_id ) : string {
+    static $cache = [];
+
+    if ( $user_id <= 0 ) {
+      return '';
+    }
+
+    if ( isset( $cache[ $user_id ] ) ) {
+      return $cache[ $user_id ];
+    }
+
+    $user = get_user_by( 'ID', $user_id );
+
+    if ( ! $user ) {
+      return $cache[ $user_id ] = '';
+    }
+
+    $fingerprint = md5( 'fictioneer|' . $user_id . '|' . $user->user_registered );
+
+    $cache[ $user_id ] = $fingerprint;
+
+    return $fingerprint;
+  }
 }

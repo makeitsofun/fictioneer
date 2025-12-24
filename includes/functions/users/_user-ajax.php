@@ -30,7 +30,7 @@ function fictioneer_ajax_get_user_data() {
     'checkmarks' => false,
     'notifications' => false,
     'bookmarks' => '{}',
-    'fingerprint' => fictioneer_get_user_fingerprint( $user->ID ),
+    'fingerprint' => Utils::get_user_fingerprint( $user->ID ),
     'avatarUrl' => '',
     'isAdmin' => false,
     'isModerator' => false,

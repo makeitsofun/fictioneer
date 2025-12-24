@@ -1197,6 +1197,27 @@ function fictioneer_sql_update_comment_count( $post_id, $count ) {
   Utils_Admin::update_comment_count( $post_id, $count );
 }
 
+if ( ! function_exists( 'fictioneer_get_user_fingerprint' ) ) {
+  /**
+   * [Deprecated] Return an unique-enough MD5 hash for the user.
+   *
+   * In order to differentiate users on the frontend even if they have the same
+   * display name (which is possible) but without exposing any sensitive data,
+   * a simple cryptic hash is calculated.
+   *
+   * @since 4.7.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_user_fingerprint() instead.
+   *
+   * @param int $user_id  User ID to get the hash for.
+   *
+   * @return string The unique fingerprint hash or empty string if not found.
+   */
+
+  function fictioneer_get_user_fingerprint( $user_id ) {
+    return Utils::get_user_fingerprint( $user_id );
+  }
+}
+
 // =============================================================================
 // SEARCH DELEGATES
 // =============================================================================
