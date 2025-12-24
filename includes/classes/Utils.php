@@ -840,4 +840,28 @@ class Utils {
 
     return $fingerprint;
   }
+
+  /**
+   * Mark a function as deprecated and inform when it has been used.
+   *
+   * @since 5.34.0
+   *
+   * @param string $function     The function that was called.
+   * @param string $version      The version of WordPress that deprecated the function.
+   * @param string $replacement  Optional. The function that should have been called. Default null.
+   */
+
+  public static function deprecated( $function, $version, $replacement ) {
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+      trigger_error(
+        sprintf(
+          '%s is deprecated since Fictioneer %s; use %s.',
+          $function,
+          $version,
+          $replacement
+        ),
+        E_USER_DEPRECATED
+      );
+    }
+  }
 }
