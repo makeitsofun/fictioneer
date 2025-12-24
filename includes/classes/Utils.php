@@ -83,6 +83,7 @@ class Utils {
 
   public static function parse_list( $input_list, $sanitizer = null, $mode = 'auto' ) : array {
     if ( $mode === 'comma' && is_string( $input_list ) ) {
+      $input_list = str_replace( [ "\r", "\n" ], '', $input_list );
       $values = array_map( 'trim', explode( ',', $input_list ) );
     } else {
       $values = wp_parse_list( $input_list );
