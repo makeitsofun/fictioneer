@@ -127,10 +127,6 @@ function fcn_getSkins() {
   const _default = { 'data': {}, 'active': null, 'fingerprint': fingerprint };
   const skins = FcnUtils.parseJSON(localStorage.getItem('fcnSkins')) ?? _default;
 
-  if (!skins?.fingerprint || fingerprint !== skins.fingerprint) {
-    return _default;
-  }
-
   if (typeof skins.data !== 'object' || Array.isArray(skins.data)) {
     skins.data = {};
   }
@@ -151,11 +147,6 @@ function fcn_setSkins(skins) {
     typeof skins.data !== 'object' || Array.isArray(skins.data)
   ) {
     fcn_showNotification(fcn_skinTranslations.invalidJson, 3, 'warning');
-    return;
-  }
-
-  if (!skins?.fingerprint || FcnUtils.getCookie('fcnLoggedIn') !== skins.fingerprint) {
-    fcn_showNotification(fcn_skinTranslations.wrongFingerprint, 3, 'warning');
     return;
   }
 
@@ -249,11 +240,6 @@ function fcn_applySkin() {
   // Cleanup old style tag (if any)
   _$$$('fictioneer-active-custom-skin')?.remove();
 
-  // Check fingerprint
-  if (skins?.fingerprint !== fingerprint) {
-    return;
-  }
-
   // Check if skins data is valid and an active skin is set
   if (skins?.data?.[skins.active]?.css) {
     const styleTag = document.createElement('style');
@@ -285,12 +271,6 @@ function fcn_renderSkinList() {
 
   // Clear previous content
   container.innerHTML = '';
-
-  // Check fingerprint
-  if (skins?.fingerprint !== fingerprint) {
-    _$('[data-css-skin-target="form"]').style.display = '';
-    return;
-  }
 
   // Ensure skins data exists and has entries
   if (skins?.data && Object.keys(skins.data).length > 0) {
@@ -341,15 +321,9 @@ _$('[data-css-skin-target="file"]')?.addEventListener('input', event => {
   const input = event.currentTarget;
   const file = input.files[0];
   const skins = fcn_getSkins();
-  const fingerprint = FcnUtils.getCookie('fcnLoggedIn');
 
   if (Object.keys(skins.data).length > 2) {
     fcn_showNotification(fcn_skinTranslations.tooManySkins, 3, 'warning');
-    return;
-  }
-
-  if (skins?.fingerprint !== fingerprint) {
-    fcn_showNotification(fcn_skinTranslations.wrongFingerprint, 3, 'warning');
     return;
   }
 
@@ -423,6 +397,9 @@ function fcn_uploadSkins(trigger) {
 
   // Get skins from local storage
   const skins = fcn_getSkins();
+
+  // Fix legacy fingerprint
+  skins.fingerprint = FcnUtils.getCookie('fcnLoggedIn');
 
   // Toggle button progress
   _$('[data-css-skin-target="action-status-message"]').classList.add('invisible');
