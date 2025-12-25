@@ -51,173 +51,21 @@ class Sanitizer_Admin {
 
     $unfiltered = current_user_can( 'fcn_unfiltered_css' ) || current_user_can( 'manage_options' );
 
-    $max_bytes = 10 * 1024;
-    $max_lines = 500;
+    $validator = new \Fictioneer\CSS_Validator( $css, $feedback );
 
-    // Size limits
-    if ( ! $unfiltered && $css !== '' ) {
-      if ( strlen( $css ) > $max_bytes ) {
-        return $feedback ? '/* Rejected due to size (max. ' . $max_bytes . ' bytes). */' : '';
-      }
+    $validator->reject_excess_size( $unfiltered, 10 * 1024, 500 )
+      ->reject_html_open()
+      ->reject_danger_tokens()
+      ->reject_invalid_imports( $unfiltered || $fonts );
 
-      $line_check = str_replace( ["\r\n", "\r"], "\n", $css );
+    $buffer = $validator->without_imports();
 
-      if ( substr_count( $line_check, "\n" ) + 1 > $max_lines ) {
-        return $feedback ? '/* Rejected due to too many lines (max. ' . $max_lines . ' lines). */' : '';
-      }
-    }
+    $validator->reject_url( $unfiltered, $buffer )
+      ->reject_blocked_url_schemes( $buffer, ['javascript:', 'vbscript:', 'file:'] )
+      ->reject_unallowed_at_rules( $buffer, ['media', 'container', 'keyframes', 'supports'] )
+      ->reject_unbalanced_braces();
 
-    // Remove UTF-8 BOM and control chars
-    $css = preg_replace( '/^\xEF\xBB\xBF/u', '', $css );
-    $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
-    $css = trim( $css );
-
-    if ( $css === '' ) {
-      return '';
-    }
-
-    // Strip comments for scanning
-    $no_comments = preg_replace( '#/\*.*?\*/#s', '', $css );
-
-    if ( $no_comments === null ) {
-      return '';
-    }
-
-    // Strip strings for scanning
-    $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $no_comments );
-
-    if ( $check === null ) {
-      return '';
-    }
-
-    // Hard fails
-    if ( strpos( $check, '<' ) !== false ) {
-      return $feedback ? '/* Rejected due to HTML opening character. */' : '';
-    }
-
-    if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|javascript\s*:)/i', $check ) ) {
-      return $feedback ? '/* Rejected due to dangerous expression or property. */' : '';
-    }
-
-    // Charset
-    if ( stripos( $css, '@charset' ) !== false ) {
-      if ( preg_match( '/^\s*@charset\b/i', $css ) !== 1 ) {
-        return $feedback ? '/* Rejected due to invalid @charset. */' : '';
-      }
-
-      $css = preg_replace( '/^\s*@charset\s+(?:"[^"]+"|\'[^\']+\'|[^\s;]+)\s*;\s*/i', '', $css );
-
-      if ( $css === null || stripos( $css, '@charset' ) !== false ) {
-        return $feedback ? '/* Rejected due to invalid @charset. */' : '';
-      }
-
-      // Rebuild scan buffers after modification
-      $no_comments = preg_replace( '#/\*.*?\*/#s', '', $css );
-      $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $no_comments );
-
-      if ( $no_comments === null || $check === null ) {
-        return '';
-      }
-    }
-
-    // Imports
-    $import_regex = '/@import\s+(?:url\s*\(\s*)?(?:"([^"]+)"|\'([^\']+)\'|([^"\')\s]+))\s*\)?\s*;/i';
-    $has_import = stripos( $no_comments, '@import' ) !== false;
-
-    if ( $has_import && ! ( $unfiltered || $fonts ) ) {
-      return $feedback ? '/* Rejected due to unallowed @import. */' : '';
-    }
-
-    if ( $has_import ) {
-      if ( preg_match_all( $import_regex, $no_comments, $imports, PREG_SET_ORDER ) ) {
-        foreach ( $imports as $match ) {
-          // Check matches for double quotes, single quotes, and no quotes
-          $url = trim( $match[1] ?: ( $match[2] ?: ( $match[3] ?? '' ) ) );
-
-          $url_parts = wp_parse_url( $url );
-
-          if ( ! is_array( $url_parts ) ) {
-            return '';
-          }
-
-          $scheme = strtolower( $url_parts['scheme'] ?? '' );
-          $host = strtolower( $url_parts['host'] ?? '' );
-          $path = $url_parts['path'] ?? '';
-
-          if ( $scheme !== 'https' || $host !== 'fonts.googleapis.com' || strpos( $path, '/css' ) !== 0 ) {
-            return $feedback ? '/* Rejected due to unallowed @import. */' : '';
-          }
-        }
-      } else {
-        return $feedback ? '/* Rejected due to unallowed @import. */' : ''; // @import present but not recognized form
-      }
-
-      // Reject any unrecognized/leftover @import
-      $import_stripped = preg_replace( $import_regex, '', $no_comments );
-
-      if ( $import_stripped === null || stripos( $import_stripped, '@import' ) !== false ) {
-        return $feedback ? '/* Rejected due to unallowed @import. */' : '';
-      }
-    }
-
-    // Strip allowed imports
-    $scan_body = $has_import ? preg_replace( $import_regex, '', $no_comments ) : $no_comments;
-
-    if ( $scan_body === null ) {
-      return '';
-    }
-
-    // Reject url() for non-privileged users
-    if ( ! $unfiltered && stripos( $scan_body, 'url(' ) !== false ) {
-      return $feedback ? '/* Rejected due to use of url(). */' : '';
-    }
-
-    // Reject any url() with 'javascript'
-    if ( self::has_dangerous_url_scheme( $scan_body ) ) {
-      return $feedback ? '/* Rejected due to dangerous scheme inside url(). */' : '';
-    }
-
-    // Reject unallowed at-rules
-    $scan_for_at_rules = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $scan_body );
-
-    if ( $scan_for_at_rules === null ) {
-      return '';
-    }
-
-    $scan_for_at_rules = preg_replace( '/@(?:media|container|keyframes|supports)\b/i', '.dummy', $scan_for_at_rules );
-
-    if ( $scan_for_at_rules === null ) {
-      return '';
-    }
-
-    if ( strpos( $scan_for_at_rules, '@' ) !== false ) {
-      return $feedback ? '/* Rejected due to unallowed @-rule. */' : '';
-    }
-
-    // Basic sanity
-    $open = substr_count( $css, '{' );
-    $close = substr_count( $css, '}' );
-
-    if ( $open < 1 || $open !== $close ) {
-      return $feedback ? '/* Rejected due to mismatched opening/closing braces. */' : '';
-    }
-
-    // Recheck size limits
-    $css = trim( $css );
-
-    if ( ! $unfiltered && $css !== '' ) {
-      if ( strlen( $css ) > $max_bytes ) {
-        return $feedback ? '/* Rejected due to size (max. ' . $max_bytes . ' bytes). */' : '';
-      }
-
-      $line_check = str_replace( ["\r\n", "\r"], "\n", $css );
-
-      if ( substr_count( $line_check, "\n" ) + 1 > $max_lines ) {
-        return $feedback ? '/* Rejected due to too many lines (max. ' . $max_lines . ' lines). */' : '';
-      }
-    }
-
-    return $css;
+    return $validator->result();
   }
 
   /**
