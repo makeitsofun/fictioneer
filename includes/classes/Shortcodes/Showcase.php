@@ -23,6 +23,13 @@ class Showcase {
 
   public static function render( $attr, $content = '', $tag = '' ) : string {
     $shortcode = $tag ?: 'fictioneer_showcase';
+
+    $attr['height'] = sanitize_text_field( $attr['height'] ?? '' );
+    $attr['min_width'] = sanitize_text_field( $attr['min_width'] ?? '' );
+    $attr['quality'] = sanitize_key( $attr['quality'] ?? 'medium' );
+    $attr['no_cap'] = \Fictioneer\Utils::bool( $attr['no_cap'] ?? null );
+    $attr['for'] = sanitize_key( $attr['for'] ?? '' );
+
     $args = Attributes::parse( $attr, $shortcode, 4 );
 
     if ( empty( $args['for'] ) ) {
@@ -30,10 +37,6 @@ class Showcase {
     }
 
     $args['content'] = $content;
-    $args['height'] = sanitize_text_field( $args['height'] ?? '' );
-    $args['min_width'] = sanitize_text_field( $args['min_width'] ?? '' );
-    $args['quality'] = sanitize_key( $args['quality'] ?? 'medium' );
-    $args['no_cap'] = \Fictioneer\Utils::bool( $args['no_cap'] ?? null );
 
     switch ( $args['for'] ) {
       case 'collections':

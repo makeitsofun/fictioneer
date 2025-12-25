@@ -22,10 +22,12 @@ class Latest_Updates {
 
   public static function render( $attr, $content = '', $tag = '' ) : string {
     $shortcode = $tag ?: 'fictioneer_latest_updates';
+
+    $attr['footer_comments'] = \Fictioneer\Utils::bool( $attr['footer_comments'] ?? null );
+
     $args = Attributes::parse( $attr, $shortcode, 4 );
 
     $args['content'] = $content;
-    $args['footer_comments'] = \Fictioneer\Utils::bool( $attr['footer_comments'] ?? null ); // Default false
 
     if ( ! empty( $args['splide'] ) ) {
       $args['classes'] .= ' splide _splide-placeholder';
