@@ -36,16 +36,39 @@ class Sanitizer_Admin {
    *
    * @since 5.7.4
    * @since 5.27.4 - Unslash string.
-   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   * @since 5.34.0 - Refactored and moved into Sanitizer_Admin class.
    *
-   * @param string|null $css  CSS to be sanitized.
+   * @param string|null $css       CSS to be sanitized.
+   * @param bool        $fonts     Whether to allow Google Fonts. Default false.
+   * @param bool        $feedback  Whether to return rejection feedback. Default true.
    *
    * @return string The sanitized string.
    */
 
-  public static function sanitize_css( $css ) : string {
+  public static function sanitize_css( $css, $fonts = false, $feedback = true ) : string {
     $css = (string) ( $css ?? '' );
     $css = wp_kses_no_null( $css );
+
+    $unfiltered = current_user_can( 'fcn_unfiltered_css' ) || current_user_can( 'manage_options' );
+
+    $max_bytes = 10 * 1024;
+    $max_lines = 500;
+
+    // Size limits
+    if ( ! $unfiltered && $css !== '' ) {
+      if ( strlen( $css ) > $max_bytes ) {
+        return $feedback ? '/* Rejected due to size (max. ' . $max_bytes . ' bytes). */' : '';
+      }
+
+      $line_check = str_replace( ["\r\n", "\r"], "\n", $css );
+
+      if ( substr_count( $line_check, "\n" ) + 1 > $max_lines ) {
+        return $feedback ? '/* Rejected due to too many lines (max. ' . $max_lines . ' lines). */' : '';
+      }
+    }
+
+    // Remove UTF-8 BOM and control chars
+    $css = preg_replace( '/^\xEF\xBB\xBF/u', '', $css );
     $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
     $css = trim( $css );
 
@@ -53,20 +76,59 @@ class Sanitizer_Admin {
       return '';
     }
 
+    // Strip comments for scanning
     $no_comments = preg_replace( '#/\*.*?\*/#s', '', $css );
+
+    if ( $no_comments === null ) {
+      return '';
+    }
+
+    // Strip strings for scanning
     $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $no_comments );
 
-    if ( strpos( $check, '<' ) !== false ) {
+    if ( $check === null ) {
       return '';
+    }
+
+    // Hard fails
+    if ( strpos( $check, '<' ) !== false ) {
+      return $feedback ? '/* Rejected due to HTML opening character. */' : '';
     }
 
     if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|javascript\s*:)/i', $check ) ) {
-      return '';
+      return $feedback ? '/* Rejected due to dangerous expression or property. */' : '';
     }
 
-    if ( stripos( $no_comments, '@import' ) !== false ) {
-      $import_regex = '/@import\s+(?:url\s*\(\s*)?(?:"([^"]+)"|\'([^\']+)\'|([^"\')\s]+))\s*\)?\s*;/i';
+    // Charset
+    if ( stripos( $css, '@charset' ) !== false ) {
+      if ( preg_match( '/^\s*@charset\b/i', $css ) !== 1 ) {
+        return $feedback ? '/* Rejected due to invalid @charset. */' : '';
+      }
 
+      $css = preg_replace( '/^\s*@charset\s+(?:"[^"]+"|\'[^\']+\'|[^\s;]+)\s*;\s*/i', '', $css );
+
+      if ( $css === null || stripos( $css, '@charset' ) !== false ) {
+        return $feedback ? '/* Rejected due to invalid @charset. */' : '';
+      }
+
+      // Rebuild scan buffers after modification
+      $no_comments = preg_replace( '#/\*.*?\*/#s', '', $css );
+      $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $no_comments );
+
+      if ( $no_comments === null || $check === null ) {
+        return '';
+      }
+    }
+
+    // Imports
+    $import_regex = '/@import\s+(?:url\s*\(\s*)?(?:"([^"]+)"|\'([^\']+)\'|([^"\')\s]+))\s*\)?\s*;/i';
+    $has_import = stripos( $no_comments, '@import' ) !== false;
+
+    if ( $has_import && ! ( $unfiltered || $fonts ) ) {
+      return $feedback ? '/* Rejected due to unallowed @import. */' : '';
+    }
+
+    if ( $has_import ) {
       if ( preg_match_all( $import_regex, $no_comments, $imports, PREG_SET_ORDER ) ) {
         foreach ( $imports as $match ) {
           // Check matches for double quotes, single quotes, and no quotes
@@ -83,32 +145,160 @@ class Sanitizer_Admin {
           $path = $url_parts['path'] ?? '';
 
           if ( $scheme !== 'https' || $host !== 'fonts.googleapis.com' || strpos( $path, '/css' ) !== 0 ) {
-            return '';
+            return $feedback ? '/* Rejected due to unallowed @import. */' : '';
           }
         }
       } else {
-        return ''; // @import present in not recognized form
+        return $feedback ? '/* Rejected due to unallowed @import. */' : ''; // @import present but not recognized form
       }
 
-      $stripped = preg_replace( $import_regex, '', $no_comments );
+      // Reject any unrecognized/leftover @import
+      $import_stripped = preg_replace( $import_regex, '', $no_comments );
 
-      if ( $stripped === null || stripos( $stripped, '@import' ) !== false ) {
-        return '';
+      if ( $import_stripped === null || stripos( $import_stripped, '@import' ) !== false ) {
+        return $feedback ? '/* Rejected due to unallowed @import. */' : '';
       }
     }
 
-    if ( preg_match( '/url\s*\(\s*[^)]*javascript\s*:/i', $check ) ) {
+    // Strip allowed imports
+    $scan_body = $has_import ? preg_replace( $import_regex, '', $no_comments ) : $no_comments;
+
+    if ( $scan_body === null ) {
       return '';
     }
 
-    $open  = substr_count( $css, '{' );
+    // Reject url() for non-privileged users
+    if ( ! $unfiltered && stripos( $scan_body, 'url(' ) !== false ) {
+      return $feedback ? '/* Rejected due to use of url(). */' : '';
+    }
+
+    // Reject any url() with 'javascript'
+    if ( self::has_dangerous_url_scheme( $scan_body ) ) {
+      return $feedback ? '/* Rejected due to dangerous scheme inside url(). */' : '';
+    }
+
+    // Reject unallowed at-rules
+    $scan_for_at_rules = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $scan_body );
+
+    if ( $scan_for_at_rules === null ) {
+      return '';
+    }
+
+    $scan_for_at_rules = preg_replace( '/@(?:media|container|keyframes|supports)\b/i', '.dummy', $scan_for_at_rules );
+
+    if ( $scan_for_at_rules === null ) {
+      return '';
+    }
+
+    if ( strpos( $scan_for_at_rules, '@' ) !== false ) {
+      return $feedback ? '/* Rejected due to unallowed @-rule. */' : '';
+    }
+
+    // Basic sanity
+    $open = substr_count( $css, '{' );
     $close = substr_count( $css, '}' );
 
     if ( $open < 1 || $open !== $close ) {
-      return '';
+      return $feedback ? '/* Rejected due to mismatched opening/closing braces. */' : '';
+    }
+
+    // Recheck size limits
+    $css = trim( $css );
+
+    if ( ! $unfiltered && $css !== '' ) {
+      if ( strlen( $css ) > $max_bytes ) {
+        return $feedback ? '/* Rejected due to size (max. ' . $max_bytes . ' bytes). */' : '';
+      }
+
+      $line_check = str_replace( ["\r\n", "\r"], "\n", $css );
+
+      if ( substr_count( $line_check, "\n" ) + 1 > $max_lines ) {
+        return $feedback ? '/* Rejected due to too many lines (max. ' . $max_lines . ' lines). */' : '';
+      }
     }
 
     return $css;
+  }
+
+  /**
+   * Detect whether any url() contains a dangerous scheme payload.
+   *
+   * @since 5.34.0
+   *
+   * @param string $css      CSS without comments.
+   * @param array  $schemes  List of schemes to block (with colon).
+   *                         Default ['javascript:', 'vbscript:', 'file:'].
+   *
+   * @return bool True if a dangerous scheme is detected inside any url().
+   */
+
+  public static function has_dangerous_url_scheme( $css, $schemes = ['javascript:', 'vbscript:', 'file:'] ) : bool {
+    if ( stripos( $css, 'url(' ) === false ) {
+      return false;
+    }
+
+    if ( ! preg_match_all( '/url\s*\(\s*([^)]+)\s*\)/i', $css, $matches, PREG_SET_ORDER ) ) {
+      return false;
+    }
+
+    foreach ( $matches as $m ) {
+      $raw = (string) ( $m[1] ?? '' );
+
+      if ( $raw === '' ) {
+        continue;
+      }
+
+      $norm = strtolower( $raw );
+
+      // Decode CSS hex escapes: \HHHHHH[optional whitespace]
+      for ( $i = 0; $i < 5; $i++ ) {
+        $next = preg_replace_callback(
+          '/\\\\([0-9a-f]{1,6})\s?/i',
+          function ( $mm ) {
+            $cp = hexdec( $mm[1] );
+
+            // Only keep visible ASCII
+            if ( $cp < 0x20 || $cp > 0x7E ) {
+              return '';
+            }
+
+            return chr( $cp );
+          },
+          $norm
+        );
+
+        if ( $next === null || $next === $norm ) {
+          break;
+        }
+
+        $norm = $next;
+      }
+
+      // Strip quotes and whitespace
+      $norm = preg_replace( '/["\'\s]+/', '', $norm );
+
+      if ( $norm === null || $norm === '' ) {
+        continue;
+      }
+
+      // Strip everything except letters, digits, colon
+      $norm = preg_replace( '/[^a-z0-9:]/', '', $norm );
+
+      if ( $norm === null || $norm === '' ) {
+        continue;
+      }
+
+      // Scheme check
+      foreach ( $schemes as $scheme ) {
+        $scheme = strtolower( (string) $scheme );
+
+        if ( $scheme !== '' && strpos( $norm, $scheme ) !== false ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**

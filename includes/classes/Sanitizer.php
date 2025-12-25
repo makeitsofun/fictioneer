@@ -334,13 +334,15 @@ class Sanitizer {
    * @since 5.27.4 - Unslash string.
    * @since 5.34.0 - Moved into Sanitizer class.
    *
-   * @param string|null $css  CSS to be sanitized. Expects slashed string.
+   * @param string|null $css       CSS to be sanitized.
+   * @param bool        $fonts     Whether to allow Google Fonts. Default false.
+   * @param bool        $feedback  Whether to return rejection feedback. Default true.
    *
    * @return string The sanitized string.
    */
 
-  public static function sanitize_css( $css ) : string {
-    return Sanitizer_Admin::sanitize_css( $css );
+  public static function sanitize_css( $css, $fonts = false, $feedback = true ) : string {
+    return Sanitizer_Admin::sanitize_css( $css, $fonts, $feedback );
   }
 
   /**

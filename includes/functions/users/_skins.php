@@ -73,7 +73,7 @@ function fictioneer_ajax_save_skins() {
           wp_send_json_error( array( 'error' => 'Invalid JSON (SKIN-006).' ) );
         }
 
-        if ( $sub_key === 'css' && Sanitizer::sanitize_css( wp_unslash( $value ) ) === '' ) {
+        if ( $sub_key === 'css' && Sanitizer::sanitize_css( wp_unslash( $value ), true, false ) === '' ) {
           wp_send_json_error( array( 'error' => 'Invalid CSS (SKIN-007).' ) );
         }
       }
