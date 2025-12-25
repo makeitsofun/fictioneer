@@ -938,6 +938,7 @@ function fcntr_admin( $key, $escape = false ) {
       'edit_private_fcn_recommendations' => _x( 'Edit Private Recommendations', 'Capability translation', 'fictioneer' ),
       'delete_private_fcn_recommendations' => _x( 'Delete Private Recommendations', 'Capability translation', 'fictioneer' ),
       'fcn_no_filters' => _x( 'No Filters', 'Capability translation', 'fictioneer' ),
+      'fcn_unfiltered_css' => _x( 'Unfiltered CSS', 'Capability translation', 'fictioneer' ),
     );
   }
 

@@ -79,7 +79,8 @@ $admin_caps = array(
   'switch_themes',
   'edit_theme_options',
   'edit_themes',
-  'unfiltered_html'
+  'unfiltered_html',
+  'fcn_unfiltered_css'
 );
 
 $taxonomy_caps = array(
