@@ -210,6 +210,7 @@ final class Attributes {
     $sanitized = array(
       'uid' => $uid,
       'type' => sanitize_key( $attr['type'] ?? 'default' ),
+      'simple' => self::bool( $attr['simple'] ?? null ),
       'count' => max( -1, (int) ( $attr['count'] ?? $count ) ),
       'offset' => max( 0, (int) ( $attr['offset'] ?? 0 ) ),
       'order' => sanitize_key( $attr['order'] ?? '' ),
@@ -233,6 +234,7 @@ final class Attributes {
       'seamless' => self::bool( $attr['seamless'] ?? null, $defaults['seamless'] ),
       'thumbnail' => self::bool( $attr['thumbnail'] ?? null, $defaults['thumbnail'] ),
       'aspect_ratio' => Sanitizer::sanitize_css_aspect_ratio( $attr['aspect_ratio'] ?? '' ),
+      'spoiler' => self::bool( $attr['spoiler'] ?? null ),
       'lightbox' => self::bool( $attr['lightbox'] ?? null, true ),
       'words' => self::bool( $attr['words'] ?? null, true ),
       'date' => self::bool( $attr['date'] ?? null, true ),

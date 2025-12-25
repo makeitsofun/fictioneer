@@ -1672,3 +1672,39 @@ function fictioneer_get_splide_inline_init() {
 
   return \Fictioneer\Shortcodes\Base::splide_inline_script();
 }
+
+/**
+ * Shortcode delegate callback for latest stories.
+ *
+ * @since 5.34.0
+ *
+ * @param array|string $atts     Raw shortcode attributes.
+ * @param string       $content  Enclosed content (if any).
+ * @param string       $tag      Shortcode tag name.
+ *
+ * @return string Shortcode HTML.
+ */
+
+function fictioneer_shortcode_latest_stories( $atts, $content, $tag ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Latest_Stories::render()' );
+
+  return \Fictioneer\Shortcodes\Latest_Stories::render( $atts, $content, $tag );
+}
+
+/**
+ * Shortcode delegate callback for latest chapters.
+ *
+ * @since 5.34.0
+ *
+ * @param array|string $atts     Raw shortcode attributes.
+ * @param string       $content  Enclosed content (if any).
+ * @param string       $tag      Shortcode tag name.
+ *
+ * @return string Shortcode HTML.
+ */
+
+function fictioneer_shortcode_latest_chapters( $atts, $content, $tag ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Latest_Chapters::render()' );
+
+  return \Fictioneer\Shortcodes\Latest_Chapters::render( $atts, $content, $tag );
+}

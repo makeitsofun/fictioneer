@@ -7,7 +7,7 @@ use Fictioneer\Shortcodes\Base;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Latest_Stories {
+class Latest_Chapters {
   /**
    * Shortcode callback.
    *
@@ -22,10 +22,11 @@ class Latest_Stories {
    */
 
   public static function render( $attr, $content = '', $tag = '' ) : string {
-    $shortcode = $tag ?: 'fictioneer_latest_stories';
+    $shortcode = $tag ?: 'fictioneer_latest_chapters';
     $args = Attributes::parse( $attr, $shortcode, 4 );
 
     $args['content'] = $content;
+    $args['simple'] = false;
 
     $args['terms'] = Sanitizer::sanitize_query_var(
       $args['terms'] ?? 'inline',
@@ -52,13 +53,14 @@ class Latest_Stories {
 
     switch ( $args['type'] ?? 'default' ) {
       case 'compact':
-        fictioneer_get_template_part( 'partials/_latest-stories-compact', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-chapters-compact', null, $args );
         break;
       case 'list':
-        fictioneer_get_template_part( 'partials/_latest-stories-list', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-chapters-list', null, $args );
         break;
       default:
-        fictioneer_get_template_part( 'partials/_latest-stories', null, $args );
+        $args['simple'] = ( $args['type'] === 'simple' );
+        fictioneer_get_template_part( 'partials/_latest-chapters', null, $args );
     }
 
     $html = fictioneer_minify_html( (string) ob_get_clean() );
