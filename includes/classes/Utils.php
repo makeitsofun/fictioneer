@@ -864,4 +864,23 @@ class Utils {
       );
     }
   }
+
+  /**
+   * Cast a value to boolean with an optional default.
+   *
+   * @since 5.34.0
+   *
+   * @param mixed $value    Raw value.
+   * @param bool  $default  Optional. Default if value is empty.
+   *
+   * @return bool Parsed boolean value.
+   */
+
+  public static function bool( $value, $default = false ) : bool {
+    if ( $value === null || $value === '' ) {
+      return $default;
+    }
+
+    return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+  }
 }

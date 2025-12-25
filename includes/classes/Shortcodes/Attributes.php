@@ -11,25 +11,6 @@ final class Attributes {
   private static $card_image_style = null;
 
   /**
-   * Cast a value to boolean with an optional default.
-   *
-   * @since 5.34.0
-   *
-   * @param mixed $value    Raw value.
-   * @param bool  $default  Optional. Default if value is empty.
-   *
-   * @return bool Parsed boolean value.
-   */
-
-  private static function bool( $value, $default = false ) : bool {
-    if ( $value === null || $value === '' ) {
-      return $default;
-    }
-
-    return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
-  }
-
-  /**
    * Return the card image style theme mod (cached).
    *
    * @since 5.34.0
@@ -210,7 +191,8 @@ final class Attributes {
     $sanitized = array(
       'uid' => $uid,
       'type' => sanitize_key( $attr['type'] ?? 'default' ),
-      'simple' => self::bool( $attr['simple'] ?? null ),
+      'simple' => Utils::bool( $attr['simple'] ?? null ),
+      'single' => Utils::bool( $attr['single'] ?? null ),
       'count' => max( -1, (int) ( $attr['count'] ?? $count ) ),
       'offset' => max( 0, (int) ( $attr['offset'] ?? 0 ) ),
       'order' => sanitize_key( $attr['order'] ?? '' ),
@@ -227,33 +209,35 @@ final class Attributes {
       'excluded_cats' => wp_parse_id_list( $attr['exclude_cat_ids'] ?? '' ),
       'taxonomies' => self::get_shortcode_taxonomies( $attr ),
       'relation' => strtolower( (string) ( $attr['rel'] ?? $attr['relation'] ?? 'and' ) ) === 'or' ? 'OR' : 'AND',
-      'ignore_sticky' => self::bool( $attr['ignore_sticky'] ?? null ),
-      'ignore_protected' => self::bool( $attr['ignore_protected'] ?? null ),
-      'only_protected' => self::bool( $attr['only_protected'] ?? null ),
-      'vertical' => self::bool( $attr['vertical'] ?? null ),
-      'seamless' => self::bool( $attr['seamless'] ?? null, $defaults['seamless'] ),
-      'thumbnail' => self::bool( $attr['thumbnail'] ?? null, $defaults['thumbnail'] ),
+      'ignore_sticky' => Utils::bool( $attr['ignore_sticky'] ?? null ),
+      'ignore_protected' => Utils::bool( $attr['ignore_protected'] ?? null ),
+      'only_protected' => Utils::bool( $attr['only_protected'] ?? null ),
+      'vertical' => Utils::bool( $attr['vertical'] ?? null ),
+      'seamless' => Utils::bool( $attr['seamless'] ?? null, $defaults['seamless'] ),
+      'thumbnail' => Utils::bool( $attr['thumbnail'] ?? null, $defaults['thumbnail'] ),
       'aspect_ratio' => Sanitizer::sanitize_css_aspect_ratio( $attr['aspect_ratio'] ?? '' ),
-      'spoiler' => self::bool( $attr['spoiler'] ?? null ),
-      'lightbox' => self::bool( $attr['lightbox'] ?? null, true ),
-      'words' => self::bool( $attr['words'] ?? null, true ),
-      'date' => self::bool( $attr['date'] ?? null, true ),
+      'spoiler' => Utils::bool( $attr['spoiler'] ?? null ),
+      'lightbox' => Utils::bool( $attr['lightbox'] ?? null, true ),
+      'terms' => Sanitizer::sanitize_query_var( $attr['terms'] ?? 'inline', ['inline', 'pills', 'none', 'false'], 'inline' ),
+      'max_terms' => max( 1, absint( $attr['max_terms'] ?? 10 ) ),
+      'words' => Utils::bool( $attr['words'] ?? null, true ),
+      'date' => Utils::bool( $attr['date'] ?? null, true ),
       'date_format' => Sanitizer::sanitize_date_format( $attr['date_format'] ?? '' ),
       'nested_date_format' => Sanitizer::sanitize_date_format( $attr['nested_date_format'] ?? '' ),
-      'footer' => self::bool( $attr['footer'] ?? null, true ),
-      'footer_author' => self::bool( $attr['footer_author'] ?? null, true ),
-      'footer_chapters' => self::bool( $attr['footer_chapters'] ?? null, true ),
-      'footer_comments' => self::bool( $attr['footer_comments'] ?? null, true ),
-      'footer_date' => self::bool( $attr['footer_date'] ?? null, true ),
-      'footer_rating' => self::bool( $attr['footer_rating'] ?? null, true ),
-      'footer_status' => self::bool( $attr['footer_status'] ?? null, true ),
-      'footer_words' => self::bool( $attr['footer_words'] ?? null, true ),
+      'footer' => Utils::bool( $attr['footer'] ?? null, true ),
+      'footer_author' => Utils::bool( $attr['footer_author'] ?? null, true ),
+      'footer_chapters' => Utils::bool( $attr['footer_chapters'] ?? null, true ),
+      'footer_comments' => Utils::bool( $attr['footer_comments'] ?? null, true ),
+      'footer_date' => Utils::bool( $attr['footer_date'] ?? null, true ),
+      'footer_rating' => Utils::bool( $attr['footer_rating'] ?? null, true ),
+      'footer_status' => Utils::bool( $attr['footer_status'] ?? null, true ),
+      'footer_words' => Utils::bool( $attr['footer_words'] ?? null, true ),
       'classes' => esc_attr( wp_strip_all_tags( $attr['classes'] ?? $attr['class'] ?? '' ) ) . " {$uid}",
-      'infobox' => self::bool( $attr['infobox'] ?? null, true ),
-      'source' => self::bool( $attr['source'] ?? null, true ),
+      'infobox' => Utils::bool( $attr['infobox'] ?? null, true ),
+      'source' => Utils::bool( $attr['source'] ?? null, true ),
       'splide' => self::parse_splide( (string) ( $attr['splide'] ?? '' ) ),
-      'cache' => self::bool( $attr['cache'] ?? null, true ),
-      'spotlight' => self::bool( $attr['spotlight'] ?? null )
+      'cache' => Utils::bool( $attr['cache'] ?? null, true ),
+      'spotlight' => Utils::bool( $attr['spotlight'] ?? null )
     );
 
     if ( ! empty( $sanitized['post_ids'] ) ) {

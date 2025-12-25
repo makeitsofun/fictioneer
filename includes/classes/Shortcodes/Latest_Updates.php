@@ -7,7 +7,7 @@ use Fictioneer\Shortcodes\Base;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Latest_Stories {
+class Latest_Updates {
   /**
    * Shortcode callback.
    *
@@ -22,10 +22,11 @@ class Latest_Stories {
    */
 
   public static function render( $attr, $content = '', $tag = '' ) : string {
-    $shortcode = $tag ?: 'fictioneer_latest_stories';
+    $shortcode = $tag ?: 'fictioneer_latest_updates';
     $args = Attributes::parse( $attr, $shortcode, 4 );
 
     $args['content'] = $content;
+    $args['footer_comments'] = \Fictioneer\Utils::bool( $attr['footer_comments'] ?? null ); // Default false
 
     if ( ! empty( $args['splide'] ) ) {
       $args['classes'] .= ' splide _splide-placeholder';
@@ -46,13 +47,13 @@ class Latest_Stories {
 
     switch ( $args['type'] ?? 'default' ) {
       case 'compact':
-        fictioneer_get_template_part( 'partials/_latest-stories-compact', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-updates-compact', null, $args );
         break;
       case 'list':
-        fictioneer_get_template_part( 'partials/_latest-stories-list', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-updates-list', null, $args );
         break;
       default:
-        fictioneer_get_template_part( 'partials/_latest-stories', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-updates', null, $args );
     }
 
     $html = fictioneer_minify_html( (string) ob_get_clean() );

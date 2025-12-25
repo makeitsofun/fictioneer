@@ -1692,6 +1692,25 @@ function fictioneer_shortcode_latest_stories( $atts, $content, $tag ) {
 }
 
 /**
+ * Shortcode delegate callback for latest updates.
+ *
+ * @since 5.34.0
+ *
+ * @param array|string $atts     Raw shortcode attributes.
+ * @param string       $content  Enclosed content (if any).
+ * @param string       $tag      Shortcode tag name.
+ *
+ * @return string Shortcode HTML.
+ */
+
+function fictioneer_shortcode_latest_story_updates( $atts, $content, $tag ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Latest_Updates::render()' );
+
+  return \Fictioneer\Shortcodes\Latest_Updates::render( $atts, $content, $tag );
+}
+add_shortcode( 'fictioneer_latest_updates', 'fictioneer_shortcode_latest_story_updates' );
+
+/**
  * Shortcode delegate callback for latest chapters.
  *
  * @since 5.34.0

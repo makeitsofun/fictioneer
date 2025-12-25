@@ -28,12 +28,6 @@ class Latest_Chapters {
     $args['content'] = $content;
     $args['simple'] = false;
 
-    $args['terms'] = Sanitizer::sanitize_query_var(
-      $args['terms'] ?? 'inline',
-      ['inline', 'pills', 'none', 'false'],
-      'inline'
-    );
-
     if ( ! empty( $args['splide'] ) ) {
       $args['classes'] .= ' splide _splide-placeholder';
     }
