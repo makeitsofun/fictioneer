@@ -174,6 +174,7 @@ class Base {
     add_shortcode( 'fictioneer_latest_stories', [ self::class, 'latest_stories' ] );
     add_shortcode( 'fictioneer_latest_chapters', [ self::class, 'latest_chapters' ] );
     add_shortcode( 'fictioneer_latest_updates', [ self::class, 'latest_updates' ] );
+    add_shortcode( 'fictioneer_latest_recommendations', [ self::class, 'latest_recommendations' ] );
     add_shortcode( 'fictioneer_showcase', [ self::class, 'showcase' ] );
   }
 
@@ -239,5 +240,21 @@ class Base {
 
   public static function showcase( $atts = [], $content = '', $tag = '' ) : string {
     return Showcase::render( $atts, $content, $tag );
+  }
+
+   /**
+   * Shortcode delegate callback for latest recommendations.
+   *
+   * @since 5.34.0
+   *
+   * @param array|string $atts     Raw shortcode attributes.
+   * @param string       $content  Enclosed content (if any).
+   * @param string       $tag      Shortcode tag name.
+   *
+   * @return string Shortcode HTML.
+   */
+
+  public static function latest_recommendations( $atts = [], $content = '', $tag = '' ) : string {
+    return Latest_Recommendations::render( $atts, $content, $tag );
   }
 }

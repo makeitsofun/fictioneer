@@ -2,7 +2,6 @@
 
 namespace Fictioneer\Shortcodes;
 
-use Fictioneer\Sanitizer;
 use Fictioneer\Shortcodes\Base;
 
 defined( 'ABSPATH' ) OR exit;

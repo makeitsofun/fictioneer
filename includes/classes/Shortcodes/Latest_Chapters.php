@@ -10,7 +10,7 @@ class Latest_Chapters {
   /**
    * Shortcode callback.
    *
-   * @since 3.0
+   * @since 3.0.0
    * @since 5.34.0 - Moved into class.
    *
    * @param array|string $attr     Raw shortcode attributes.

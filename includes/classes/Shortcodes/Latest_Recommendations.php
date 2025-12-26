@@ -6,11 +6,11 @@ use Fictioneer\Shortcodes\Base;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Latest_Stories {
+class Latest_Recommendations {
   /**
    * Shortcode callback.
    *
-   * @since 3.0.0
+   * @since 4.0.0
    * @since 5.34.0 - Moved into class.
    *
    * @param array|string $attr     Raw shortcode attributes.
@@ -21,7 +21,7 @@ class Latest_Stories {
    */
 
   public static function render( $attr, $content = '', $tag = '' ) : string {
-    $shortcode = $tag ?: 'fictioneer_latest_stories';
+    $shortcode = $tag ?: 'fictioneer_latest_recommendations';
     $args = Attributes::parse( $attr, $shortcode, 4 );
 
     $args['content'] = $content;
@@ -45,13 +45,10 @@ class Latest_Stories {
 
     switch ( $args['type'] ?? 'default' ) {
       case 'compact':
-        fictioneer_get_template_part( 'partials/_latest-stories-compact', null, $args );
-        break;
-      case 'list':
-        fictioneer_get_template_part( 'partials/_latest-stories-list', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-recommendations-compact', null, $args );
         break;
       default:
-        fictioneer_get_template_part( 'partials/_latest-stories', null, $args );
+        fictioneer_get_template_part( 'partials/_latest-recommendations', null, $args );
     }
 
     $html = fictioneer_minify_html( (string) ob_get_clean() );
