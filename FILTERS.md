@@ -2780,7 +2780,7 @@ Filters the query arguments used for the taxonomy submenu `get_terms()` call.
 ---
 
 ### `apply_filters( 'fictioneer_filter_translations', $strings )`
-Filters the source array of selected translation strings used in the theme, see `fcntr()` function in `includes/functions/_utility.php`. You cannot translate the whole theme with this, but give it a personal touch.
+Deprecated. Use `'fictioneer_filter_translations_static'` instead.
 
 **Parameters:**
 * $strings (array) – Associative array of translation keys and values.
@@ -2788,7 +2788,11 @@ Filters the source array of selected translation strings used in the theme, see 
 ---
 
 ### `apply_filters( 'fictioneer_filter_translations_static', $strings )`
-Same as the `fictioneer_filter_translations` filter, but only applied once when the `fcntr()` function is first called and cached in a static variable to save system resources. Using this is recommended if possible.
+Filters the source array of selected translation strings used in the theme, see `fcntr()` function in `includes/functions/_utility.php`. You cannot translate the whole theme with this, but give it a personal touch. Only executed once, so best hook early in the `'init'` action.
+
+**Parameters:**
+* $strings (array) – Associative array of translation keys and values.
+
 
 ---
 

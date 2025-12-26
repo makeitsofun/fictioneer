@@ -1181,13 +1181,14 @@ function fcntr( $key, $escape = false ) {
 
     // Filter static translations
     $strings = apply_filters( 'fictioneer_filter_translations_static', $strings );
+
+    if ( has_filter( 'fictioneer_filter_translations' ) ) {
+      $strings = apply_filters( 'fictioneer_filter_translations', $strings ); // Legacy
+    }
   }
 
-  // Filter translations
-  $strings = apply_filters( 'fictioneer_filter_translations', $strings );
-
   // Return requested translation if defined...
-  if ( array_key_exists( $key, $strings ) ) {
+  if ( isset( $strings[ $key ] ) ) {
     return $escape ? esc_attr( $strings[ $key ] ) : $strings[ $key ];
   }
 
