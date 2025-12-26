@@ -32,7 +32,13 @@ class Utils_Admin {
       'Chaotic', 'Wacky', 'Twisted', 'Manic', 'Crystal', 'Infernal', 'Ruthless', 'Grim',
       'Mortal', 'Forsaken', 'Heretical', 'Cursed', 'Blighted', 'Scarlet', 'Delightful',
       'Nuclear', 'Azure', 'Emerald', 'Amber', 'Mystic', 'Ethereal', 'Enchanted', 'Valiant',
-      'Fierce', 'Obscure', 'Enigmatic'
+      'Fierce', 'Obscure', 'Enigmatic', 'Blazing', 'Velocity', 'Phantom', 'Razor', 'Spectral',
+      'Overclocked', 'Flux', 'Pulse', 'Limitless', 'Neural', 'Ciphered', 'Encrypted',
+      'Void', 'Abyssal', 'Harrowed', 'Doomed', 'Nightbound', 'Umbral', 'Tenebrous', 'Dire',
+      'Baleful', 'Malevolent', 'Graveborn', 'Ashen', 'Mythic', 'Legendary', 'Chosen', 'Exalted',
+      'Anointed', 'Venerated', 'Hallowed', 'Imperial', 'Regal', 'Oathbound', 'Valorous', 'Eminent',
+      'Unstable', 'Dubious', 'Dreaming', 'Wandering', 'Starry', 'Moonlit', 'Petalsoft', 'Fated',
+      'Forgotten', 'Humming', 'Echoing', 'Velvet', 'Federal', 'Awesome', 'Succulent'
     );
 
     return apply_filters( 'fictioneer_random_username_adjectives', $adjectives );
@@ -66,7 +72,17 @@ class Utils_Admin {
       'Berserker', 'Oblivion', 'Decimator', 'Devastation', 'Calamity', 'Doom', 'Ruin', 'Abyss',
       'Heretic', 'Armageddon', 'Obliteration', 'Inferno', 'Torment', 'Carnage', 'Purgatory',
       'Chastity', 'Angel', 'Raven', 'Star', 'Trinity', 'Idol', 'Eidolon', 'Havoc', 'Nirvana',
-      'Digitron', 'Phoenix', 'Lantern', 'Warden', 'Falcon'
+      'Digitron', 'Phoenix', 'Lantern', 'Warden', 'Falcon', 'Mainframe', 'Datacore', 'Proxy',
+      'Netrunner', 'Assembler', 'Drone', 'Striker', 'Breaker', 'Enforcer', 'Vanguard', 'Reaper',
+      'Bulwark', 'Skirmisher', 'Blademaster', 'Gunrunner', 'Sharpshooter', 'Interceptor', 'Anvil',
+      'Hammer', 'Spellblade', 'Battlemage', 'Archon', 'Invoker', 'Thaumaturge', 'Loremaster',
+      'Runesmith', 'Arcanist', 'Spellweaver', 'Chronomancer', 'Voidcaller', 'Soulbinder',
+      'Starborn', 'Oathkeeper', 'Harbinger', 'Endbringer', 'Bloodmoon', 'Behemoth', 'Colossus',
+      'Direwolf', 'Hellkite', 'Wyvern', 'Griffon', 'Hydra', 'Manticore', 'Basilisk', 'Watcher',
+      'Crawler', 'Stalker', 'Aberration', 'Parasite', 'Husk', 'Fixer', 'Operator', 'Wildcard',
+      'Outlaw', 'Renegade', 'Freerunner', 'Troublemaker', 'Instigator', 'Disruptor', 'Provocateur',
+      'Saboteur', 'Firestarter', 'Anarch', 'Nightowl', 'Dreamer', 'Drifter', 'Wanderer', 'Stargazer',
+      'Moonchild', 'Menace', 'Mistake', 'Liability', 'Disaster', 'Raccoon', 'Cryptid', 'Placeholder'
     );
 
     return apply_filters( 'fictioneer_random_username_nouns', $nouns );
@@ -84,16 +100,17 @@ class Utils_Admin {
    */
 
   public static function get_random_username( $unique = true ) : string {
-    $adjectives = Utils_Admin::get_username_adjectives();
-    $nouns = Utils_Admin::get_username_nouns();
-
-    shuffle( $adjectives );
-    shuffle( $nouns );
+    $adjectives = self::get_username_adjectives();
+    $nouns = self::get_username_nouns();
 
     do {
-      $username = $adjectives[ array_rand( $adjectives ) ] . $nouns[ array_rand( $nouns ) ] . rand( 1000, 9999 );
+      $username = $adjectives[ array_rand( $adjectives ) ] . $nouns[ array_rand( $nouns ) ] . wp_rand( 1000, 9999 );
       $username = sanitize_user( $username, true );
-    } while ( username_exists( $username ) && $unique );
+
+      if ( ! $unique ) {
+        break;
+      }
+    } while ( username_exists( $username ) );
 
     return $username;
   }
