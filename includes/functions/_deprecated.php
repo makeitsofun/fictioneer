@@ -1415,6 +1415,21 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
   }
 }
 
+/**
+ * [Deprecated] Translated label of the post status.
+ *
+ * @since 5.24.5
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_post_status_label() instead.
+ *
+ * @param string $status  Post status.
+ *
+ * @return string Translated label of the post status or the post status if custom.
+ */
+
+function fictioneer_get_post_status_label( $status ) {
+  return Utils_Admin::get_post_status_label( $status );
+}
+
 // =============================================================================
 // USER HELPER DELEGATES
 // =============================================================================

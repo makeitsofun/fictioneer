@@ -1018,7 +1018,7 @@ class Utils_Admin {
       $suffix = [];
 
       if ( $story->post_status !== 'publish' ) {
-        $suffix['status'] = fictioneer_get_post_status_label( $story->post_status );
+        $suffix['status'] = self::get_post_status_label( $story->post_status );
       }
 
       if ( in_array( $story->ID, $co_authored_stories ) ) {
@@ -1046,7 +1046,7 @@ class Utils_Admin {
       }
 
       if ( get_post_status( $current_story_id ) !== 'publish' ) {
-        $suffix['status'] = fictioneer_get_post_status_label( get_post_status( $current_story_id ) );
+        $suffix['status'] = self::get_post_status_label( get_post_status( $current_story_id ) );
       }
 
       $stories[ $current_story_id ] = sprintf(
@@ -1210,5 +1210,33 @@ class Utils_Admin {
       'comment_count' => $comment_count,
       'updated_count' => $count
     );
+  }
+
+  /**
+   * Translated label of the post status.
+   *
+   * @since 5.24.5
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $status  Post status.
+   *
+   * @return string Translated label of the post status or the post status if custom.
+   */
+
+  public static function get_post_status_label( $status ) : string {
+    static $labels = null;
+
+    if ( $labels === null ) {
+      $labels = array(
+        'draft' => get_post_status_object( 'draft' )->label,
+        'pending' => get_post_status_object( 'pending' )->label,
+        'publish' => get_post_status_object( 'publish' )->label,
+        'private' => get_post_status_object( 'private' )->label,
+        'future' => get_post_status_object( 'future' )->label,
+        'trash' => get_post_status_object( 'trash' )->label
+      );
+    }
+
+    return $labels[ $status ] ?? $status;
   }
 }

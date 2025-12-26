@@ -2346,33 +2346,6 @@ function fictioneer_get_publishing_authors( $args = [] ) {
 // =============================================================================
 
 /**
- * Return the translated label of the post status.
- *
- * @since 5.24.5
- *
- * @param string $status  Post status.
- *
- * @return string Translated label of the post status or the post status if custom.
- */
-
-function fictioneer_get_post_status_label( $status ) {
-  static $labels = null;
-
-  if ( $labels === null ) {
-    $labels = array(
-      'draft' => get_post_status_object( 'draft' )->label,
-      'pending' => get_post_status_object( 'pending' )->label,
-      'publish' => get_post_status_object( 'publish' )->label,
-      'private' => get_post_status_object( 'private' )->label,
-      'future' => get_post_status_object( 'future' )->label,
-      'trash' => get_post_status_object( 'trash' )->label
-    );
-  }
-
-  return $labels[ $status ] ?? $status;
-}
-
-/**
  * Return the translated label of the post type.
  *
  * @since 5.25.0

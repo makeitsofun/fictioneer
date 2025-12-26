@@ -1229,7 +1229,7 @@ function fictioneer_callback_relationship_chapters( $selected, $meta_key, $args 
       get_date_from_gmt( $chapter->post_date_gmt, get_option( 'time_format' ) )
     );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
-    $label = fictioneer_get_post_status_label( $chapter->post_status );
+    $label = Utils_Admin::get_post_status_label( $chapter->post_status );
 
     if ( $chapter->fictioneer_chapter_hidden ?? 0 ) {
       $title = "{$title} (" . _x( 'Unlisted', 'Chapter assignment flag.', 'fictioneer' ) . ")";
@@ -1311,7 +1311,7 @@ function fictioneer_ajax_get_relationship_chapters( $post_id, $meta_key ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $chapter, 'admin-ajax-get-relationship-chapters' );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
-    $label = fictioneer_get_post_status_label( $chapter->post_status );
+    $label = Utils_Admin::get_post_status_label( $chapter->post_status );
 
     // Update title if necessary
     if ( get_post_meta( $chapter->ID, 'fictioneer_chapter_hidden', true ) ) {
@@ -1395,7 +1395,7 @@ function fictioneer_get_relationship_chapter_details( $chapter ) {
 
   $info[] = sprintf(
     _x( '<strong>Status:</strong>&nbsp;%s', 'Chapter assignment info.', 'fictioneer' ),
-    fictioneer_get_post_status_label( $chapter->post_status )
+    Utils_Admin::get_post_status_label( $chapter->post_status )
   );
 
   $info[] = sprintf(
