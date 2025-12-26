@@ -4,7 +4,7 @@ namespace Fictioneer;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Sanitizer {
+final class Sanitizer {
   /**
    * Sanitize a date format string.
    *

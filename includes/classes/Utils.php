@@ -6,7 +6,7 @@ use Fictioneer\Fonts;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Utils {
+final class Utils {
   /**
    * Return directory path of the theme cache.
    *

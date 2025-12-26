@@ -4,7 +4,7 @@ namespace Fictioneer;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Role_Admin {
+final class Role_Admin {
   public const BASE_CAPABILITIES = array(
     'fcn_read_others_files',
     'fcn_edit_others_files',

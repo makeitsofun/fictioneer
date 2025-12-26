@@ -4,7 +4,7 @@ namespace Fictioneer;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Utils_Admin {
+final class Utils_Admin {
   /**
    * Return array of adjectives for randomized username generation.
    *

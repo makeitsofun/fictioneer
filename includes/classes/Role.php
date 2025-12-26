@@ -4,7 +4,7 @@ namespace Fictioneer;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Role {
+final class Role {
   /**
    * Initialize theme roles and capabilities.
    *

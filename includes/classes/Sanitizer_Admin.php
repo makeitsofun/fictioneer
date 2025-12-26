@@ -4,7 +4,7 @@ namespace Fictioneer;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Sanitizer_Admin {
+final class Sanitizer_Admin {
   /**
    * Sanitize a selected option.
    *
