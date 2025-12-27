@@ -1193,16 +1193,16 @@ function fictioneer_register_chapter_meta_fields() {
     'fcn_chapter',
     'fictioneer_chapter_story',
     array(
-      'type' => ['integer', 'string'],
+      'type' => 'string',
       'single' => true,
       'show_in_rest' => array(
         'schema' => array(
-          'type' => 'integer',
+          'type' => 'string',
           'default' => ''
         )
       ),
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
-        return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
+        return ! wp_doing_cron() && fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
       'sanitize_callback' => function( $meta_value ) {
         $meta_value = fictioneer_validate_id( $meta_value, 'fcn_story' );
