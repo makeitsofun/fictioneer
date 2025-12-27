@@ -3232,7 +3232,11 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
   }
 
   // Story
-  if ( isset( $_POST['fictioneer_chapter_story'] ) && ! ( $_POST['fictioneer_chapter_story_override'] ?? 0 ) ) {
+  if (
+    ! wp_doing_cron() &&
+    isset( $_POST['fictioneer_chapter_story'] ) &&
+    empty( $_POST['fictioneer_chapter_story_override'] )
+  ) {
     $story_id = fictioneer_validate_id( $_POST['fictioneer_chapter_story'], 'fcn_story' );
     $current_story_id = (int) fictioneer_get_chapter_story_id( $post_id );
 
