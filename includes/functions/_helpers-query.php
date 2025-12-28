@@ -372,6 +372,12 @@ if ( get_option( 'fictioneer_disable_extended_story_list_meta_queries' ) ) {
  */
 
 function fictioneer_get_chapter_story_id( $chapter_id ) {
+  $chapter = get_post( $chapter_id );
+
+  if ( $chapter->post_parent ) {
+    return $chapter->post_parent;
+  }
+
   return get_post_meta( $chapter_id, 'fictioneer_chapter_story', true );
 }
 
