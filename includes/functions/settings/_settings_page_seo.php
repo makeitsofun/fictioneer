@@ -84,7 +84,11 @@ class Fictioneer_Seo_Table extends WP_List_Table {
 
   public function column_default( $item, $column_name ) {
     $schema = get_post_meta( $item->ID, 'fictioneer_schema', true );
-    $schema_text = stripslashes( json_encode( json_decode( $schema ), JSON_PRETTY_PRINT ) );
+    $schema_text = '';
+
+    if ( is_array( $schema ) && isset( $schema['schema'], $schema['ttl'], $schema['v'] ) ) {
+      $schema_text = stripslashes( wp_json_encode( json_decode( $schema['schema'] ), JSON_PRETTY_PRINT ) );
+    }
 
     switch ( $column_name ) {
       case 'title':
