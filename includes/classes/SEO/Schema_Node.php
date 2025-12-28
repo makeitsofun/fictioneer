@@ -134,7 +134,7 @@ final class Schema_Node {
   public static function article( $post, $image_data = null, $type = null, $title = null, $description = null ) {
     $node = array(
       '@type' => $type ?: self::article_type( $post ),
-      '@id' => self::main_entity_id( $post ),
+      '@id' => self::entity_id( $post ),
       'headline' => $title ?: fictioneer_get_safe_title( $post, 'seo-schema-article-node' ),
       'description' => $description ?: self::description( $post ),
       'url' => get_permalink( $post ),
@@ -252,7 +252,7 @@ final class Schema_Node {
       array(
         'post__in' => $chapter_ids,
         'orderby' => 'post__in',
-        'posts_per_page' => 10
+        'posts_per_page' => count( $chapter_ids )
       )
     );
 
@@ -277,7 +277,7 @@ final class Schema_Node {
    */
 
   public static function item_list( $post, $items = [], $title = null, $description = null ) : array {
-    $template = get_page_template_slug( $post->ID );
+    $template = (string) get_page_template_slug( $post->ID );
 
     if ( $template && empty( $items ) ) {
       $post_type = null;
@@ -515,7 +515,7 @@ final class Schema_Node {
    */
 
   private static function webpage_type( $post ) {
-    $template = get_page_template_slug( $post );
+    $template = (string) get_page_template_slug( $post->ID );
 
     switch ( $template ) {
       case 'chapters.php':
@@ -555,17 +555,17 @@ final class Schema_Node {
   }
 
   /**
-   * Article entity ID.
+   * Main entity ID.
    *
    * @since 5.34.0
    *
    * @param \WP_Post $post  Post object.
    *
-   * @return string Article entity ID.
+   * @return string Main entity ID.
    */
 
   private static function main_entity_id( $post ) : string {
-    $template = get_page_template_slug( $post );
+    $template = (string) get_page_template_slug( $post->ID );
 
     switch ( $template ) {
       case 'chapters.php':
@@ -575,6 +575,28 @@ final class Schema_Node {
         return '#list';
     }
 
+    if ( $post->post_type === 'fcn_story' ) {
+      return '#story';
+    }
+
+    if ( $post->post_type === 'fcn_chapter' ) {
+      return '#chapter';
+    }
+
+    return '#article';
+  }
+
+  /**
+   * Entity ID.
+   *
+   * @since 5.34.0
+   *
+   * @param \WP_Post $post  Post object.
+   *
+   * @return string Entity ID.
+   */
+
+  private static function entity_id( $post ) : string {
     if ( $post->post_type === 'fcn_story' ) {
       return '#story';
     }
@@ -661,7 +683,7 @@ final class Schema_Node {
 
     $keywords = array_unique( $keywords );
 
-    $filter_title = mb_strtolower( trim( get_the_title( $post ) ) );
+    $filter_title = mb_strtolower( trim( $post->post_title ) );
 
     $keywords = array_filter(
       $keywords,

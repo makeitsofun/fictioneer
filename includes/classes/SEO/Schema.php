@@ -12,11 +12,11 @@ final class Schema {
    */
 
   public static function init() : void {
-    add_action( 'wp_head', array( self::class, 'render' ) );
-
-    if ( is_admin() ) {
-      // TODO: save_post
+    if ( ! is_admin() ) {
+      add_action( 'wp_head', [ self::class, 'render' ] );
     }
+
+    add_action( 'save_post', [ self::class, 'delete_cache' ], 99, 2 );
   }
 
   /**
@@ -76,7 +76,7 @@ final class Schema {
 
     $schema = self::build( $post );
 
-    if ( $cached ) {
+    if ( $cached && $schema !== '' ) {
       self::set_cache( $post, $schema );
     }
 
@@ -105,13 +105,17 @@ final class Schema {
 
     $graph[] = Schema_Node::webpage( $post, $image_data );
 
-    $template = get_page_template_slug();
-
     if ( $post->post_type === 'fcn_chapter' ) {
-      $graph[] = Schema_Node::chapter_story( $post );
+      $story = Schema_Node::chapter_story( $post );
+
+      if ( ! empty( $story ) ) {
+        $graph[] = $story;
+      }
     }
 
-    if ( in_array( $template, ['chapters.php', 'stories.php', 'recommendations.php', 'collections.php'] ) ) {
+    $template = (string) get_page_template_slug( $post->ID );
+
+    if ( in_array( $template, ['chapters.php', 'stories.php', 'recommendations.php', 'collections.php'], true ) ) {
       $list = Schema_Node::item_list( $post );
 
       if ( ! empty( $list ) ) {
@@ -132,7 +136,7 @@ final class Schema {
     $schema = Schema_Node::root();
     $schema['@graph'] = $graph;
 
-    $schema = json_encode( $schema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
+    $schema = wp_json_encode( $schema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
 
     return $schema;
   }
@@ -189,15 +193,16 @@ final class Schema {
    *
    * @since 5.34.0
    *
-   * @param \WP_Post $post  Post object.
+   * @param int      $post_id  Post ID.
+   * @param \WP_Post $post     Post object.
    */
 
-  public static function delete_cache( $post ) : void {
-    if ( fictioneer_save_guard( $post->ID ) ) {
+  public static function delete_cache( $post_id, $post ) : void {
+    if ( fictioneer_save_guard( $post_id ) ) {
       return;
     }
 
-    delete_post_meta( $post->ID, 'fictioneer_schema' );
+    delete_post_meta( $post_id, 'fictioneer_schema' );
 
     if ( $post->post_parent ) {
       delete_post_meta( $post->post_parent, 'fictioneer_schema' );
