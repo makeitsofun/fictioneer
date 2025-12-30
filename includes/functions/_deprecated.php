@@ -655,6 +655,8 @@ function fictioneer_get_font_data() : array {
  */
 
 function fictioneer_get_theme_cache_dir( $context = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_cache_dir' );
+
   return Utils::get_cache_dir( $context );
 }
 
@@ -670,6 +672,8 @@ function fictioneer_get_theme_cache_dir( $context = null ) {
  */
 
 function fictioneer_get_theme_cache_uri( $context = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_cache_uri' );
+
   return Utils::get_cache_uri( $context );
 }
 
@@ -685,6 +689,8 @@ function fictioneer_get_theme_cache_uri( $context = null ) {
  */
 
 function fictioneer_get_split_aspect_ratio( $css ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::split_aspect_ratio' );
+
   return Utils::split_aspect_ratio( $css );
 }
 
@@ -698,6 +704,8 @@ function fictioneer_get_split_aspect_ratio( $css ) {
  */
 
 function fictioneer_get_username_adjectives() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_username_adjectives' );
+
   return Utils_Admin::get_username_adjectives();
 }
 
@@ -711,6 +719,8 @@ function fictioneer_get_username_adjectives() {
  */
 
 function fictioneer_get_username_nouns() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_username_nouns' );
+
   return Utils_Admin::get_username_nouns();
 }
 
@@ -726,6 +736,8 @@ function fictioneer_get_username_nouns() {
  */
 
 function fictioneer_get_random_username( $unique = true ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_random_username' );
+
   return Utils_Admin::get_random_username( $unique );
 }
 
@@ -740,6 +752,8 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
    */
 
   function fictioneer_get_clean_url() {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_clean_url' );
+
     return Utils::get_clean_url();
   }
 }
@@ -756,6 +770,8 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
  */
 
 function fictioneer_encrypt( $data ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::encrypt' );
+
   return Utils::encrypt( $data );
 }
 
@@ -771,6 +787,8 @@ function fictioneer_encrypt( $data ) {
  */
 
 function fictioneer_decrypt( $data ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::decrypt' );
+
   return Utils::decrypt( $data );
 }
 
@@ -787,6 +805,8 @@ function fictioneer_decrypt( $data ) {
  */
 
 function fictioneer_add_class_to_element( $html, $class ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::add_class_to_element' );
+
   return Utils::add_class_to_element( $html, $class );
 }
 
@@ -808,6 +828,8 @@ function fictioneer_add_class_to_element( $html, $class ) {
  */
 
 function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_theme_icon' );
+
   return Utils::get_theme_icon( $name, $default, $args );
 }
 
@@ -821,6 +843,8 @@ function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
  */
 
 function fictioneer_get_global_page() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_global_page' );
+
   return Utils::get_global_page();
 }
 
@@ -837,6 +861,8 @@ function fictioneer_get_global_page() {
  */
 
 function fictioneer_font_family_value( $font_value, $quote = '"' ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::get_font_family_value' );
+
   return Fonts::get_font_family_value( $font_value, $quote );
 }
 
@@ -853,6 +879,8 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
    */
 
   function fictioneer_url_exists( $url ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::url_exists' );
+
     return Utils_Admin::url_exists( $url );
   }
 }
@@ -870,6 +898,8 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
  */
 
 function fictioneer_is_valid_json( $data ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::json_validate' );
+
   return Utils::json_validate( $data );
 }
 
@@ -886,6 +916,8 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
    */
 
   function fictioneer_get_user_by_id_or_email( $id_or_email ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_user_by_id_or_email' );
+
     return Utils::get_user_by_id_or_email( $id_or_email );
   }
 }
@@ -904,6 +936,8 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
  */
 
 function fictioneer_unset_by_value( $value, $array, $strict = false ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::array_unset_by_value' );
+
   Utils::array_unset_by_value( $value, $array, $strict );
 }
 
@@ -926,6 +960,8 @@ if ( ! function_exists( 'fictioneer_minify_css' ) ) {
    */
 
   function fictioneer_minify_css( $string ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::minify_css' );
+
     return Utils::minify_css( $string );
   }
 }
@@ -946,6 +982,8 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
    */
 
   function fictioneer_get_fonts() {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::get_fonts' );
+
     return Fonts::get_fonts();
   }
 }
@@ -967,6 +1005,8 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
    */
 
   function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::get_data' );
+
     return Story::get_data( $story_id, $show_comments, $args );
   }
 }
@@ -987,6 +1027,8 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
  */
 
 function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::get_chapter_posts' );
+
   return Story::get_chapter_posts( $story_id, $args, $full, $slow );
 }
 
@@ -1006,6 +1048,8 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
  */
 
 function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::prepare_chapter_groups' );
+
   return Story::prepare_chapter_groups( $story_id, $chapters );
 }
 
@@ -1025,6 +1069,8 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
  */
 
 function fictioneer_get_story_comment_count( $story_id, $chapter_ids = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::get_story_comment_count' );
+
   return Story::get_story_comment_count( $story_id, $chapter_ids );
 }
 
@@ -1043,6 +1089,8 @@ if ( ! function_exists( 'fictioneer_count_words' ) ) {
    */
 
   function fictioneer_count_words( $post_id, $content = null ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::count_words' );
+
     return Utils_Admin::count_words( $post_id, $content );
   }
 }
@@ -1058,6 +1106,8 @@ if ( ! function_exists( 'fictioneer_count_words' ) ) {
  */
 
 function fictioneer_log( $message, $current_user = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Log::add' );
+
   \Fictioneer\Log::add( $message, $current_user );
 }
 
@@ -1071,6 +1121,8 @@ function fictioneer_log( $message, $current_user = null ) {
  */
 
 function fictioneer_get_log() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Log::get' );
+
   return \Fictioneer\Log::get();
 }
 
@@ -1084,6 +1136,8 @@ function fictioneer_get_log() {
  */
 
 function fictioneer_get_wp_debug_log() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Log::get_debug' );
+
   return \Fictioneer\Log::get_debug();
 }
 
@@ -1101,6 +1155,8 @@ if ( ! function_exists( 'fictioneer_get_validated_ajax_user' ) ) {
    */
 
   function fictioneer_get_validated_ajax_user( $nonce_name = 'nonce', $nonce_value = 'fictioneer_nonce' ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_validated_ajax_user' );
+
     return Utils_Admin::get_validated_ajax_user( $nonce_name, $nonce_value );
   }
 }
@@ -1124,6 +1180,8 @@ if ( ! function_exists( 'fictioneer_bulk_update_post_meta' ) ) {
    */
 
   function fictioneer_bulk_update_post_meta( $post_id, $fields ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::bulk_update_post_meta' );
+
     Utils_Admin::bulk_update_post_meta( $post_id, $fields );
   }
 }
@@ -1145,6 +1203,8 @@ if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
    */
 
   function fictioneer_sql_has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::has_new_story_chapters' );
+
     return Utils_Admin::has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids );
   }
 }
@@ -1164,6 +1224,8 @@ if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
    */
 
   function fictioneer_sql_get_co_authored_story_ids( $author_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_co_authored_story_ids' );
+
     return Utils_Admin::get_co_authored_story_ids( $author_id );
   }
 }
@@ -1184,6 +1246,8 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
    */
 
   function fictioneer_sql_get_chapter_story_selection( $post_author_id, $current_story_id = 0 ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_chapter_story_selection' );
+
     return Utils_Admin::get_chapter_story_selection( $post_author_id, $current_story_id );
   }
 }
@@ -1203,6 +1267,8 @@ if ( ! function_exists( 'fictioneer_sql_get_story_chapter_relationship_data' ) )
    */
 
   function fictioneer_sql_get_story_chapter_relationship_data( $story_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_story_chapter_relationship_data' );
+
     return Utils_admin::get_story_chapter_relationship_data( $story_id );
   }
 }
@@ -1220,6 +1286,8 @@ if ( ! function_exists( 'fictioneer_sql_get_story_chapter_relationship_data' ) )
  */
 
 function fictioneer_sql_update_comment_count( $post_id, $count ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::update_comment_count' );
+
   Utils_Admin::update_comment_count( $post_id, $count );
 }
 
@@ -1240,6 +1308,8 @@ if ( ! function_exists( 'fictioneer_get_user_fingerprint' ) ) {
    */
 
   function fictioneer_get_user_fingerprint( $user_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_user_fingerprint' );
+
     return Utils::get_user_fingerprint( $user_id );
   }
 }
@@ -1264,6 +1334,8 @@ if ( ! function_exists( 'fictioneer_soft_delete_user_comments' ) ) {
    */
 
   function fictioneer_soft_delete_user_comments( $user_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::soft_delete_user_comments' );
+
     return Utils_Admin::soft_delete_user_comments( $user_id );
   }
 }
