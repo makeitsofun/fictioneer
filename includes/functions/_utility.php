@@ -565,22 +565,6 @@ if ( ! function_exists( 'fictioneer_get_icon_field' ) ) {
 }
 
 // =============================================================================
-// UPDATE META FIELDS
-// =============================================================================
-
-/**
- * Return allow list for falsy meta fields
- *
- * @since 5.7.4
- *
- * @return array Meta fields allowed to be saved falsy and not be deleted.
- */
-
-function fictioneer_get_falsy_meta_allow_list() {
-  return apply_filters( 'fictioneer_filter_falsy_meta_allow_list', [] );
-}
-
-// =============================================================================
 // APPEND CHAPTER
 // =============================================================================
 

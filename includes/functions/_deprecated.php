@@ -1597,6 +1597,21 @@ if ( ! function_exists( 'fictioneer_update_post_meta' ) ) {
   }
 }
 
+/**
+ * [Deprecated] Return allow list for falsy meta fields
+ *
+ * @since 5.7.4
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_falsy_meta_allow_list() instead.
+ *
+ * @return array Meta fields allowed to be saved falsy and not be deleted.
+ */
+
+function fictioneer_get_falsy_meta_allow_list() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_falsy_meta_allow_list' );
+
+  return Utils_Admin::get_falsy_meta_allow_list();
+}
+
 // =============================================================================
 // SQL DELEGATES
 // =============================================================================

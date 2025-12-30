@@ -773,7 +773,7 @@ final class Utils_Admin {
     }
 
     // Prepare
-    $allowed_meta_keys = fictioneer_get_falsy_meta_allow_list();
+    $allowed_meta_keys = self::get_falsy_meta_allow_list();
 
     foreach ( $fields as $key => $value ) {
       // Mark for deletion...
@@ -1289,7 +1289,7 @@ final class Utils_Admin {
    */
 
   public static function update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value = '' ) {
-    if ( empty( $meta_value ) && ! in_array( $meta_key, fictioneer_get_falsy_meta_allow_list() ) ) {
+    if ( empty( $meta_value ) && ! in_array( $meta_key, self::get_falsy_meta_allow_list() ) ) {
       return delete_comment_meta( $comment_id, $meta_key );
     } else {
       return update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value );
@@ -1317,7 +1317,7 @@ final class Utils_Admin {
    */
 
   public static function update_user_meta( $user_id, $meta_key, $meta_value, $prev_value = '' ) {
-    if ( empty( $meta_value ) && ! in_array( $meta_key, fictioneer_get_falsy_meta_allow_list() ) ) {
+    if ( empty( $meta_value ) && ! in_array( $meta_key, self::get_falsy_meta_allow_list() ) ) {
       return delete_user_meta( $user_id, $meta_key );
     } else {
       return update_user_meta( $user_id, $meta_key, $meta_value, $prev_value );
@@ -1345,10 +1345,29 @@ final class Utils_Admin {
    */
 
   public static function update_post_meta( $post_id, $meta_key, $meta_value, $prev_value = '' ) {
-    if ( empty( $meta_value ) && ! in_array( $meta_key, fictioneer_get_falsy_meta_allow_list() ) ) {
+    if ( empty( $meta_value ) && ! in_array( $meta_key, self::get_falsy_meta_allow_list() ) ) {
       return delete_post_meta( $post_id, $meta_key );
     } else {
       return update_post_meta( $post_id, $meta_key, $meta_value, $prev_value );
     }
+  }
+
+  /**
+   * Return allow list for falsy meta fields.
+   *
+   * @since 5.7.4
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @return array Meta fields allowed to be saved falsy and not be deleted.
+   */
+
+  public static function get_falsy_meta_allow_list() {
+    static $allow_list = null;
+
+    if ( $allow_list === null ) {
+      $allow_list = (array) apply_filters( 'fictioneer_filter_falsy_meta_allow_list', [] );
+    }
+
+    return $allow_list;
   }
 }

@@ -96,7 +96,7 @@ function fictioneer_rest_get_auth_callback_for_type( $type ) {
   }
 
   $keys_to_delete = [];
-  $allowed_meta_keys = fictioneer_get_falsy_meta_allow_list();
+  $allowed_meta_keys = \Fictioneer\Utils_Admin::get_falsy_meta_allow_list();
 
   foreach ( $request['meta'] as $key => $value ) {
     if (

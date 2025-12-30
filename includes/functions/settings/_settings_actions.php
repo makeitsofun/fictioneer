@@ -1090,7 +1090,7 @@ function fictioneer_tools_optimize_database() {
   fictioneer_migrate_deleted_comments();
 
   // Delete post meta
-  $allowed_meta_keys = fictioneer_get_falsy_meta_allow_list();
+  $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
   $not_like_sql = '';
 
   if ( ! empty( $allowed_meta_keys ) ) {
@@ -1181,7 +1181,7 @@ function fictioneer_tools_optimize_database_preview() {
   global $wpdb;
 
   // Post meta
-  $allowed_meta_keys = fictioneer_get_falsy_meta_allow_list();
+  $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
   $not_like_sql = '';
 
   if ( ! empty( $allowed_meta_keys ) ) {
