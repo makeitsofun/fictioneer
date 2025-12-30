@@ -568,35 +568,6 @@ if ( ! function_exists( 'fictioneer_get_icon_field' ) ) {
 // UPDATE META FIELDS
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_update_user_meta' ) ) {
-  /**
-   * Wrapper to update user meta
-   *
-   * If the meta value is truthy, the meta field is updated as normal.
-   * If not, the meta field is deleted instead to keep the database tidy.
-   *
-   * @since 5.7.3
-   *
-   * @param int    $user_id     The ID of the user.
-   * @param string $meta_key    The meta key to update.
-   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
-   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
-   *                            Otherwise, update all entries. Default empty.
-   *
-   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
-   *                  false on failure or if the value passed to the function is the same as the one
-   *                  that is already in the database.
-   */
-
-  function fictioneer_update_user_meta( $user_id, $meta_key, $meta_value, $prev_value = '' ) {
-    if ( empty( $meta_value ) && ! in_array( $meta_key, fictioneer_get_falsy_meta_allow_list() ) ) {
-      return delete_user_meta( $user_id, $meta_key );
-    } else {
-      return update_user_meta( $user_id, $meta_key, $meta_value, $prev_value );
-    }
-  }
-}
-
 if ( ! function_exists( 'fictioneer_update_post_meta' ) ) {
   /**
    * Wrapper to update post meta

@@ -1181,7 +1181,7 @@ Filters the webhook used for the Discord notification about a new stories.
 ---
 
 ### `apply_filters( 'fictioneer_filter_falsy_meta_allow_list', $allowed )`
-Filters the array of meta keys allowed to be saved as "falsy" ("", 0, null, false, []) instead of being deleted when updated via theme functions. Applies to post, comment, and user meta fields. This does not affect the core update functions. See `fictioneer_update_user_meta(…)`, `\Fictioneer\Utils_Admin::update_comment_meta(…)`, and `fictioneer_update_post_meta(…)`.
+Filters the array of meta keys allowed to be saved as "falsy" ("", 0, null, false, []) instead of being deleted when updated via theme functions. Applies to post, comment, and user meta fields. This does not affect the core update functions. See `\Fictioneer\Utils_Admin::update_user_meta(…)`, `\Fictioneer\Utils_Admin::update_comment_meta(…)`, and `fictioneer_update_post_meta(…)`.
 
 **Parameters:**
 * $allowed (array) – Array of allowed meta keys. Default empty.

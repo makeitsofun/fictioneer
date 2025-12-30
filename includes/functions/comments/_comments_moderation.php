@@ -311,13 +311,13 @@ function fictioneer_edit_comment( $comment_id ) {
   Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_thread_closed', $is_closed );
   Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_marked_offensive', $is_offensive );
   Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_ignore_reports', $ignores_reports );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_avatar', $disable_avatar );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_reporting', $disable_reports );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_renaming', $disable_renaming );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_commenting', $disable_commenting );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_editing', $disable_editing );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_notifications', $disable_notifications );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_always_moderate_comments', $hold_comments );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_avatar', $disable_avatar );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_reporting', $disable_reports );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_renaming', $disable_renaming );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_commenting', $disable_commenting );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_editing', $disable_editing );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_notifications', $disable_notifications );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_always_moderate_comments', $hold_comments );
 }
 
 // Add filters and actions if not disabled

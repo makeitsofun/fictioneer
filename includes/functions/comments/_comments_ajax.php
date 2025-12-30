@@ -362,7 +362,7 @@ function fictioneer_ajax_submit_comment() {
 
   if ( empty( $notification_validator ) ) {
     $notification_validator = time();
-    fictioneer_update_user_meta( wp_get_current_user(), 'fictioneer_comment_reply_validator', $notification_validator );
+    \Fictioneer\Utils_Admin::update_user_meta( wp_get_current_user(), 'fictioneer_comment_reply_validator', $notification_validator );
   }
 
   /*

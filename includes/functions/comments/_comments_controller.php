@@ -327,7 +327,7 @@ function fictioneer_comment_post( $comment_id, $comment_approved, $commentdata )
 
   if ( empty( $notification_validator ) ) {
     $notification_validator = time();
-    fictioneer_update_user_meta( $commentdata['user_id'], 'fictioneer_comment_reply_validator', $notification_validator );
+    Utils_Admin::update_user_meta( $commentdata['user_id'], 'fictioneer_comment_reply_validator', $notification_validator );
   }
 
   // If user opted for email notifications
