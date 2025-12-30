@@ -4722,11 +4722,11 @@ function fictioneer_save_seo_metabox( $post_id, $post ) {
   // Discourage
   if ( isset( $_POST['fictioneer_discourage_search_engines'] ) ) {
     $discourage = Sanitizer::sanitize_bool_num( $_POST['fictioneer_discourage_search_engines'] );
-    fictioneer_update_post_meta( $post_id, 'fictioneer_discourage_search_engines', $discourage );
+    Utils_Admin::update_post_meta( $post_id, 'fictioneer_discourage_search_engines', $discourage );
   }
 
   // Save fields
-  fictioneer_update_post_meta( $post_id, 'fictioneer_seo_fields', $seo_data );
+  Utils_Admin::update_post_meta( $post_id, 'fictioneer_seo_fields', $seo_data );
 
   // Purge meta cache
   delete_post_meta( $post_id, 'fictioneer_seo_cache' );
@@ -5006,7 +5006,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
       }
 
       if ( $tiers === 'remove' ) {
-        fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', 0 );
+        Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', 0 );
       } elseif ( is_array( $tiers ) ) {
         $allowed_tiers = get_option( 'fictioneer_connection_patreon_tiers' );
         $allowed_tiers = is_array( $allowed_tiers ) ? $allowed_tiers : [];
@@ -5017,7 +5017,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
           $tiers = array_unique( $tiers );
           $tiers = array_values( $tiers );
 
-          fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', $tiers );
+          Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', $tiers );
         }
       }
     }
@@ -5030,7 +5030,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
         continue;
       }
 
-      fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_amount', absint( $amount ) );
+      Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_amount', absint( $amount ) );
     }
   }
 }
@@ -5174,7 +5174,7 @@ function fictioneer_save_chapter_bulk_edit( $updated_post_ids, $shared_post_data
       foreach ( $updated_post_ids as $post_id ) {
         reset( $update_fields );
 
-        fictioneer_update_post_meta( $post_id, key( $update_fields ), current( $update_fields ) );
+        Utils_Admin::update_post_meta( $post_id, key( $update_fields ), current( $update_fields ) );
       }
     } else {
       foreach ( $updated_post_ids as $post_id ) {
