@@ -136,6 +136,8 @@ final class Schema {
     $schema = Schema_Node::root();
     $schema['@graph'] = $graph;
 
+    $schema = apply_filters( 'fictioneer_filter_seo_schema', $schema, $post, $image_data );
+
     $schema = wp_json_encode( $schema, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
 
     return $schema;

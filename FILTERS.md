@@ -2479,13 +2479,23 @@ Filters the intermediate output array of the `fictioneer_filter_media_buttons( $
 
 ---
 
+### `apply_filters( 'fictioneer_filter_seo_schema', $schema, $post, $image_data )`
+Filters the SEO schema array before it is encoded as JSON and returned. The schema is then cached, so this filter only applies when the cache becomes invalid or gets deleted.
+
+**Parameters:**
+* $schema (array) – SEO schema graph associative array.
+* $post (WP_Post|null) – Post object of the main query. Unsafe.
+* $image_data (array|false) – Image data of the open graph image (if any). Unsafe.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_splide_breakpoints', $breakpoints, $json_string, $uid )`
 Filters the associative array of Splide breakpoints returned by the `fictioneer_extract_splide_breakpoints()` function. These breakpoints are used to generate dynamic placeholder styles for a specific slider. Modifying the breakpoints at this stage is generally inadvisable, the filter exists primarily for completeness and edge cases.
 
 **Parameters:**
 * $breakpoints (array) – Breakpoint data or empty.
 * $json_string (string) – Stringified Splide JSON.
-* $uid (string|null) – Optional. Unique ID of the target element (only for reference).
+* $uid (string|null) – Unique ID of the target element (only for reference). Unsafe.
 
 ---
 
