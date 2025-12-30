@@ -4,8 +4,6 @@ namespace Fictioneer\SEO;
 
 defined( 'ABSPATH' ) OR exit;
 
-error_log( 'loaded' );
-
 final class Meta {
   private static array $data = array(
     'context' => null,
