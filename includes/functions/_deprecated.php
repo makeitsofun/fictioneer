@@ -28,6 +28,8 @@ use Fictioneer\User;
  */
 
 function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_integer' );
+
   return Sanitizer::sanitize_integer( $value, $default, $min, $max );
 }
 
@@ -42,6 +44,8 @@ function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = 
  */
 
 function fictioneer_sanitize_integer_one_up( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_integer_one_up' );
+
   return Sanitizer::sanitize_integer_one_up( $input );
 }
 
@@ -57,6 +61,8 @@ function fictioneer_sanitize_integer_one_up( $input ) {
  */
 
 function fictioneer_sanitize_words_per_minute( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_integer_words_per_minute' );
+
   return Sanitizer::sanitize_integer_words_per_minute( $input );
 }
 
@@ -72,6 +78,8 @@ function fictioneer_sanitize_words_per_minute( $input ) {
  */
 
 function fictioneer_sanitize_float( $value ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_float' );
+
   return Sanitizer::sanitize_float( $value );
 }
 
@@ -88,6 +96,8 @@ function fictioneer_sanitize_float( $value ) {
  */
 
 function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_float_zero_positive' );
+
   return Sanitizer::sanitize_float_zero_positive( $value,  $default );
 }
 
@@ -103,6 +113,8 @@ function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
  */
 
 function fictioneer_sanitize_positive_float_def1( $value ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_float_zero_positive_def1' );
+
   return Sanitizer::sanitize_float_zero_positive_def1( $value );
 }
 
@@ -118,6 +130,8 @@ function fictioneer_sanitize_positive_float_def1( $value ) {
  */
 
 function fictioneer_sanitize_checkbox( $value ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_bool' );
+
   return Sanitizer::sanitize_bool( $value, true );
 }
 
@@ -125,7 +139,7 @@ function fictioneer_sanitize_checkbox( $value ) {
  * [Deprecated] Explode string into an array.
  *
  * @since 5.1.3
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list() in comma-mode instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list( ..., ..., 'comma' ) instead.
  *
  * @param string $string  The string to explode.
  *
@@ -133,6 +147,8 @@ function fictioneer_sanitize_checkbox( $value ) {
  */
 
 function fictioneer_explode_list( $string ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::parse_list( ..., ..., "comma" )' );
+
   return Utils::parse_list( $string, null, 'comma' );
 }
 
@@ -140,7 +156,7 @@ function fictioneer_explode_list( $string ) {
  * [Deprecated] Sanitize (and transform) a comma-separated list into an array.
  *
  * @since 5.15.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list() in comma-mode instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list( ..., ..., 'comma' ) instead.
  *
  * @param string $input  The comma-separated list.
  * @param array  $args   Deprecated. Optional flags ('unique', 'absint').
@@ -149,6 +165,8 @@ function fictioneer_explode_list( $string ) {
  */
 
 function fictioneer_sanitize_list_into_array( $input, $args = []  ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::parse_list( ..., ..., "comma" )' );
+
   $list = Utils::parse_list( $input, ( $args['absint'] ?? 0 ) ? 'absint' : null, 'comma' );
 
   if ( $args['unique'] ?? 0 ) {
@@ -170,6 +188,8 @@ function fictioneer_sanitize_list_into_array( $input, $args = []  ) {
  */
 
 function fictioneer_sanitize_comma_separated_ids( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', 'wp_parse_id_list' );
+
   return wp_parse_id_list( $input );
 }
 
@@ -186,6 +206,8 @@ function fictioneer_sanitize_comma_separated_ids( $input ) {
  */
 
 function fictioneer_sanitize_global_patreon_tiers( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', 'wp_parse_id_list' );
+
   return wp_parse_id_list( $input );
 }
 
@@ -203,6 +225,8 @@ function fictioneer_sanitize_global_patreon_tiers( $input ) {
  */
 
 function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_url' );
+
   return Sanitizer::sanitize_url( $url, $match, $preg_match );
 }
 
@@ -219,6 +243,8 @@ function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
  */
 
 function fictioneer_sanitize_patreon_url( $url ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_url' );
+
   return Sanitizer::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
 }
 
@@ -236,6 +262,8 @@ function fictioneer_sanitize_patreon_url( $url ) {
  */
 
 function fictioneer_sanitize_selection( $value, $allowed_options, $default = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_selection' );
+
   return Sanitizer::sanitize_selection( $value, $allowed_options, $default );
 }
 
@@ -252,6 +280,8 @@ function fictioneer_sanitize_selection( $value, $allowed_options, $default = nul
  */
 
 function fictioneer_sanitize_css( $css ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_css' );
+
   return Sanitizer::sanitize_css( $css );
 }
 
@@ -275,6 +305,8 @@ function fictioneer_sanitize_css( $css ) {
  */
 
 function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args = [] ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_query_var' );
+
   return Sanitizer::sanitize_query_var( $var, $allowed, $default, $args );
 }
 
@@ -293,6 +325,8 @@ function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args =
  */
 
 function fictioneer_sanitize_post_type( $post_type ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_post_type' );
+
   return Sanitizer::sanitize_post_type( $post_type );
 }
 
@@ -310,6 +344,8 @@ function fictioneer_sanitize_post_type( $post_type ) {
  */
 
 function fictioneer_sanitize_editor( $content ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_meta_field_editor' );
+
   return Sanitizer::sanitize_meta_field_editor( $content );
 }
 
@@ -325,6 +361,8 @@ function fictioneer_sanitize_editor( $content ) {
  */
 
 function fictioneer_sanitize_image_id( $id ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_image_id' );
+
   return Sanitizer::sanitize_image_id( $id );
 }
 
@@ -340,6 +378,8 @@ function fictioneer_sanitize_image_id( $id ) {
  */
 
 function fictioneer_sanitize_icon_html( $html ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_icon_html' );
+
   return Sanitizer::sanitize_icon_html( $html );
 }
 
@@ -357,6 +397,8 @@ function fictioneer_sanitize_icon_html( $html ) {
  */
 
 function fictioneer_sanitize_safe_title( $title, $date, $time ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_safe_title' );
+
   return Sanitizer::sanitize_safe_title( $title, $date, $time );
 }
 
@@ -372,6 +414,8 @@ function fictioneer_sanitize_safe_title( $title, $date, $time ) {
  */
 
 function fictioneer_sanitize_page_id( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::sanitize_page_id' );
+
   return Sanitizer_Admin::sanitize_page_id( $input );
 }
 
@@ -387,6 +431,8 @@ function fictioneer_sanitize_page_id( $input ) {
  */
 
 function fictioneer_sanitize_absint_or_empty_string( $input ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string' );
+
   return Sanitizer_Admin::sanitize_absint_or_empty_string( $input );
 }
 
