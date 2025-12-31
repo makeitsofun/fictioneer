@@ -124,7 +124,7 @@ if ( ! wp_doing_ajax() ) {
 
 function fictioneer_ajax_toggle_follow() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_toggle_follow' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_toggle_follow' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
@@ -189,7 +189,7 @@ if ( get_option( 'fictioneer_enable_follows' ) ) {
 
 function fictioneer_ajax_clear_my_follows() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_follows' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_clear_my_follows' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_follows' );

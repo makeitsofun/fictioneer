@@ -129,7 +129,7 @@ if ( ! wp_doing_ajax() ) {
 
 function fictioneer_ajax_set_checkmark() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_set_checkmark', 30 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_set_checkmark', 30 );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
@@ -198,7 +198,7 @@ if ( get_option( 'fictioneer_enable_checkmarks' ) ) {
 
 function fictioneer_ajax_clear_my_checkmarks() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_checkmarks' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_clear_my_checkmarks' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_checkmarks' );

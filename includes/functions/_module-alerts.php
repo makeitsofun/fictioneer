@@ -549,7 +549,7 @@ function fictioneer_get_alerts( $args = [] ) {
 
 function fictioneer_ajax_mark_alert_read() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_mark_alert_read' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_mark_alert_read' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();

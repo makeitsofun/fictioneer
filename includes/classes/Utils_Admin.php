@@ -1361,7 +1361,7 @@ final class Utils_Admin {
    * @return array Meta fields allowed to be saved falsy and not be deleted.
    */
 
-  public static function get_falsy_meta_allow_list() {
+  public static function get_falsy_meta_allow_list() : array {
     static $allow_list = null;
 
     if ( $allow_list === null ) {
@@ -1369,5 +1369,50 @@ final class Utils_Admin {
     }
 
     return $allow_list;
+  }
+
+  /**
+   * Check rate limit globally or for an action via the session.
+   *
+   * @since 5.7.1
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string   $action  The action to check for rate-limiting.
+   *                          Defaults to 'fictioneer_global'.
+   * @param int|null $max     Optional. Maximum number of requests.
+   *                          Defaults to FICTIONEER_REQUESTS_PER_MINUTE.
+   */
+
+  public static function check_rate_limit( $action = 'fictioneer_global', $max = null ) {
+    if ( ! get_option( 'fictioneer_enable_rate_limits' ) ) {
+      return;
+    }
+
+    if ( session_status() == PHP_SESSION_NONE ) {
+      session_start();
+    }
+
+    if ( ! isset( $_SESSION[ $action ]['request_times'] ) ) {
+      $_SESSION[ $action ]['request_times'] = [];
+    }
+
+    $current_time = microtime( true );
+    $time_window = 60;
+    $max = $max ? absint( $max ) : FICTIONEER_REQUESTS_PER_MINUTE;
+    $max = max( 1, $max );
+
+    $_SESSION[ $action ]['request_times'] = array_filter(
+      $_SESSION[ $action ]['request_times'],
+      function ( $time ) use ( $current_time, $time_window ) {
+        return ( $current_time - $time ) < $time_window;
+      }
+    );
+
+    if ( count( $_SESSION[ $action ]['request_times'] ) >= $max ) {
+      http_response_code( 429 ); // Too many requests
+      exit;
+    }
+
+    $_SESSION[ $action ]['request_times'][] = $current_time;
   }
 }

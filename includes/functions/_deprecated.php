@@ -1612,6 +1612,24 @@ function fictioneer_get_falsy_meta_allow_list() {
   return Utils_Admin::get_falsy_meta_allow_list();
 }
 
+/**
+ * [Deprecated] Check rate limit globally or for an action via the session.
+ *
+ * @since 5.7.1
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::check_rate_limit() instead.
+ *
+ * @param string   $action  The action to check for rate-limiting.
+ *                          Defaults to 'fictioneer_global'.
+ * @param int|null $max     Optional. Maximum number of requests.
+ *                          Defaults to FICTIONEER_REQUESTS_PER_MINUTE.
+ */
+
+function fictioneer_check_rate_limit( $action = 'fictioneer_global', $max = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::check_rate_limit' );
+
+  Utils_Admin::check_rate_limit( $action, $max );
+}
+
 // =============================================================================
 // SQL DELEGATES
 // =============================================================================

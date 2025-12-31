@@ -15,7 +15,7 @@ use Fictioneer\Utils_Admin;
 
 function fictioneer_ajax_get_user_data() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_get_user_data', 30 );
+  Utils_Admin::check_rate_limit( 'fictioneer_ajax_get_user_data', 30 );
 
   // Setup
   $logged_in = is_user_logged_in();

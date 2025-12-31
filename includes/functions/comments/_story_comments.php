@@ -166,7 +166,7 @@ add_action( 'rest_api_init', 'fictioneer_register_endpoint_get_story_comments' )
 
 function fictioneer_rest_get_story_comments( WP_REST_Request $request ) {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_rest_get_story_comments', 10 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_rest_get_story_comments', 10 );
 
   // Validations
   $story_id = $request->get_param( 'post_id' );

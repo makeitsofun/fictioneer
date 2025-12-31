@@ -21,7 +21,7 @@ function fictioneer_ajax_save_skins() {
     wp_send_json_error( null, 403 );
   }
 
-  fictioneer_check_rate_limit( 'fictioneer_ajax_save_skins', 5 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_save_skins', 5 );
 
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
@@ -108,7 +108,7 @@ function fictioneer_ajax_get_skins() {
   }
 
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_get_skins', 5 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_get_skins', 5 );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();

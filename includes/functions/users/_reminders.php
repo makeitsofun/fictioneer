@@ -60,7 +60,7 @@ if ( ! wp_doing_ajax() ) {
 
 function fictioneer_ajax_toggle_reminder() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_toggle_reminder' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_toggle_reminder' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
@@ -125,7 +125,7 @@ if ( get_option( 'fictioneer_enable_reminders' ) ) {
 
 function fictioneer_ajax_clear_my_reminders() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_reminders' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_clear_my_reminders' );
 
   // Setup and validations
   $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_reminders' );
