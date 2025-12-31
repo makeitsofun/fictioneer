@@ -1436,7 +1436,6 @@ final class Utils_Admin {
    */
 
   public static function balance_pagination_array( $pages, $current, $keep = 2, $ellipses = '…' ) : array {
-    // Setup
     $max_pages = is_array( $pages ) ? count( $pages ) : $pages;
     $steps = is_array( $pages ) ? $pages : [];
 
@@ -1471,5 +1470,77 @@ final class Utils_Admin {
     }
 
     return $steps;
+  }
+
+  /**
+   * Check whether a comment contains disallowed characters or words and
+   * returns the offenders within the comment content.
+   *
+   * @since 5.0.0
+   * @since 5.34.0 - Refactored and moved into Utils_Admin class.
+   *
+   * @param string $author      The author of the comment.
+   * @param string $email       The email of the comment.
+   * @param string $url         The url used in the comment.
+   * @param string $comment     The comment content
+   * @param string $user_ip     The comment author's IP address.
+   * @param string $user_agent  The author's browser user agent.
+   *
+   * @return array Tuple of true/false [0] and offenders [1] as array.
+   */
+
+  public static function check_comment_disallowed_list( $author, $email, $url, $comment, $user_ip, $user_agent ) : array {
+    $mod_keys = trim( get_option( 'disallowed_keys' ) );
+
+    if ( '' === $mod_keys ) {
+      return [false, []]; // If moderation keys are empty.
+    }
+
+    $comment = (string) $comment;
+    $comment_without_html = wp_strip_all_tags( $comment );
+
+    $fields = array(
+      (string) $author,
+      (string) $email,
+      (string) $url,
+      $comment,
+      $comment_without_html,
+      (string) $user_ip,
+      (string) $user_agent
+    );
+
+    $words = (array) preg_split( '/\r\n|\r|\n/', $mod_keys );
+
+    $offenders = [];
+
+    foreach ( $words as $word ) {
+      $word = trim( (string) $word );
+
+      if ( empty( $word ) ) {
+        continue;
+      }
+
+      $pattern = '#' . preg_quote( $word, '#' ) . '#i';
+
+      foreach ( $fields as $field ) {
+        if ( $field === '' ) {
+          continue;
+        }
+
+        if ( preg_match( $pattern, $field, $matches ) ) {
+          $offenders[] = $matches[0];
+
+          break;
+        }
+      }
+    }
+
+    if ( empty( $offenders ) ) {
+      return [false, []];
+    }
+
+    $offenders = array_values( array_unique( $offenders ) );
+
+    return [true, $offenders];
   }
 }

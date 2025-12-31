@@ -842,69 +842,6 @@ if ( ! function_exists( 'fictioneer_is_commenting_disabled' ) ) {
 }
 
 // =============================================================================
-// CHECK DISALLOWED KEYS WITH OFFENSES RETURNED
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_check_comment_disallowed_list' ) ) {
-  /**
-   * Checks whether a comment contains disallowed characters or words and
-   * returns the offenders within the comment content
-   *
-   * @since 5.0.0
-   *
-   * @param string $author      The author of the comment.
-   * @param string $email       The email of the comment.
-   * @param string $url         The url used in the comment.
-   * @param string $comment     The comment content
-   * @param string $user_ip     The comment author's IP address.
-   * @param string $user_agent  The author's browser user agent.
-   *
-   * @return array Tuple of true/false [0] and offenders [1] as array.
-   */
-
-  function fictioneer_check_comment_disallowed_list( $author, $email, $url, $comment, $user_ip, $user_agent ) {
-    // Implementation is the same as wp_check_comment_disallowed_list(...)
-    $mod_keys = trim( get_option( 'disallowed_keys' ) );
-
-    if ( '' === $mod_keys ) {
-      return [false, []]; // If moderation keys are empty.
-    }
-
-    // Ensure HTML tags are not being used to bypass the list of disallowed characters and words.
-    $comment_without_html = wp_strip_all_tags( $comment );
-
-    $words = preg_split( '/\r\n|\r|\n/', $mod_keys );
-
-    foreach ( (array) $words as $word ) {
-      $word = trim( $word );
-
-      // Skip empty lines.
-      if ( empty( $word ) ) {
-        continue;
-      }
-
-      // Do some escaping magic so that '#' chars in the spam words don't break things:
-      $word = preg_quote( $word, '#' );
-      $matches = false;
-
-      $pattern = "#$word#i";
-      if ( preg_match( $pattern, $author )
-        || preg_match( $pattern, $email )
-        || preg_match( $pattern, $url )
-        || preg_match( $pattern, $comment, $matches )
-        || preg_match( $pattern, $comment_without_html, $matches )
-        || preg_match( $pattern, $user_ip )
-        || preg_match( $pattern, $user_agent )
-      ) {
-        return [true, $matches];
-      }
-    }
-
-    return [false, []];
-  }
-}
-
-// =============================================================================
 // BBCODES
 // =============================================================================
 

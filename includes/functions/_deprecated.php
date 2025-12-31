@@ -1655,6 +1655,31 @@ function fictioneer_balance_pagination_array( $pages, $current, $keep = 2, $elli
   return \Fictioneer\Utils_Admin::balance_pagination_array( $pages, $current, $keep, $ellipses );
 }
 
+if ( ! function_exists( 'fictioneer_check_comment_disallowed_list' ) ) {
+  /**
+   * [Deprecated] Check whether a comment contains disallowed characters or words and
+   * returns the offenders within the comment content.
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::check_comment_disallowed_list() instead.
+   *
+   * @param string $author      The author of the comment.
+   * @param string $email       The email of the comment.
+   * @param string $url         The url used in the comment.
+   * @param string $comment     The comment content
+   * @param string $user_ip     The comment author's IP address.
+   * @param string $user_agent  The author's browser user agent.
+   *
+   * @return array Tuple of true/false [0] and offenders [1] as array.
+   */
+
+  function fictioneer_check_comment_disallowed_list( $author, $email, $url, $comment, $user_ip, $user_agent ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::check_comment_disallowed_list' );
+
+    return Utils_Admin::check_comment_disallowed_list( $author, $email, $url, $comment, $user_ip, $user_agent );
+  }
+}
+
 // =============================================================================
 // SQL DELEGATES
 // =============================================================================

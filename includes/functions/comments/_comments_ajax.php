@@ -303,7 +303,7 @@ function fictioneer_ajax_submit_comment() {
 
   // Check against disallow list (Settings > Discussion) if not admin
   if ( ! fictioneer_is_admin( $user->ID ) ) {
-    $offenders = fictioneer_check_comment_disallowed_list(
+    $offenders = \Fictioneer\Utils_Admin::check_comment_disallowed_list(
       $comment_data['author'] ?? '',
       $comment_data['email'] ?? '',
       '',
@@ -499,7 +499,7 @@ function fictioneer_ajax_edit_comment() {
 
   // Check against disallow list (Settings > Discussion) if not admin
   if ( ! fictioneer_is_admin( $user->ID ) ) {
-    $offenders = fictioneer_check_comment_disallowed_list( '', '', '', $_POST['content'], '', '' );
+    $offenders = \Fictioneer\Utils_Admin::check_comment_disallowed_list( '', '', '', $_POST['content'], '', '' );
 
     // Only show error for keys in content, no need to tell
     // someone his name or email address is blocked, etc.
