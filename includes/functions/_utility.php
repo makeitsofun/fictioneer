@@ -799,66 +799,6 @@ function fcntr( $key, $escape = false ) {
 }
 
 // =============================================================================
-// BALANCE PAGINATION ARRAY
-// =============================================================================
-
-/**
- * Balances pagination array
- *
- * Takes an number array of pagination pages and balances the items around the
- * current page number, replacing anything above the keep threshold with ellipses.
- * E.g. 1 … 7, 8, [9], 10, 11 … 20.
- *
- * @since 5.0.0
- *
- * @param array|int $pages     Array of pages to balance. If an integer is provided,
- *                             it is converted to a number array.
- * @param int       $current   Current page number.
- * @param int       $keep      Optional. Balancing factor to each side. Default 2.
- * @param string    $ellipses  Optional. String for skipped numbers. Default '…'.
- *
- * @return array The balanced array.
- */
-
-function fictioneer_balance_pagination_array( $pages, $current, $keep = 2, $ellipses = '…' ) {
-  // Setup
-  $max_pages = is_array( $pages ) ? count( $pages ) : $pages;
-  $steps = is_array( $pages ) ? $pages : [];
-
-  if ( ! is_array( $pages ) ) {
-    for ( $i = 1; $i <= $max_pages; $i++ ) {
-      $steps[] = $i;
-    }
-  }
-
-  // You know, I wrote this but don't really get it myself...
-  if ( $max_pages - $keep * 2 > $current ) {
-    $start = $current + $keep;
-    $end = $max_pages - $keep + 1;
-
-    for ( $i = $start; $i < $end; $i++ ) {
-      unset( $steps[ $i ] );
-    }
-
-    array_splice( $steps, count( $steps ) - $keep + 1, 0, $ellipses );
-  }
-
-  // It certainly does math...
-  if ( $current - $keep * 2 >= $keep ) {
-    $start = $keep - 1;
-    $end = $current - $keep - 1;
-
-    for ( $i = $start; $i < $end; $i++ ) {
-      unset( $steps[ $i ] );
-    }
-
-    array_splice( $steps, $keep - 1, 0, $ellipses );
-  }
-
-  return $steps;
-}
-
-// =============================================================================
 // CHECK WHETHER COMMENTING IS DISABLED
 // =============================================================================
 

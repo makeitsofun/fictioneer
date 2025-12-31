@@ -1630,6 +1630,31 @@ function fictioneer_check_rate_limit( $action = 'fictioneer_global', $max = null
   Utils_Admin::check_rate_limit( $action, $max );
 }
 
+/**
+ * [Deprecated] Balance pagination array.
+ *
+ * Takes an number array of pagination pages and balances the items around the
+ * current page number, replacing anything above the keep threshold with ellipses.
+ * E.g. 1 … 7, 8, [9], 10, 11 … 20.
+ *
+ * @since 5.0.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::balance_pagination_array() instead.
+ *
+ * @param array|int $pages     Array of pages to balance. If an integer is provided,
+ *                             it is converted to a number array.
+ * @param int       $current   Current page number.
+ * @param int       $keep      Optional. Balancing factor to each side. Default 2.
+ * @param string    $ellipses  Optional. String for skipped numbers. Default '…'.
+ *
+ * @return array The balanced array.
+ */
+
+function fictioneer_balance_pagination_array( $pages, $current, $keep = 2, $ellipses = '…' ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::balance_pagination_array' );
+
+  return \Fictioneer\Utils_Admin::balance_pagination_array( $pages, $current, $keep, $ellipses );
+}
+
 // =============================================================================
 // SQL DELEGATES
 // =============================================================================

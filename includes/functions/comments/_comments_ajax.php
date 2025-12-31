@@ -162,7 +162,7 @@ function fictioneer_ajax_get_comment_section() {
     // Start HTML ---> ?>
     <nav class="pagination comments-pagination _padding-top">
       <?php
-        $steps = fictioneer_balance_pagination_array( $max_pages, $page );
+        $steps = \Fictioneer\Utils_Admin::balance_pagination_array( $max_pages, $page );
 
         foreach ( $steps as $step ) {
           switch ( $step ) {
