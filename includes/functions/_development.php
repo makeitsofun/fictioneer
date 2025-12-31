@@ -94,7 +94,7 @@ function fictioneer_generate_test_comments( $post_id, $number = 3 ) {
 }
 
 /**
- * Generate a test users, stories, and chapters.
+ * Generate test users, stories, and chapters.
  *
  * @since 5.23.1
  */
@@ -218,8 +218,6 @@ function fictioneer_generate_test_content() {
   fictioneer_delete_transients_like( 'fictioneer_' );
 
   fictioneer_clear_all_cached_partials();
-
-  update_option( 'fictioneer_story_or_chapter_updated_timestamp', time() * 1000 );
 
   // Finish
   wp_die( 'Done' );

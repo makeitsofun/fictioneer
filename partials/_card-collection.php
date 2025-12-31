@@ -26,7 +26,7 @@ $excerpt = fictioneer_first_paragraph_as_excerpt(
   fictioneer_get_content_field( 'fictioneer_collection_description', $post_id )
 );
 $excerpt = empty( $excerpt ) ? fictioneer_get_excerpt( $post_id ) : $excerpt;
-$statistics = fictioneer_get_collection_statistics( $post_id );
+$statistics = \Fictioneer\Stats::get_collection_statistics( $post_id );
 $items = get_post_meta( $post_id, 'fictioneer_collection_items', true );
 $items = empty( $items ) ? [] : $items;
 $card_classes = [];

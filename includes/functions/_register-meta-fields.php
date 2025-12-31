@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 
 // =============================================================================
 // AUTH CALLBACKS
@@ -95,7 +96,7 @@ function fictioneer_rest_get_auth_callback_for_type( $type ) {
   }
 
   $keys_to_delete = [];
-  $allowed_meta_keys = fictioneer_get_falsy_meta_allow_list();
+  $allowed_meta_keys = \Fictioneer\Utils_Admin::get_falsy_meta_allow_list();
 
   foreach ( $request['meta'] as $key => $value ) {
     if (
@@ -1192,16 +1193,16 @@ function fictioneer_register_chapter_meta_fields() {
     'fcn_chapter',
     'fictioneer_chapter_story',
     array(
-      'type' => ['integer', 'string'],
+      'type' => 'string',
       'single' => true,
       'show_in_rest' => array(
         'schema' => array(
-          'type' => 'integer',
+          'type' => 'string',
           'default' => ''
         )
       ),
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
-        return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
+        return ! wp_doing_cron() && fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
       'sanitize_callback' => function( $meta_value ) {
         $meta_value = fictioneer_validate_id( $meta_value, 'fcn_story' );
@@ -1223,7 +1224,7 @@ function fictioneer_register_chapter_meta_fields() {
         }
 
         if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
-          $co_authored_ids = fictioneer_sql_get_co_authored_story_ids( $user_id );
+          $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
 
           if (
             $story_author_id != $user_id &&
@@ -1662,7 +1663,7 @@ function fictioneer_register_collection_meta_fields() {
           return [];
         }
 
-        $meta_value = fictioneer_sql_filter_valid_collection_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_collection_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];
@@ -1825,7 +1826,7 @@ function fictioneer_register_post_meta_fields() {
           return [];
         }
 
-        $meta_value = fictioneer_sql_filter_valid_featured_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_featured_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];
@@ -1859,7 +1860,7 @@ function fictioneer_register_post_meta_fields() {
           return [];
         }
 
-        $meta_value = fictioneer_sql_filter_valid_blog_story_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_blog_story_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];

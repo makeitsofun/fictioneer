@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // FIX COMMENT POST REDIRECT
@@ -326,7 +327,7 @@ function fictioneer_comment_post( $comment_id, $comment_approved, $commentdata )
 
   if ( empty( $notification_validator ) ) {
     $notification_validator = time();
-    fictioneer_update_user_meta( $commentdata['user_id'], 'fictioneer_comment_reply_validator', $notification_validator );
+    Utils_Admin::update_user_meta( $commentdata['user_id'], 'fictioneer_comment_reply_validator', $notification_validator );
   }
 
   // If user opted for email notifications
@@ -527,8 +528,8 @@ if ( ! function_exists( 'fictioneer_unsubscribe_from_comment' ) ) {
     // Unsubscribe if code matches
     if ( $code == get_comment_meta( $comment->comment_ID, 'fictioneer_notifications_reset', true ) ) {
       // Remove meta
-      fictioneer_update_comment_meta( $comment->comment_ID, 'fictioneer_send_notifications', false );
-      fictioneer_update_comment_meta( $comment->comment_ID, 'fictioneer_notifications_reset', false );
+      Utils_Admin::update_comment_meta( $comment->comment_ID, 'fictioneer_send_notifications', false );
+      Utils_Admin::update_comment_meta( $comment->comment_ID, 'fictioneer_notifications_reset', false );
 
       // Comment data
       $title = get_the_title( $comment->comment_post_ID );

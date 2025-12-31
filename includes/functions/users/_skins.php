@@ -1,13 +1,14 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // AJAX: SAVE SKINS FOR USERS
 // =============================================================================
 
 /**
- * AJAX: Saves skins JSON
+ * AJAX: Save skins JSON.
  *
  * Note: Skins are not evaluated server-side, only stored as JSON string.
  * Everything else happens client-side.
@@ -16,32 +17,33 @@ use Fictioneer\Sanitizer;
  */
 
 function fictioneer_ajax_save_skins() {
-  // Enabled?
   if ( ! get_option( 'fictioneer_enable_css_skins' ) ) {
     wp_send_json_error( null, 403 );
   }
 
-  // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_save_skins', 5 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_save_skins', 5 );
 
-  // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
   }
 
-  if ( empty( $_POST['skins'] ?? 0 ) ) {
+  $skins = $_POST['skins'] ?? '';
+
+  if ( $skins === '' ) {
     wp_send_json_error( array( 'error' => 'Missing arguments.' ) );
   }
 
-  // Sanitize
-  $skins = sanitize_text_field( $_POST['skins'] );
+  $skins = wp_check_invalid_utf8( $skins, true );
 
-  if ( $skins && fictioneer_is_valid_json( wp_unslash( $skins ) ) ) {
-    // Inspect
+  if ( $skins === '' ) {
+    wp_send_json_error( array( 'error' => 'Invalid encoding.' ) );
+  }
+
+  if ( $skins && Utils::json_validate( wp_unslash( $skins ) ) ) {
     $decoded = json_decode( wp_unslash( $skins ), true );
-    $fingerprint = fictioneer_get_user_fingerprint( $user->ID );
+    $fingerprint = Utils::get_user_fingerprint( $user->ID );
 
     if ( ! $decoded || ! isset( $decoded['data'] ) ) {
       wp_send_json_error( array( 'error' => 'Invalid JSON (SKIN-001).' ) );
@@ -67,18 +69,17 @@ function fictioneer_ajax_save_skins() {
       $allowed_keys = ['name', 'author', 'version', 'css'];
 
       foreach ( $sub_array as $sub_key => $value ) {
-        if ( ! in_array( $sub_key, $allowed_keys ) ) {
+        if ( ! in_array( $sub_key, $allowed_keys, true ) ) {
           wp_send_json_error( array( 'error' => 'Invalid JSON (SKIN-006).' ) );
         }
 
-        if ( $sub_key === 'css' && Sanitizer::sanitize_css( $value ) === '' ) {
+        if ( $sub_key === 'css' && Sanitizer::sanitize_css( wp_unslash( $value ), true, false ) === '' ) {
           wp_send_json_error( array( 'error' => 'Invalid CSS (SKIN-007).' ) );
         }
       }
     }
 
-    // Easier than checking whether the skins have changed
-    delete_user_meta( $user->ID, 'fictioneer_skins' );
+    delete_user_meta( $user->ID, 'fictioneer_skins' ); // Just easier this way
 
     if ( update_user_meta( $user->ID, 'fictioneer_skins', $skins ) ) {
       wp_send_json_success( array( 'message' => __( 'Skins uploaded successfully.', 'fictioneer' ) ) );
@@ -87,7 +88,6 @@ function fictioneer_ajax_save_skins() {
     }
   }
 
-  // Something went wrong if we end up here...
   wp_send_json_error( array( 'error' => 'An unknown error occurred.' ) );
 }
 
@@ -108,10 +108,10 @@ function fictioneer_ajax_get_skins() {
   }
 
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_get_skins', 5 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_get_skins', 5 );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );

@@ -25,7 +25,7 @@ if ( ! $story_id || $is_hidden || post_password_required( $story_id ) ) {
 }
 
 // Get story data
-$story = fictioneer_get_story_data( $story_id, false ); // Does not refresh comment count!
+$story = \Fictioneer\Story::get_data( $story_id, false ); // Does not refresh comment count!
 $chapters = fictioneer_get_story_chapter_ids( $story_id );
 
 // Feed title
@@ -45,7 +45,7 @@ $description = sprintf(
 $date = mysql2date( 'D, d M Y H:i:s +0000', get_post_modified_time( 'Y-m-d H:i:s', true, $story_id ), false );
 
 // Cover image
-$cover = fictioneer_get_seo_image( $story_id );
+$cover = \Fictioneer\SEO\Meta::image( $story_id );
 
 // Set header
 header( 'Content-Type: ' . feed_content_type( 'rss-http' ) . '; charset=' . get_option( 'blog_charset' ), true );
@@ -184,7 +184,7 @@ do_action( 'rss_tag_pre', 'rss2' );
 
           // Data
           $pub_date = mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false );
-          $og_image = fictioneer_get_seo_image( $post_id );
+          $og_image = \Fictioneer\SEO\Meta::image( $post_id );
 
           // <-- Start HTML
           ?>

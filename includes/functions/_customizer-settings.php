@@ -1,6 +1,8 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
+use Fictioneer\Customizer;
 
 // =============================================================================
 // WATCH FOR CUSTOMIZER UPDATES
@@ -23,7 +25,7 @@ function fictioneer_watch_for_customizer_updates() {
   wp_cache_flush();
 
   // Rebuild customize stylesheet
-  fictioneer_build_customize_css();
+  Customizer::build_customizer_css();
 
   // Rebuild dynamic scripts
   fictioneer_build_dynamic_scripts();
@@ -32,7 +34,7 @@ function fictioneer_watch_for_customizer_updates() {
   fictioneer_clear_all_cached_partials();
 
   // Files
-  $bundled_fonts = fictioneer_get_theme_cache_dir( 'watch_for_customizer_updates' ) . '/bundled-fonts.css';
+  $bundled_fonts = Utils::get_cache_dir( 'watch_for_customizer_updates' ) . 'bundled-fonts.css';
 
   if ( file_exists( $bundled_fonts ) ) {
     unlink( $bundled_fonts );
@@ -59,7 +61,7 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
 // =============================================================================
 
 /**
- * Helper to add color theme option
+ * Helper to add color theme option.
  *
  * @since 5.12.0
  * @since 5.21.2 - Improved with theme colors helper function.
@@ -69,7 +71,7 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
  */
 
 function fictioneer_add_color_theme_option( $manager, $args ) {
-  $fictioneer_colors = fictioneer_get_theme_colors_array();
+  $fictioneer_colors = Utils::get_theme_colors();
   $default = $args['default'] ?? $fictioneer_colors[ $args['setting'] ]['hex'] ?? '';
 
   $manager->add_setting(
@@ -3187,7 +3189,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
 
 function fictioneer_add_fonts_customizer_settings( $manager ) {
   // Setup
-  $fonts = fictioneer_get_font_data();
+  $fonts = Utils::get_font_data();
   $font_options = array( 'system' => __( 'System Font', 'fictioneer' ) );
   $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
   $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];

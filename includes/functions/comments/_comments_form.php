@@ -110,9 +110,6 @@ function fictioneer_change_comment_fields( $fields ) {
   // Rebuild email field
   $fields['email'] = '<div class="comment-form-email"><input type="email" name="email" data-lpignore="true" value="' . esc_attr( $commenter['comment_author_email'] ) . '" maxlength="100" aria-describedby="email-notes" placeholder="' . $email_placeholder . '"' . $required_attribute . ' data-fictioneer-comment-form-target="email"></div>';
 
-  // Open .fictioneer-respond__checkboxes wrapper
-  $fields['checkboxes'] = '<div class="fictioneer-respond__form-checkboxes fictioneer-respond__form-bottom-block">';
-
   // Rebuild cookies field (ignores 'show_comments_cookies_opt_in' and is always enabled)
   $fields['cookies'] = '<label class="comment-form-cookies-consent fictioneer-respond__checkbox-label-pair"><input name="wp-comment-cookies-consent" type="checkbox" value="yes"' . $cookie_checked_attribute . '  data-fictioneer-comment-form-target="cookies"><span>' . fcntr( 'save_in_cookie' ) . '</span></label>';
 
@@ -123,12 +120,16 @@ function fictioneer_change_comment_fields( $fields ) {
     $privacy_policy = '<label class="comment-form-privacy-policy-consent fictioneer-respond__checkbox-label-pair"><input name="fictioneer-privacy-policy-consent" type="checkbox" value="1" required' . $cookie_checked_attribute . ' data-fictioneer-comment-form-target="privacyPolicy"><span>' . sprintf( fcntr( 'accept_privacy_policy' ), $privacy_policy_link ) . '</span></label>';
   }
 
-  // Append checkboxes and close .fictioneer-respond__checkboxes wrapper
-  if ( get_option( 'show_comments_cookies_opt_in' ) ) {
-    $fields['checkboxes'] .= $fields['cookies'];
-  }
+  // Wrap in .fictioneer-respond__checkboxes
+  if ( ! is_user_logged_in() ) {
+    $fields['checkboxes'] = '<div class="fictioneer-respond__form-checkboxes fictioneer-respond__form-bottom-block hide-if-logged-in">';
 
-  $fields['checkboxes'] .= $privacy_policy . '</div>';
+    if ( get_option( 'show_comments_cookies_opt_in' ) ) {
+      $fields['checkboxes'] .= $fields['cookies'];
+    }
+
+    $fields['checkboxes'] .= $privacy_policy . '</div>';
+  }
 
   // Disable now redundant cookies field (do not unset, this can cause issues with cache plugins apparently)
   $fields['cookies'] = '';

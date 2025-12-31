@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // CHECK USER COMMENT MODERATION PERMISSION
@@ -306,17 +307,17 @@ function fictioneer_edit_comment( $comment_id ) {
   $hold_comments = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_always_moderate_comments'] ?? 0 );
 
   // Save to database
-  fictioneer_update_comment_meta( $comment_id, 'fictioneer_sticky', $is_sticky );
-  fictioneer_update_comment_meta( $comment_id, 'fictioneer_thread_closed', $is_closed );
-  fictioneer_update_comment_meta( $comment_id, 'fictioneer_marked_offensive', $is_offensive );
-  fictioneer_update_comment_meta( $comment_id, 'fictioneer_ignore_reports', $ignores_reports );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_avatar', $disable_avatar );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_reporting', $disable_reports );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_renaming', $disable_renaming );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_commenting', $disable_commenting );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_editing', $disable_editing );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_notifications', $disable_notifications );
-  fictioneer_update_user_meta( $comment->user_id, 'fictioneer_admin_always_moderate_comments', $hold_comments );
+  Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_sticky', $is_sticky );
+  Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_thread_closed', $is_closed );
+  Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_marked_offensive', $is_offensive );
+  Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_ignore_reports', $ignores_reports );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_avatar', $disable_avatar );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_reporting', $disable_reports );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_renaming', $disable_renaming );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_commenting', $disable_commenting );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_editing', $disable_editing );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_disable_comment_notifications', $disable_notifications );
+  Utils_Admin::update_user_meta( $comment->user_id, 'fictioneer_admin_always_moderate_comments', $hold_comments );
 }
 
 // Add filters and actions if not disabled
@@ -363,7 +364,7 @@ function fictioneer_track_comment_edit( $data, $comment ) {
   remove_filter( 'wp_update_comment_data', 'fictioneer_track_comment_edit', 10 );
 
   // Update stack
-  fictioneer_update_comment_meta( $comment['comment_ID'], 'fictioneer_user_edit_stack', $edit_stack );
+  Utils_Admin::update_comment_meta( $comment['comment_ID'], 'fictioneer_user_edit_stack', $edit_stack );
 
   // Restore filter
   add_filter( 'wp_update_comment_data', 'fictioneer_track_comment_edit', 10, 2 );
@@ -456,7 +457,7 @@ function fictioneer_ajax_moderate_comment() {
   }
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -505,10 +506,10 @@ function fictioneer_ajax_moderate_comment() {
       $result = wp_set_comment_status( $comment_id, 'trash' );
       break;
     case 'offensive':
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_marked_offensive', true );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_marked_offensive', true );
       break;
     case 'unoffensive':
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_marked_offensive', false );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_marked_offensive', false );
       break;
     case 'approve':
       $result = wp_set_comment_status( $comment_id, 'approve' );
@@ -517,10 +518,10 @@ function fictioneer_ajax_moderate_comment() {
       $result = wp_set_comment_status( $comment_id, 'hold' );
       break;
     case 'close':
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_thread_closed', true );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_thread_closed', true );
       break;
     case 'open':
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_thread_closed', false );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_thread_closed', false );
       break;
     case 'sticky':
       if ( $comment->comment_parent ) {
@@ -531,10 +532,10 @@ function fictioneer_ajax_moderate_comment() {
         wp_send_json_error( array( 'error' => __( 'Deleted comments cannot be sticky.', 'fictioneer' ) ) );
         break;
       }
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_sticky', true );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_sticky', true );
       break;
     case 'unsticky':
-      $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_sticky', false );
+      $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_sticky', false );
       break;
   }
 
@@ -560,7 +561,7 @@ if ( get_option( 'fictioneer_enable_ajax_comment_moderation' ) ) {
 // =============================================================================
 
 /**
- * Adds user to a comment's reports list via AJAX
+ * AJAX: Add user to a comment's reports list.
  *
  * @since 4.7.0
  * @link  https://developer.wordpress.org/reference/functions/wp_send_json_success/
@@ -577,7 +578,7 @@ function fictioneer_ajax_report_comment() {
   }
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -626,7 +627,7 @@ function fictioneer_ajax_report_comment() {
   }
 
   // Update comment meta
-  $result = fictioneer_update_comment_meta( $comment_id, 'fictioneer_user_reports', $reports );
+  $result = Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_user_reports', $reports );
 
   if ( ! $result ) {
     wp_send_json_error( array( 'error' => 'Report could not be saved.' ) );
@@ -637,7 +638,7 @@ function fictioneer_ajax_report_comment() {
 
   if ( empty( $auto_moderation ) && count( $reports ) >= get_option( 'fictioneer_comment_report_threshold', 10 ) ) {
     // Only ever auto-moderate once!
-    fictioneer_update_comment_meta( $comment_id, 'fictioneer_auto_moderation', time() );
+    Utils_Admin::update_comment_meta( $comment_id, 'fictioneer_auto_moderation', time() );
 
     // Set back to hold
     wp_set_comment_status( $comment_id, 'hold' );

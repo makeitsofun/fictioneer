@@ -2,6 +2,7 @@
 
 use Fictioneer\Sanitizer;
 use Fictioneer\Sanitizer_Admin;
+use Fictioneer\Utils;
 
 // =============================================================================
 // SETUP
@@ -251,12 +252,6 @@ define( 'FICTIONEER_OPTIONS', array(
     ),
     'fictioneer_reduce_admin_bar' => array(
       'name' => 'fictioneer_reduce_admin_bar',
-      'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
-      'default' => 0
-    ),
-    'fictioneer_bundle_stylesheets' => array(
-      'name' => 'fictioneer_bundle_stylesheets',
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
@@ -681,8 +676,8 @@ define( 'FICTIONEER_OPTIONS', array(
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
-    'fictioneer_enable_global_splide' => array(
-      'name' => 'fictioneer_enable_global_splide',
+    'fictioneer_disable_splide' => array(
+      'name' => 'fictioneer_disable_splide',
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
@@ -795,6 +790,11 @@ define( 'FICTIONEER_OPTIONS', array(
     ),
     'fictioneer_enable_extended_alert_queries' => array(
       'name' => 'fictioneer_enable_extended_alert_queries',
+      'group' => 'fictioneer-settings-general-group',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
+    ),
+    'fictioneer_enable_fast_chapter_posts' => array(
+      'name' => 'fictioneer_enable_fast_chapter_posts',
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
@@ -1174,15 +1174,14 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_disable_heartbeat' => __( 'Disable Heartbeat API', 'fictioneer' ),
       'fictioneer_remove_head_clutter' => __( 'Remove clutter from HTML head', 'fictioneer' ),
       'fictioneer_reduce_admin_bar' => __( 'Reduce admin bar items', 'fictioneer' ),
-      'fictioneer_bundle_stylesheets' => __( 'Bundle CSS files into one', 'fictioneer' ),
       'fictioneer_bundle_scripts' => __( 'Bundle JavaScript files into one', 'fictioneer' ),
       'fictioneer_do_not_save_comment_ip' => __( 'Do not save comment IP addresses', 'fictioneer' ),
       'fictioneer_logout_redirects_home' => __( 'Logout redirects Home', 'fictioneer' ),
       'fictioneer_disable_theme_logout' => __( 'Disable theme logout without nonce', 'fictioneer' ),
       'fictioneer_consent_wrappers' => __( 'Add consent wrappers to embedded content', 'fictioneer' ),
       'fictioneer_cookie_banner' => __( 'Enable cookie banner and consent function', 'fictioneer' ),
-      'fictioneer_enable_cache_compatibility' => __( 'Enable cache compatibility mode', 'fictioneer' ),
-      'fictioneer_enable_private_cache_compatibility' => __( 'Enable private cache compatibility mode', 'fictioneer' ),
+      'fictioneer_enable_cache_compatibility' => __( 'Enable compatibility mode for caching', 'fictioneer' ),
+      'fictioneer_enable_private_cache_compatibility' => __( 'Enable compatibility mode for private caching', 'fictioneer' ),
       'fictioneer_enable_ajax_comments' => __( 'Enable AJAX comment section', 'fictioneer' ),
       'fictioneer_disable_comment_callback' => __( 'Disable theme comment style (callback)', 'fictioneer' ),
       'fictioneer_disable_comment_query' => __( 'Disable theme comment query', 'fictioneer' ),
@@ -1200,7 +1199,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_enable_chapter_groups' => __( 'Enable chapter groups', 'fictioneer' ),
       'fictioneer_disable_chapter_collapsing' => __( 'Disable collapsing of chapters', 'fictioneer' ),
       'fictioneer_collapse_groups_by_default' => __( 'Collapse chapter groups by default', 'fictioneer' ),
-      'fictioneer_enable_public_cache_compatibility' => __( 'Enable public cache compatibility mode', 'fictioneer' ),
+      'fictioneer_enable_public_cache_compatibility' => __( 'Enable compatibility mode for public caching', 'fictioneer' ),
       'fictioneer_show_full_post_content' => __( 'Display full posts instead of excerpts', 'fictioneer' ),
       'fictioneer_enable_ajax_authentication' => __( 'Enable AJAX user authentication', 'fictioneer' ),
       'fictioneer_disable_application_passwords' => __( 'Disable application passwords', 'fictioneer' ),
@@ -1217,7 +1216,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_enable_chapter_appending' => __( 'Append new chapters to story', 'fictioneer' ),
       'fictioneer_limit_chapter_stories_by_author' => __( 'Restrict chapter stories by author', 'fictioneer' ),
       'fictioneer_see_some_evil' => __( 'Monitor posts for suspicious content', 'fictioneer' ),
-      'fictioneer_enable_fast_ajax_comments' => __( 'Enable fast AJAX for comments', 'fictioneer' ),
+      'fictioneer_enable_fast_ajax_comments' => __( 'Enable AJAX Fast Requests for comments', 'fictioneer' ),
       'fictioneer_enable_rate_limits' => __( 'Enable rate limiting for AJAX requests', 'fictioneer' ),
       'fictioneer_enable_advanced_meta_fields' => __( 'Enable advanced meta fields', 'fictioneer' ),
       'fictioneer_show_story_changelog' => __( 'Show story changelog button', 'fictioneer' ),
@@ -1296,13 +1295,13 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_enable_anti_flicker' => __( 'Enable anti-flicker script', 'fictioneer' ),
       'fictioneer_hide_categories' => __( 'Hide categories on posts', 'fictioneer' ),
       'fictioneer_enable_story_card_caching' => __( 'Enable caching of story cards', 'fictioneer' ),
-      'fictioneer_enable_global_splide' => __( 'Enable Splide slider globally', 'fictioneer' ),
+      'fictioneer_disable_splide' => __( 'Disable Splide slider integration', 'fictioneer' ),
       'fictioneer_log_posts' => __( 'Log all post updates', 'fictioneer' ),
-      'fictioneer_disable_menu_transients' => __( 'Disable menu Transient caching', 'fictioneer' ),
+      'fictioneer_disable_menu_transients' => __( 'Disable Transient caching for menus', 'fictioneer' ),
       'fictioneer_enable_line_break_fix' => __( 'Enable fixing of chapter paragraphs', 'fictioneer' ),
       'fictioneer_show_story_modified_date' => __( 'Show the modified date on story pages', 'fictioneer' ),
-      'fictioneer_disable_chapter_list_transients' => __( 'Disable chapter list Transient caching', 'fictioneer' ),
-      'fictioneer_disable_shortcode_transients' => __( 'Disable shortcode Transient caching', 'fictioneer' ),
+      'fictioneer_disable_chapter_list_transients' => __( 'Disable Transient caching for chapter lists', 'fictioneer' ),
+      'fictioneer_disable_shortcode_transients' => __( 'Disable Transient caching for shortcodes', 'fictioneer' ),
       'fictioneer_enable_css_skins' => __( 'Enable CSS skins (requires account)', 'fictioneer' ),
       'fictioneer_exclude_non_stories_from_cloud_counts' => __( 'Only count stories in taxonomy clouds', 'fictioneer' ),
       'fictioneer_enable_ffcnr_auth' => __( 'Enable FFCNR user authentication', 'fictioneer' ),
@@ -1310,7 +1309,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_exclude_protected_from_rss' => __( 'Exclude password-protected posts from RSS', 'fictioneer' ),
       'fictioneer_exclude_protected_from_discord' => __( 'Exclude password-protected posts from Discord notifications', 'fictioneer' ),
       'fictioneer_disable_header_image_preload' => __( 'Disable preloading of header image', 'fictioneer' ),
-      'fictioneer_enable_lastpostmodified_caching' => __( 'Cache last post modified date as Transient', 'fictioneer' ),
+      'fictioneer_enable_lastpostmodified_caching' => __( 'Enable Transient caching for last post modified', 'fictioneer' ),
       'fictioneer_show_scheduled_chapters' => __( 'Make scheduled chapters publicly accessible', 'fictioneer' ),
       'fictioneer_enable_scheduled_chapter_commenting' => __( 'Allow commenting on scheduled posts', 'fictioneer' ),
       'fictioneer_enable_story_filter_reel' => __( 'Enable story chapter list filters', 'fictioneer' ),
@@ -1320,6 +1319,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_seo_sitemap_excludes' => __( 'Post IDs excluded from sitemap', 'fictioneer' ),
       'fictioneer_oauth_cookie_expiration_days' => __( 'OAuth cookie expiration days', 'fictioneer' ),
       'fictioneer_enable_extended_alert_queries' => __( 'Enable extended alert queries', 'fictioneer' ),
+      'fictioneer_enable_fast_chapter_posts' => __( 'Enable optimized chapter post queries', 'fictioneer' ),
     );
   }
 
@@ -1484,6 +1484,6 @@ add_action(
  */
 
 function fictioneer_updated_google_fonts( $old_value, $value ) {
-  fictioneer_build_bundled_fonts();
+  Utils::bundle_fonts();
 }
 add_action( 'update_option_fictioneer_google_fonts_links', 'fictioneer_updated_google_fonts', 10, 2 );

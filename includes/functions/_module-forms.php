@@ -170,7 +170,7 @@ function fictioneer_ajax_submit_contact_form() {
   }
 
   // Check against disallow list (Settings > Discussion)
-  $offenders = fictioneer_check_comment_disallowed_list(
+  $offenders = \Fictioneer\Utils_Admin::check_comment_disallowed_list(
     $name,
     $email,
     '',

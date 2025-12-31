@@ -30,7 +30,7 @@ function fictioneer_stories_statistics( $args ) {
 
   // Compute statistics if necessary
   if ( ! $statistics ) {
-    $words = fictioneer_get_stories_total_word_count();
+    $words = \Fictioneer\Stats::get_stories_total_word_count();
 
     $statistics = array(
       'stories' => array(
@@ -654,13 +654,15 @@ function fictioneer_story_chapters( $args ) {
   $enable_checkmarks = get_option( 'fictioneer_enable_checkmarks' );
 
   // Capture output
-  ob_start();
+  if ( $enable_transients ) {
+    ob_start();
+  }
 
   // Start HTML ---> ?>
   <section class="story__tab-target _current story__chapters" data-fictioneer-story-target="tabContent" data-tab-name="chapters" data-order="asc" data-view="list">
     <?php
-      $chapters = fictioneer_get_story_chapter_posts( $story_id );
-      $chapter_groups = fictioneer_prepare_chapter_groups( $story_id, $chapters );
+      $chapters = \Fictioneer\Story::get_chapter_posts( $story_id );
+      $chapter_groups = \Fictioneer\Story::prepare_chapter_groups( $story_id, $chapters );
       $chapter_group_count = count( $chapter_groups );
       $group_classes = [];
 
@@ -867,15 +869,15 @@ function fictioneer_story_chapters( $args ) {
   </section>
   <?php // <--- End HTML
 
-  // Store output
-  $chapters_html = ob_get_clean();
-
-  // Flush buffered output
-  echo $chapters_html;
-
-  // Cache for next time (24 hours)
+  // Cache and flush buffered output (if enabled)
   if ( $enable_transients ) {
+    $chapters_html = ob_get_clean();
+
+    echo $chapters_html;
+
     $chapters_html = fictioneer_minify_html( $chapters_html ); // Compress
+
+    // Cache for next time (24 hours)
     set_transient( 'fictioneer_story_chapter_list_html_' . $story_id, $chapters_html, 86400 );
   }
 }

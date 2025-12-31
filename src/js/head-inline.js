@@ -35,7 +35,6 @@
         });
 
         root.dataset.fontWeight = settings['font-weight'] ? settings['font-weight'] : 'default';
-        root.dataset.theme = (settings['site-theme'] && !root.dataset.forceChildTheme) ? settings['site-theme'] : 'default';
 
         let themeColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-color-base').trim().split(' ');
 

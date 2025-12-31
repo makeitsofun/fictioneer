@@ -135,12 +135,6 @@
       "oAP" : "\/author.php",
       "oF" : 1
     },
-    "\/cache" : {
-      "ft" : 65536,
-      "oA" : 1,
-      "oAP" : "\/cache",
-      "oF" : 0
-    },
     "\/category.php" : {
       "cB" : 0,
       "ft" : 8192,
@@ -204,6 +198,42 @@
       "oF" : 1,
       "pg" : 0
     },
+    "\/css\/application-properties-splide.css" : {
+      "aP" : 1,
+      "bl" : 0,
+      "ci" : 0,
+      "co" : 0,
+      "ft" : 16,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-properties-splide-min.css",
+      "oF" : 0,
+      "pg" : 0
+    },
+    "\/css\/application-properties.css" : {
+      "aP" : 1,
+      "bl" : 0,
+      "ci" : 0,
+      "co" : 0,
+      "ft" : 16,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-properties-min.css",
+      "oF" : 0,
+      "pg" : 0
+    },
+    "\/css\/application-splide.css" : {
+      "aP" : 1,
+      "bl" : 0,
+      "ci" : 0,
+      "co" : 0,
+      "ft" : 16,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-splide-min.css",
+      "oF" : 0,
+      "pg" : 0
+    },
     "\/css\/application.css" : {
       "aP" : 1,
       "bl" : 0,
@@ -216,30 +246,6 @@
       "oF" : 1,
       "pg" : 0
     },
-    "\/css\/chapter.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/chapter-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
-    "\/css\/collections.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/collections-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
     "\/css\/comments.css" : {
       "aP" : 1,
       "bl" : 0,
@@ -249,18 +255,6 @@
       "ma" : 0,
       "oA" : 1,
       "oAP" : "\/css\/comments-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
-    "\/css\/complete.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/complete-min.css",
       "oF" : 1,
       "pg" : 0
     },
@@ -636,42 +630,6 @@
       "oF" : 1,
       "pg" : 0
     },
-    "\/css\/post-list.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/post-list-min.css",
-      "oF" : 0,
-      "pg" : 0
-    },
-    "\/css\/properties.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/properties-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
-    "\/css\/recommendation.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/recommendation-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
     "\/css\/settings.css" : {
       "aP" : 1,
       "bl" : 0,
@@ -693,42 +651,6 @@
       "ma" : 0,
       "oA" : 1,
       "oAP" : "\/css\/skin-template-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
-    "\/css\/splide.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/splide-min.css",
-      "oF" : 0,
-      "pg" : 0
-    },
-    "\/css\/story.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/story-min.css",
-      "oF" : 1,
-      "pg" : 0
-    },
-    "\/css\/taxonomies.css" : {
-      "aP" : 1,
-      "bl" : 0,
-      "ci" : 0,
-      "co" : 0,
-      "ft" : 16,
-      "ma" : 0,
-      "oA" : 1,
-      "oAP" : "\/css\/taxonomies-min.css",
       "oF" : 1,
       "pg" : 0
     },
@@ -2391,9 +2313,9 @@
       "ft" : 64,
       "ma" : 0,
       "mi" : 1,
-      "oA" : 1,
+      "oA" : 0,
       "oAP" : "\/js\/css-skins.min.js",
-      "oF" : 2,
+      "oF" : 3,
       "sC" : 3,
       "tS" : 0
     },
@@ -2618,6 +2540,32 @@
       "oS" : 3,
       "pg" : 0
     },
+    "\/src\/scss\/_collections.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 0,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/css\/collections.css",
+      "oF" : 3,
+      "oS" : 3,
+      "pg" : 0
+    },
+    "\/src\/scss\/_comment-section.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 0,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/src\/scss\/css\/_comment-section.css",
+      "oF" : 0,
+      "oS" : 3,
+      "pg" : 0
+    },
     "\/src\/scss\/_consent.scss" : {
       "aP" : 0,
       "bl" : 0,
@@ -2771,6 +2719,19 @@
       "oA" : 1,
       "oAP" : "\/src\/scss\/css\/_paragraph-tools.css",
       "oF" : 0,
+      "oS" : 3,
+      "pg" : 0
+    },
+    "\/src\/scss\/_post-list.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 0,
+      "ec" : 0,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/css\/post-list.css",
+      "oF" : 3,
       "oS" : 3,
       "pg" : 0
     },
@@ -2930,6 +2891,19 @@
       "oS" : 3,
       "pg" : 0
     },
+    "\/src\/scss\/_splide.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 0,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 1,
+      "oAP" : "\/src\/scss\/css\/_splide.css",
+      "oF" : 0,
+      "oS" : 3,
+      "pg" : 0
+    },
     "\/src\/scss\/_statistics.scss" : {
       "aP" : 0,
       "bl" : 0,
@@ -3034,6 +3008,45 @@
       "oS" : 3,
       "pg" : 0
     },
+    "\/src\/scss\/application-properties-splide.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 1,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-properties-splide.css",
+      "oF" : 2,
+      "oS" : 3,
+      "pg" : 0
+    },
+    "\/src\/scss\/application-properties.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 1,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-properties.css",
+      "oF" : 2,
+      "oS" : 3,
+      "pg" : 0
+    },
+    "\/src\/scss\/application-splide.scss" : {
+      "aP" : 0,
+      "bl" : 0,
+      "co" : 1,
+      "ec" : 1,
+      "ft" : 4,
+      "ma" : 0,
+      "oA" : 0,
+      "oAP" : "\/css\/application-splide.css",
+      "oF" : 2,
+      "oS" : 3,
+      "pg" : 0
+    },
     "\/src\/scss\/application.scss" : {
       "aP" : 0,
       "bl" : 0,
@@ -3043,32 +3056,6 @@
       "ma" : 0,
       "oA" : 0,
       "oAP" : "\/css\/application.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/chapter.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/chapter.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/collections.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/collections.css",
       "oF" : 3,
       "oS" : 3,
       "pg" : 0
@@ -3291,19 +3278,6 @@
       "oA" : 1,
       "oAP" : "\/src\/scss\/common\/css\/_variables.css",
       "oF" : 0,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/complete.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/complete.css",
-      "oF" : 3,
       "oS" : 3,
       "pg" : 0
     },
@@ -3785,84 +3759,6 @@
       "oA" : 0,
       "oAP" : "\/fonts\/roboto-serif\/font.css",
       "oF" : 2,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/post-list.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 0,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/post-list.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/properties.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/properties.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/recommendation.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/recommendation.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/splide.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 0,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/splide.css",
-      "oF" : 2,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/story.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/story.css",
-      "oF" : 3,
-      "oS" : 3,
-      "pg" : 0
-    },
-    "\/src\/scss\/taxonomies.scss" : {
-      "aP" : 0,
-      "bl" : 0,
-      "co" : 0,
-      "ec" : 1,
-      "ft" : 4,
-      "ma" : 0,
-      "oA" : 0,
-      "oAP" : "\/css\/taxonomies.css",
-      "oF" : 3,
       "oS" : 3,
       "pg" : 0
     },

@@ -2,7 +2,7 @@
 @use '../common/_mixins' as *;
 @use '../common/_variables' as *;
 
-:root, :root[data-theme=base] {
+:root {
   --card-footer-rating-color: var(--fg-900);
 }
 

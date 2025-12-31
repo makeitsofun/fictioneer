@@ -75,17 +75,6 @@ defined( 'ABSPATH' ) OR exit;
           </select>
         </div>
       </div>
-      <?php if ( is_child_theme() && FICTIONEER_THEME_SWITCH ) : ?>
-        <div class="site-settings__theme modal__horizontal-input-group">
-          <i class="fa-solid fa-masks-theater reset" id="site-setting-theme-reset"></i>
-          <div class="select-wrapper">
-            <select name="site-theme" class="site-setting-site-theme">
-              <option value="default" selected="selected"><?php _ex( 'Theme:', 'Site settings modal theme selection: Current Theme.', 'fictioneer' ); ?> <?php echo get_bloginfo( 'name' ); ?></option>
-              <option value="base"><?php _ex( 'Theme: Fictioneer Base', 'Site settings modal theme selection: Base Theme.', 'fictioneer' ); ?></option>
-            </select>
-          </div>
-        </div>
-      <?php endif; ?>
       <div class="site-settings__hue-rotate modal__horizontal-input-group">
         <i class="fa-solid fa-swatchbook reset" id="site-setting-hue-rotate-reset"></i>
         <input type="range" value="0" min="0" max="360" step="1" id="site-setting-hue-rotate-range">

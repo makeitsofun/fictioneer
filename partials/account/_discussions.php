@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) OR exit;
 // Setup
 $current_user = $args['user'];
 $avatar = get_avatar( $current_user->ID, 32 );
-$badge = fictioneer_get_comment_badge( $current_user, null );
+$badge = \Fictioneer\User::get_comment_badge( $current_user, null );
 
 ?>
 

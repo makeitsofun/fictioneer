@@ -312,11 +312,13 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
    * @since 4.7.0
    * @since 5.12.0 - Added $context and $args parameters.
    * @since 5.26.0 - Split off fictioneer_sanitize_safe_title().
-   * @since 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
+   * @since 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
    *
    * @param int|WP_Post $post     The post or post ID to get the title for.
    * @param string|null $context  Optional. Context regarding where and how the title is used.
    * @param array       $args     Optional. Additional parameters.
+   *   - 'title' (string) : Ready to use title to avoid query.
+   *   - 'no_filters' (bool) : Whether to apply filters. Default false.
    *
    * @return string The title, never empty.
    */
@@ -327,7 +329,7 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
 
     // Get title and sanitize
     $title = Sanitizer::sanitize_safe_title(
-      get_the_title( $post_id ),
+      ( $args['title'] ?? '' ) ?: get_the_title( $post_id ),
       get_the_date( '', $post_id ),
       get_the_time( '', $post_id )
     );
@@ -1310,6 +1312,7 @@ if ( ! function_exists( 'fictioneer_get_chapter_micro_menu' ) ) {
  * Return HTML for the chapter index list of a story.
  *
  * @since 5.25.0
+ * @since 5.34.0 - Updated for fast chapter posts query.
  *
  * @param int $story_id  The story ID.
  *
@@ -1336,30 +1339,36 @@ function fictioneer_get_chapter_index_html( $story_id ) {
   // Setup
   $story_link = get_post_meta( $story_id, 'fictioneer_story_redirect_link', true )
     ?: get_permalink( $story_id );
-  $chapters = fictioneer_get_story_chapter_posts( $story_id );
+  $chapters = \Fictioneer\Story::get_chapter_posts( $story_id );
   $allowed_statuses = apply_filters( 'fictioneer_filter_chapter_index_list_statuses', ['publish'], $story_id );
   $hide_icons = get_post_meta( $story_id, 'fictioneer_story_hide_chapter_icons', true ) ||
     get_option( 'fictioneer_hide_chapter_icons' );
   $prefer_chapter_icon = get_option( 'fictioneer_override_chapter_status_icons' );
   $position = 0;
+  $items = [];
 
   // Loop chapters...
   foreach ( $chapters as $chapter ) {
     // Skip hidden chapters (in case of filtered query params)
     if (
       ! in_array( $chapter->post_status, $allowed_statuses ) ||
-      get_post_meta( $chapter->ID, 'fictioneer_chapter_hidden', true )
+      Utils::get_meta( $chapter, 'fictioneer_chapter_hidden' )
     ) {
       continue;
     }
 
     // Prepare
     $classes = [];
-    $title = fictioneer_get_safe_title( $chapter->ID, 'get_chapter_list_items' );
-    $list_title = get_post_meta( $chapter->ID, 'fictioneer_chapter_list_title', true );
+    $list_title = Utils::get_meta( $chapter, 'fictioneer_chapter_list_title' );
     $list_title = trim( wp_strip_all_tags( $list_title ) );
-    $text_icon = get_post_meta( $chapter->ID, 'fictioneer_chapter_text_icon', true );
+    $text_icon = Utils::get_meta( $chapter, 'fictioneer_chapter_text_icon' );
     $icon = '';
+
+    if ( get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
+      $title = $chapter->post_title ?: get_the_date( '', $chapter );
+    } else {
+      $title = fictioneer_get_safe_title( $chapter->ID, 'get_chapter_list_items' );
+    }
 
     // Mark for password
     if ( $chapter->post_password ) {
@@ -1367,14 +1376,6 @@ function fictioneer_get_chapter_index_html( $story_id ) {
     }
 
     // Chapter icon
-    if ( ! empty( $chapter->post_password ) ) {
-      $icon = '<i class="fa-solid fa-lock"></i>';
-    } elseif ( empty( $text_icon ) && ! $hide_icons ) {
-      $icon = '<i class="' . fictioneer_get_icon_field( 'fictioneer_chapter_icon', $chapter->ID ) . '"></i>';
-    } elseif ( ! $hide_icons ) {
-      $icon = '<span class="text-icon">' . $text_icon . '</span>';
-    }
-
     if ( ! $hide_icons ) {
       // Icon hierarchy: password > scheduled > text > normal
       if ( ! $prefer_chapter_icon && $chapter->post_password ) {
@@ -1384,7 +1385,11 @@ function fictioneer_get_chapter_index_html( $story_id ) {
       } elseif ( $text_icon ) {
         $icon = "<span class='text-icon'>{$text_icon}</span>";
       } else {
-        $icon = fictioneer_get_icon_field( 'fictioneer_chapter_icon', $chapter->ID ) ?: FICTIONEER_DEFAULT_CHAPTER_ICON;
+        $icon = fictioneer_get_icon_field(
+          'fictioneer_chapter_icon',
+          $chapter->ID,
+          Utils::get_meta( $chapter, 'fictioneer_chapter_icon' )
+        ) ?: FICTIONEER_DEFAULT_CHAPTER_ICON;
         $icon = "<i class='{$icon}'></i>";
       }
 
@@ -1396,7 +1401,7 @@ function fictioneer_get_chapter_index_html( $story_id ) {
       'title' => $title,
       'list_title' => $list_title,
       'icon' => $icon,
-      'group' => get_post_meta( $chapter->ID, 'fictioneer_chapter_group', true ),
+      'group' => Utils::get_meta( $chapter, 'fictioneer_chapter_group' ),
       'classes' => $classes,
       'position' => ++$position
     );
@@ -1407,7 +1412,7 @@ function fictioneer_get_chapter_index_html( $story_id ) {
       implode( ' ', $classes ),
       $position,
       $chapter->ID,
-      get_the_permalink( $chapter->ID ),
+      Utils::get_permalink( $chapter, $story_id ),
       $icon,
       $list_title ?: $title
     );
@@ -2580,7 +2585,7 @@ function fictioneer_extract_splide_breakpoints( $json_string, $uid = null ) {
   }
 
   // Valid JSON?
-  if ( ! fictioneer_is_valid_json( $json_string ) ) {
+  if ( ! Utils::json_validate( $json_string ) ) {
     return apply_filters( 'fictioneer_filter_splide_breakpoints', [], $json_string, $uid );
   }
 
@@ -2753,7 +2758,7 @@ function fictioneer_get_splide_loading_style( $json_string, $uid ) {
   $style = apply_filters( 'fictioneer_filter_splide_loading_style', $style, $uid, $breakpoints, $json_string );
 
   // Minify
-  $style = fictioneer_minify_css( $style );
+  $style = Utils::minify_css( $style );
 
   // Return style
   return "<style class='splide-placeholder-styles' data-jetpack-boost='ignore' data-no-defer='1' data-no-optimize='1' data-no-minify='1'>{$style}</style>";

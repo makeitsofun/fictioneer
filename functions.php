@@ -4,10 +4,12 @@
 // CONSTANTS/SETTINGS
 // =============================================================================
 
+define( 'FICTIONEER_THEME_DIR', trailingslashit( __DIR__ ) );
+
 // Version
-define( 'FICTIONEER_VERSION', '5.33.2-beta1' );
+define( 'FICTIONEER_VERSION', '5.34.0-beta4' );
 define( 'FICTIONEER_MAJOR_VERSION', '5' );
-define( 'FICTIONEER_RELEASE_TAG', 'v5.33.2-beta1' );
+define( 'FICTIONEER_RELEASE_TAG', 'v5.34.0-beta4' );
 
 if ( ! defined( 'CHILD_VERSION' ) ) {
   define( 'CHILD_VERSION', null );
@@ -271,13 +273,6 @@ if ( ! defined( 'FICTIONEER_REQUESTS_PER_MINUTE' ) ) {
   define( 'FICTIONEER_REQUESTS_PER_MINUTE', 10 );
 }
 
-// Integer: Maximum number of IDs in 'post__in' and 'post__not_in' query arguments
-// to prevent performance degradation. If exceeded, the whole argument will be
-// ignored in certain queries, which account for.
-if ( ! defined( 'FICTIONEER_QUERY_ID_ARRAY_LIMIT' ) ) {
-  define( 'FICTIONEER_QUERY_ID_ARRAY_LIMIT', 1000 );
-}
-
 // Integer: Time until a user's Patreon data expires in seconds
 if ( ! defined( 'FICTIONEER_PATREON_EXPIRATION_TIME' ) ) {
   define( 'FICTIONEER_PATREON_EXPIRATION_TIME', WEEK_IN_SECONDS );
@@ -326,6 +321,11 @@ if ( ! defined( 'FICTIONEER_SITEMAP_ENTRIES_PER_PAGE' ) ) {
   define( 'FICTIONEER_SITEMAP_ENTRIES_PER_PAGE', 2000 );
 }
 
+// Integer: Cache TTL for the WP cache (may or may not be persistent)
+if ( ! defined( 'FICTIONEER_WP_CACHE_TTL' ) ) {
+  define( 'FICTIONEER_WP_CACHE_TTL', 30 * MINUTE_IN_SECONDS );
+}
+
 /*
  * Booleans
  */
@@ -340,19 +340,9 @@ if ( ! defined( 'FICTIONEER_CACHE_PURGE_ASSIST' ) ) {
   define( 'FICTIONEER_CACHE_PURGE_ASSIST', true );
 }
 
-// Boolean: Theme relationship cache purging on post update
-if ( ! defined( 'FICTIONEER_RELATIONSHIP_PURGE_ASSIST' ) ) {
-  define( 'FICTIONEER_RELATIONSHIP_PURGE_ASSIST', true );
-}
-
 // Boolean: Menu items for search
 if ( ! defined( 'FICTIONEER_SHOW_SEARCH_IN_MENUS' ) ) {
   define( 'FICTIONEER_SHOW_SEARCH_IN_MENUS', true );
-}
-
-// Boolean: Base theme switch in site settings
-if ( ! defined( 'FICTIONEER_THEME_SWITCH' ) ) {
-  define( 'FICTIONEER_THEME_SWITCH', true );
 }
 
 // Boolean: Attachment pages
@@ -460,6 +450,15 @@ if ( ! defined( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES' ) ) {
   define( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES', false );
 }
 
+/*
+ * Arrays
+ */
+
+// Array: Allowed page templates ('name' => 'Display Name') without permission check
+if ( ! defined( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES' ) ) {
+  define( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES', [] );
+}
+
 // =======================================================================================
 // AUTOLOADER
 // =======================================================================================
@@ -481,7 +480,7 @@ spl_autoload_register( function ( $class ) {
   $relative_path = str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class );
 
   // Load file
-  $file = trailingslashit( get_template_directory() ) . 'includes/classes/' . $relative_path . '.php';
+  $file = FICTIONEER_THEME_DIR . 'includes/classes/' . $relative_path . '.php';
 
   if ( file_exists( $file ) ) {
     require_once $file;
@@ -496,7 +495,7 @@ spl_autoload_register( function ( $class ) {
  * Legacy delegates for deprecated functions.
  */
 
-require_once __DIR__ . '/includes/functions/__legacy.php';
+require_once __DIR__ . '/includes/functions/_deprecated.php';
 
 /**
  * Provides various utility functions.
@@ -532,8 +531,6 @@ require_once __DIR__ . '/includes/functions/_module-alerts.php';
  * Set up the theme customizer.
  */
 
-require_once __DIR__ . '/includes/functions/_customizer.php';
-
 if ( is_customize_preview() ) {
   require_once __DIR__ . '/includes/functions/_customizer-settings.php';
 }
@@ -556,6 +553,8 @@ require_once __DIR__ . '/includes/functions/_setup-types-and-terms.php';
 
 require_once __DIR__ . '/includes/functions/_setup-shortcodes.php';
 
+\Fictioneer\Shortcodes\Shortcode::register();
+
 /**
  * Set up blocks.
  */
@@ -569,12 +568,6 @@ require_once __DIR__ . '/includes/functions/_setup-blocks.php';
 if ( get_option( 'fictioneer_enable_sitemap' ) ) {
   require_once __DIR__ . '/includes/functions/_module-sitemap.php';
 }
-
-/**
- * Add SEO features to the site.
- */
-
-require_once __DIR__ . '/includes/functions/_module-seo.php';
 
 /**
  * Generate ePUBs for stories (only in ePUB context).
@@ -644,10 +637,43 @@ function fictioneer_conditional_require_comments() {
 add_action( 'wp', 'fictioneer_conditional_require_comments' );
 
 /**
- * Add helpers for users.
+ * Add user features.
  */
 
-require_once __DIR__ . '/includes/functions/_helpers-users.php';
+/**
+ * Filter the avatar URL.
+ *
+ * @since 4.0.0
+ * @since 5.34.0 - Delegate to User class.
+ *
+ * @param string     $url          The default URL by WordPress.
+ * @param int|string $id_or_email  User ID or email address.
+ * @param WP_User    $args         Additional arguments.
+ *
+ * @return string The avatar URL.
+ */
+
+function fictioneer_get_avatar_url( $url, $id_or_email, $args ) {
+  return \Fictioneer\User::get_avatar_url( $url, $id_or_email, $args );
+}
+add_filter( 'get_avatar_url', 'fictioneer_get_avatar_url', 10, 3 );
+
+/**
+ * Add fallback inline script to avatars.
+ *
+ * @since 5.0.0
+ *
+ * @param string $avatar       HTML for the avatar.
+ * @param string $id_or_email  ID or email of the user.
+ *
+ * @return string HTML with fallback script added.
+ */
+
+function fictioneer_avatar_fallback( $avatar, $id_or_email ) {
+  return str_replace( '<img', '<img onerror="this.src=\''
+    . \Fictioneer\User::get_default_avatar_url()
+    . '\';this.srcset=\'\';this.onerror=\'\';"', $avatar );
+}
 
 /**
  * Add AJAX functions for users.
@@ -712,7 +738,7 @@ require_once __DIR__ . '/includes/functions/_helpers-query.php';
  * Add role functions.
  */
 
-require_once __DIR__ . '/includes/functions/_setup-roles.php';
+\Fictioneer\Role::initialize();
 
 /**
  * Add API (only for REST requests).
@@ -734,14 +760,23 @@ if ( get_option( 'fictioneer_enable_storygraph_api' ) ) {
  * Add search.
  */
 
-require_once __DIR__ . '/includes/functions/_module-search.php';
+if ( ! get_option( 'fictioneer_disable_theme_search' ) ) {
+  add_action( 'pre_get_posts', function( \WP_Query $query ) {
+    if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {
+      return;
+    }
+
+    \Fictioneer\Search::extend_query( $query );
+  }, 11 );
+}
 
 /**
- * Generate SEO schema graphs.
+ * Add SEO features to the site.
  */
 
 if ( get_option( 'fictioneer_enable_seo' ) && ! fictioneer_seo_plugin_active() ) {
-  require_once __DIR__ . '/includes/functions/_module-schemas.php';
+  \Fictioneer\SEO\Schema::init();
+  \Fictioneer\SEO\Meta::init();
 }
 
 /**

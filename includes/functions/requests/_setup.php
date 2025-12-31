@@ -32,6 +32,7 @@ function ffcnr_load_options( $option_names = [], $blog_id_override = null ) {
 
   $_blog_id = $blog_id_override ?? $blog_id ?? 1;
   $site_prefix = $wpdb->get_blog_prefix( $_blog_id );
+
   $default_options = ['siteurl', 'home', 'blogname', 'blogdescription', 'users_can_register', 'admin_email', 'timezone_string', 'date_format', 'time_format', 'posts_per_page', 'permalink_structure', 'upload_path', 'template', 'blog_charset', 'active_plugins', 'gmt_offset', 'stylesheet', 'default_role', 'avatar_rating', 'show_avatars', 'avatar_default', 'page_for_posts', 'page_on_front', 'site_icon', 'wp_user_roles', 'cron', 'nonce_key', 'nonce_salt', 'current_theme', 'show_on_front', 'blog_public', 'theme_switched', "{$site_prefix}user_roles", 'fictioneer_ffcnr_salt', 'fictioneer_enable_extended_alert_queries'];
 
   $default_options = apply_filters( 'ffcnr_load_options_defaults', $default_options );
@@ -120,15 +121,15 @@ function ffcnr_update_option( $name, $value, $autoload = false ) {
     );
 
     return $updated !== false;
-  } else {
-    $inserted = $wpdb->insert(
-      $wpdb->options,
-      array( 'option_name' => $name, 'option_value' => $value, 'autoload' => $autoload ),
-      ['%s', '%s', '%s']
-    );
-
-    return $inserted !== false;
   }
+
+  $inserted = $wpdb->insert(
+    $wpdb->options,
+    array( 'option_name' => $name, 'option_value' => $value, 'autoload' => $autoload ),
+    ['%s', '%s', '%s']
+  );
+
+  return $inserted !== false;
 }
 
 /**
@@ -150,7 +151,9 @@ function ffcnr_hash( $data, $scheme = 'auth' ){
     'nonce' => NONCE_KEY . NONCE_SALT
   );
 
-  return hash_hmac( 'md5', $data, $salts[ $scheme ] );
+  $key = $salts[ $scheme ] ?? $salts['auth'];
+
+  return hash_hmac( 'md5', $data, $key );
 }
 
 /**
@@ -168,9 +171,9 @@ function ffcnr_hash( $data, $scheme = 'auth' ){
 function ffcnr_hash_token( $token ){
   if ( function_exists( 'hash' ) ) {
     return hash( 'sha256', $token );
-  } else {
-    return sha1( $token );
   }
+
+  return sha1( $token );
 }
 
 /**
@@ -213,6 +216,11 @@ function ffcnr_get_auth_cookie() {
 
 function ffcnr_get_session_token() {
   $cookie = ffcnr_get_auth_cookie();
+
+  if ( ! $cookie ) {
+    return '';
+  }
+
   $cookie = explode( '|', $cookie );
 
   return ! empty( $cookie[2] ) ? $cookie[2] : '';
@@ -278,6 +286,11 @@ function ffcnr_get_current_user( $options = null, $blog_id_override = null ) {
   $site_prefix = $wpdb->get_blog_prefix( $_blog_id );
   $options = $options ?: ffcnr_load_options( [], $blog_id_override );
   $cookie = ffcnr_get_auth_cookie();
+
+  if ( ! $cookie ) {
+    return 0;
+  }
+
   $cookie_elements = explode( '|', $cookie );
 
   if ( count( $cookie_elements ) !== 4 ) {
@@ -297,6 +310,36 @@ function ffcnr_get_current_user( $options = null, $blog_id_override = null ) {
 
   if ( ! $user ) {
     return 0;
+  }
+
+  $user_pass = (string) ( $user->user_pass ?? '' );
+
+  if (
+    function_exists( 'str_starts_with' ) &&
+    ( str_starts_with( $user_pass, '$P$' ) || str_starts_with( $user_pass, '$2y$' ) )
+  ) {
+    $pass_frag = substr( $user_pass, 8, 4 );
+  } else {
+    $pass_frag = substr( $user_pass, -4 );
+  }
+
+  $salt = ( defined( 'LOGGED_IN_KEY' ) ? LOGGED_IN_KEY : '' ) . ( defined( 'LOGGED_IN_SALT' ) ? LOGGED_IN_SALT : '' );
+
+  if ( $salt === '' ) {
+    return 0;
+  }
+
+  $key = hash_hmac( 'md5', $username . '|' . $pass_frag . '|' . $expiration . '|' . $token, $salt );
+  $expected_hmac = hash_hmac( 'sha256', $username . '|' . $expiration . '|' . $token, $key );
+
+  if ( function_exists( 'hash_equals' ) ) {
+    if ( ! hash_equals( $expected_hmac, (string) $hmac ) ) {
+      return 0;
+    }
+  } else {
+    if ( $expected_hmac !== (string) $hmac ) {
+      return 0;
+    }
   }
 
   $user_options = $wpdb->get_results(
@@ -414,9 +457,8 @@ function ffcnr_load_user_meta( $user_id, $filter = '', $reload = false, $meta_ke
 
 function ffcnr_get_user_meta( $user_id, $meta_key, $filter = '' ) {
   $meta = ffcnr_load_user_meta( $user_id, $filter, false, $meta_key );
-  $value = apply_filters( 'ffcnr_get_user_meta', $meta[ $meta_key ] ?? '', $user_id, $meta_key, $filter );
 
-  return $value;
+  return apply_filters( 'ffcnr_get_user_meta', $meta[ $meta_key ] ?? '', $user_id, $meta_key, $filter );
 }
 
 /**
@@ -459,19 +501,19 @@ function ffcnr_update_user_meta( $user_id, $meta_key, $meta_value ) {
     );
 
     return $updated !== false;
-  } else {
-    $inserted = $wpdb->insert(
-      $wpdb->usermeta,
-      array(
-        'user_id' => $user_id,
-        'meta_key' => $meta_key,
-        'meta_value' => maybe_serialize( $meta_value )
-      ),
-      ['%d', '%s', '%s']
-    );
-
-    return $inserted !== false;
   }
+
+  $inserted = $wpdb->insert(
+    $wpdb->usermeta,
+    array(
+      'user_id' => $user_id,
+      'meta_key' => $meta_key,
+      'meta_value' => maybe_serialize( $meta_value )
+    ),
+    ['%d', '%s', '%s']
+  );
+
+  return $inserted !== false;
 }
 
 // =============================================================================
@@ -544,17 +586,39 @@ function ffcnr_cleanup_salts( $salts, $option ) {
 function ffcnr_load_child_theme_functions() {
   $options = ffcnr_load_options();
 
-  $dir = ABSPATH . 'wp-content/themes/' . $options['stylesheet'];
-  $path = $dir . '/ffcnr-functions.php';
+  $stylesheet = (string) ( $options['stylesheet'] ?? '' );
+  $stylesheet = preg_replace( '/[^a-zA-Z0-9_-]/', '', $stylesheet );
+
+  if ( $stylesheet === '' ) {
+    define( 'CHILD_FUNCTIONS_LOADED', false );
+
+    return false;
+  }
+
+  $themes_dir = realpath( ABSPATH . 'wp-content/themes' );
+
+  if ( ! $themes_dir ) {
+    define( 'CHILD_FUNCTIONS_LOADED', false );
+
+    return false;
+  }
+
+  $path = $themes_dir . DIRECTORY_SEPARATOR . $stylesheet . DIRECTORY_SEPARATOR . 'ffcnr-functions.php';
 
   if ( file_exists( $path ) ) {
-    include_once $path;
+    $real = realpath( $path );
 
-    define( 'CHILD_FUNCTIONS_LOADED', true );
-    return true;
+    if ( $real && strpos( $real, $themes_dir . DIRECTORY_SEPARATOR ) === 0 ) {
+      include_once $real;
+
+      define( 'CHILD_FUNCTIONS_LOADED', true );
+
+      return true;
+    }
   }
 
   define( 'CHILD_FUNCTIONS_LOADED', false );
+
   return false;
 }
 
@@ -564,14 +628,26 @@ ffcnr_load_child_theme_functions();
 // DELEGATE REQUEST
 // =============================================================================
 
-global $action;
+$action = '';
 
-$action = apply_filters( 'ffcnr_request_action', $_REQUEST['action'] ?? 0 );
+if ( defined( 'FFCNR_ACTION' ) ) {
+  $action = (string) FFCNR_ACTION;
+} else {
+  $action = sanitize_key( $_GET['action'] ?? '' );
+  define( 'FFCNR_ACTION', $action );
+}
+
+$action = apply_filters( 'ffcnr_request_action', FFCNR_ACTION );
 
 if ( $action === 'auth' ) {
   require_once __DIR__ . '/_auth.php';
+  exit;
 }
 
 if ( $action === 'test' ) {
   require_once __DIR__ . '/_test.php';
+  exit;
 }
+
+http_response_code( 400 );
+exit;

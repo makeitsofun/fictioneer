@@ -104,6 +104,56 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
+                    'fictioneer_show_authors',
+                    __( 'Display authors on cards and posts', 'fictioneer' ),
+                    __( 'When you have multiple publishing authors.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_show_full_post_content',
+                    __( 'Display full posts instead of excerpts', 'fictioneer' ),
+                    __( 'You can still use the [More] block for shortened previews.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_show_protected_excerpt',
+                    __( 'Show excerpt on password-protected posts', 'fictioneer' ),
+                    __( 'This may be beneficial for search engines.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_advanced_meta_fields',
+                    __( 'Enable advanced meta fields', 'fictioneer' ),
+                    __( 'Additional options you most likely do not need.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_custom_fields',
+                    __( 'Enable custom fields', 'fictioneer' ),
+                    __( 'Show custom fields form on post edit screen.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
                     'fictioneer_disable_contact_forms',
                     __( 'Disable theme contact forms', 'fictioneer' ),
                     __( 'Emergency stop with an error notice.', 'fictioneer' )
@@ -184,95 +234,6 @@ $images = get_template_directory_uri() . '/img/documentation/';
                     'fictioneer_contact_email_addresses',
                     __( 'Contact form receivers (one email address per line)', 'fictioneer' ),
                     '205px'
-                  );
-                ?>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <div class="fictioneer-card">
-          <div class="fictioneer-card__wrapper">
-            <h3 class="fictioneer-card__header"><?php _e( 'Tweaks', 'fictioneer' ); ?></h3>
-            <div class="fictioneer-card__content">
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_show_authors',
-                    __( 'Display authors on cards and posts', 'fictioneer' ),
-                    __( 'When you have multiple publishing authors.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_hide_categories',
-                    __( 'Hide categories on posts', 'fictioneer' ),
-                    __( 'If you do not need them anyway.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_show_full_post_content',
-                    __( 'Display full posts instead of excerpts', 'fictioneer' ),
-                    __( 'You can still use the [More] block for shortened previews.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_show_protected_excerpt',
-                    __( 'Show excerpt on password-protected posts', 'fictioneer' ),
-                    __( 'This may be beneficial for search engines.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_exclude_protected_from_rss',
-                    __( 'Exclude password-protected posts from RSS', 'fictioneer' ),
-                    __( 'Only works if the theme RSS feeds are enabled.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_exclude_non_stories_from_cloud_counts',
-                    __( 'Only count stories in taxonomy clouds', 'fictioneer' ),
-                    __( 'Taxonomy pages still list all posts in the results.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_advanced_meta_fields',
-                    __( 'Enable advanced meta fields', 'fictioneer' ),
-                    __( 'Additional options you most likely do not need.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_custom_fields',
-                    __( 'Enable custom fields', 'fictioneer' ),
-                    __( 'Show custom fields form on post edit screen.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -618,6 +579,36 @@ $images = get_template_directory_uri() . '/img/documentation/';
 
         <div class="fictioneer-card">
           <div class="fictioneer-card__wrapper">
+            <h3 class="fictioneer-card__header"><?php _e( 'File Uploads', 'fictioneer' ); ?></h3>
+            <div class="fictioneer-card__content">
+
+              <div class="fictioneer-card__row fictioneer-card__row--inline-input">
+                <p class="fictioneer-inline-text-input"><?php
+                  printf(
+                    __( '<span>Limit file uploads to</span> %s <span>MB or less for user roles with the "Upload Limit" restriction.</span>', 'fictioneer' ),
+                    '<input name="fictioneer_upload_size_limit" type="text" id="fictioneer_upload_size_limit" value="' . esc_attr( get_option( 'fictioneer_upload_size_limit', 5 ) ?: 5 ) . '" style="font-family: Consolas, Monaco, monospace; font-size: 87.5%; text-align: center;" size="5" placeholder="5">'
+                  );
+                ?></p>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  $mime_types = get_option( 'fictioneer_upload_mime_types', FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS )
+                    ?: FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
+                ?>
+                <textarea class="fictioneer-textarea" name="fictioneer_upload_mime_types" id="fictioneer_upload_mime_types" rows="4" style="height: 100px;" placeholder="<?php echo FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS; ?>"><?php echo $mime_types; ?></textarea>
+                <p class="fictioneer-sub-label"><?php printf(
+                  __( 'Comma-separated list of allowed <a href="%s" target="_blank" rel="noreferrer">mime types</a> for user roles with the "Upload Restriction". Must be among the allowed mime type and file extensions of WordPress.', 'fictioneer' ),
+                  'https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types'
+                ); ?></p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="fictioneer-card">
+          <div class="fictioneer-card__wrapper">
             <h3 class="fictioneer-card__header"><?php _e( 'Chapters & Stories', 'fictioneer' ); ?></h3>
             <div class="fictioneer-card__content">
 
@@ -833,6 +824,26 @@ $images = get_template_directory_uri() . '/img/documentation/';
             <div class="fictioneer-card__content">
 
               <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_exclude_non_stories_from_cloud_counts',
+                    __( 'Only count stories in taxonomy clouds', 'fictioneer' ),
+                    __( 'Taxonomy pages still list all posts in the results.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_hide_categories',
+                    __( 'Hide categories on posts', 'fictioneer' ),
+                    __( 'If you do not need them anyway.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
                 <p><?php _e( 'Taxonomies on cards include fandoms, genres, tags (if shown), and characters in that order.', 'fictioneer' ); ?></p>
               </div>
 
@@ -1015,6 +1026,39 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_ajax_comment_form',
+                    __( 'Enable AJAX comment form', 'fictioneer' ),
+                    __( 'Load the comment form via AJAX to circumvent caching.', 'fictioneer' ),
+                    __( 'The AJAX comment form avoids conflicts with caching, especially issues with dynamic security tokens that are unique to each user. By loading the form after the page has fully loaded, it circumvents the cache, though it may require more server resources.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_ajax_comments',
+                    __( 'Enable AJAX comment section', 'fictioneer' ),
+                    __( 'Load the comment section and form via AJAX. More server work but circumvents caching.', 'fictioneer' ),
+                    __( 'The AJAX comment section avoids conflicts with caching, including the AJAX comment form, ensuring that comments are always up-to-date. By loading the comments after the page has fully loaded, it circumvents the cache, though it may require more server resources.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_ajax_authentication',
+                    __( 'Enable AJAX user authentication', 'fictioneer' ),
+                    __( 'Check for user login state after the page has been loaded to get around anonymizing caching strategies.', 'fictioneer' ),
+                    __( 'This is a <em>last-resort measure</em> for aggressive caching strategies, such as options to serve public caches to logged-in users. It queries for the user’s login state after the page has loaded. This requires more server resources, but can help when everything else fails.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
                     'fictioneer_enable_ajax_comment_moderation',
                     __( 'Enable AJAX comment moderation', 'fictioneer' ),
                     __( 'Moderation actions directly in the comment section.', 'fictioneer' )
@@ -1026,7 +1070,7 @@ $images = get_template_directory_uri() . '/img/documentation/';
                 <?php
                   fictioneer_settings_label_checkbox(
                     'fictioneer_enable_fast_ajax_comments',
-                    __( 'Enable fast AJAX for comments', 'fictioneer' ),
+                    __( 'Enable AJAX Fast Requests for comments', 'fictioneer' ),
                     sprintf(
                       __( 'Accelerate comments by skipping most plugins. Requires the <a href="%s" target="_blank">Fast Requests</a> mu-plugin to be installed.', 'fictioneer' ),
                       'https://github.com/Tetrakern/fictioneer/blob/main/INSTALLATION.md#recommended-must-use-plugins'
@@ -1214,23 +1258,6 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_ffcnr_auth',
-                    __( 'Enable FFCNR user authentication', 'fictioneer' ),
-                    sprintf(
-                      __( 'Significantly faster frontend user setup, but might not work in some cases — <a href="%s" target="_blank" rel="noopener">test it here</a>. Not safe for multi-sites.', 'fictioneer' ),
-                      fictioneer_get_ffcnr_url() . '?action=test'
-                    ),
-                    sprintf(
-                      __( 'FFCNR stands for <em>Fast Fictioneer Requests</em>, an alternative entry point to WordPress with minimal environment. In this mode, almost nothing is loaded: no themes, no plugins, and only a tiny subset of WordPress itself. This reduced environment significantly improves performance for certain tasks, such as fetching user data for the frontend. Refer to the <a href="%s" target="_blank" rel="noopener noreferrer">installation guide</a> for details on interacting with FFCNR.', 'fictioneer' ),
-                      'https://github.com/Tetrakern/fictioneer/blob/main/INSTALLATION.md#ffcnr-fast-fictioneer-requests'
-                    )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
                     'fictioneer_disable_heartbeat',
                     __( 'Disable Heartbeat API', 'fictioneer' ),
                     __( 'No more continuous requests for near real-time updates and autosaves, which can strain the server.', 'fictioneer' ),
@@ -1286,17 +1313,6 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_bundle_stylesheets',
-                    __( 'Bundle CSS files into one', 'fictioneer' ),
-                    __( 'Faster if HTTP/2 (+) is not available to load multiple smaller files in parallel, but increases the initial payload.', 'fictioneer' ),
-                    __( 'Modern browsers and servers can handle multiple stylesheets in parallel, eliminating the need to bundle them into one large file. This allows the theme to selectively load styles as needed. Unless you are sure of what you are doing, it is best to leave this setting off.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
                     'fictioneer_bundle_scripts',
                     __( 'Bundle JavaScript files into one', 'fictioneer' ),
                     __( 'Deferred script file that should be ignored by aggregation plugins to avoid errors (fictioneer/js/complete.min.js and fictioneer/cache/dynamic-scripts.js).', 'fictioneer' ),
@@ -1323,6 +1339,98 @@ $images = get_template_directory_uri() . '/img/documentation/';
                     __( 'Disable extended chapter list meta queries', 'fictioneer' ),
                     __( 'Faster, but adds one row per chapter to your database, which can slow down your site if you have thousands.', 'fictioneer' ),
                     __( 'Unless you are a developer customizing the theme, leave this setting off. Extended meta queries check not only for the value of meta fields but also their existence, as Fictioneer does not keep "falsy" values in the database. If you disable this, all chapters will have the missing meta fields added and exempted from cleanup.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="fictioneer-card">
+          <div class="fictioneer-card__wrapper">
+            <h3 class="fictioneer-card__header"><?php _e( 'Tuning', 'fictioneer' ); ?></h3>
+            <div class="fictioneer-card__content">
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_ffcnr_auth',
+                    __( 'Enable FFCNR user authentication', 'fictioneer' ),
+                    sprintf(
+                      __( 'Significantly faster frontend user setup, but might not work in some cases — <a href="%s" target="_blank" rel="noopener">test it here</a>. Not safe for multi-sites.', 'fictioneer' ),
+                      fictioneer_get_ffcnr_url() . '?action=test'
+                    ),
+                    sprintf(
+                      __( 'FFCNR stands for <em>Fast Fictioneer Requests</em>, an alternative entry point to WordPress with minimal environment. In this mode, almost nothing is loaded: no themes, no plugins, and only a tiny subset of WordPress itself. This reduced environment significantly improves performance for certain tasks, such as fetching user data for the frontend. Refer to the <a href="%s" target="_blank" rel="noopener noreferrer">installation guide</a> for details on interacting with FFCNR.', 'fictioneer' ),
+                      'https://github.com/Tetrakern/fictioneer/blob/main/INSTALLATION.md#ffcnr-fast-fictioneer-requests'
+                    )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_fast_chapter_posts',
+                    __( 'Enable optimized chapter post queries', 'fictioneer' ),
+                    __( 'Significantly reduces RAM usage, but may interfere with plugins or customizations that rely on native WordPress queries. This is an advanced option — use with care!' ),
+                    __( '<p>Compiling grouped chapter lists on story pages can place significant strain on your server, especially if you have hundreds of chapters per story that all need to be queried.</p><p>While Transient caching helps, rebuilding the list is still expensive due to how native WordPress queries work. This option replaces the default query with an optimized custom one, at the expense of full compatibility with all plugins and filters.<p><p>More specifically, only selected post and meta fields are queried. If you need more, add them with the filter. Otherwise, WordPress will make additional expensive queries to fetch the missing data.</p>' ),
+                    '<code class="helper-modal-code">fictioneer_filter_fast_story_chapter_posts_meta_keys</code>'
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_disable_header_image_preload',
+                    __( 'Disable preloading of header image', 'fictioneer' ),
+                    __( 'Not by default compatible with all image CDNs.', 'fictioneer' ),
+                    __( 'Preloading the header image can speed up your LCP time (Largest Contentful Paint), resulting in a better user experience and search rank. However, this typically clashes with image CDNs because the preload URL can differ from the CDN-provided URL, resulting in an incorrect preload, making your site actually slower.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_rewrite_chapter_permalinks',
+                    __( 'Rewrite chapter permalinks to include story', 'fictioneer' ),
+                    __( 'Becomes <code>/story/story-slug/chapter-slug[-n]</code>. You must flush your permalinks and purge the theme caches.', 'fictioneer' ),
+                    __( 'Stories and chapters are separate posts that are associated but not hierarchically linked. As a result, the permalink of a chapter does not include the story by default. Enabling this setting adds an alias to include the story in the chapter’s permalink. However, chapter slugs must still be globally unique, and a number will be appended in case of a conflict (e.g. <code>.../story/story-slug/chapter-slug-1</code>).', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_anti_flicker',
+                    __( 'Enable anti-flicker script', 'fictioneer' ),
+                    __( 'Hides the page until the document is fully parsed.', 'fictioneer' ),
+                    __( '<p>Rendering of the site begins while the HTML document is still being parsed, from top to bottom. This can cause the layout to flicker and shift for a split second if styles are applied to grouped elements that are still missing their counterparts. Not great, not terrible.</p><p>This script prevents such flickers by making the site invisible until the entire document has been parsed, which means the site technically appears a split second later. However, if the script is blocked, the site will remain invisible. This is extremely unlikely, though.</p>', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_extended_alert_queries',
+                    __( 'Enable extended alert queries', 'fictioneer' ),
+                    __( 'Allows to limit custom alerts to users and roles.', 'fictioneer' ),
+                    __( 'This option is intended purely for developers. The theme does not include a built-in interface for creating alerts restricted to specific user IDs or roles. It also makes the queries slower.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_exclude_protected_from_rss',
+                    __( 'Exclude password-protected posts from RSS', 'fictioneer' ),
+                    __( 'Only works if the theme RSS feeds are enabled.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -1480,36 +1588,6 @@ $images = get_template_directory_uri() . '/img/documentation/';
 
         <div class="fictioneer-card">
           <div class="fictioneer-card__wrapper">
-            <h3 class="fictioneer-card__header"><?php _e( 'File Uploads', 'fictioneer' ); ?></h3>
-            <div class="fictioneer-card__content">
-
-              <div class="fictioneer-card__row fictioneer-card__row--inline-input">
-                <p class="fictioneer-inline-text-input"><?php
-                  printf(
-                    __( '<span>Limit file uploads to</span> %s <span>MB or less for user roles with the "Upload Limit" restriction.</span>', 'fictioneer' ),
-                    '<input name="fictioneer_upload_size_limit" type="text" id="fictioneer_upload_size_limit" value="' . esc_attr( get_option( 'fictioneer_upload_size_limit', 5 ) ?: 5 ) . '" style="font-family: Consolas, Monaco, monospace; font-size: 87.5%; text-align: center;" size="5" placeholder="5">'
-                  );
-                ?></p>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  $mime_types = get_option( 'fictioneer_upload_mime_types', FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS )
-                    ?: FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS;
-                ?>
-                <textarea class="fictioneer-textarea" name="fictioneer_upload_mime_types" id="fictioneer_upload_mime_types" rows="4" style="height: 100px;" placeholder="<?php echo FICTIONEER_DEFAULT_UPLOAD_MIME_TYPE_RESTRICTIONS; ?>"><?php echo $mime_types; ?></textarea>
-                <p class="fictioneer-sub-label"><?php printf(
-                  __( 'Comma-separated list of allowed <a href="%s" target="_blank" rel="noreferrer">mime types</a> for user roles with the "Upload Restriction". Must be among the allowed mime type and file extensions of WordPress.', 'fictioneer' ),
-                  'https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types'
-                ); ?></p>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <div class="fictioneer-card">
-          <div class="fictioneer-card__wrapper">
             <h3 class="fictioneer-card__header"><?php _e( 'Caching', 'fictioneer' ); ?></h3>
             <div class="fictioneer-card__content">
 
@@ -1527,10 +1605,9 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_static_partials',
-                    __( 'Enable caching of partials', 'fictioneer' ),
-                    __( 'Caches parts of the page as static HTML files to speed up loading. Do not use this together with a cache plugin.', 'fictioneer' ),
-                    __( '<p>With this feature enabled, the theme caches parts of the page that never change as static HTML files, pulling them up on subsequent requests to save resources. Unlike full caching, this only affects some modals, menus, and chapter contents. Use this only if cache plugins are not an option.</p><p>Plugins that change the content of chapters may not work without further adjustments. If you need to apply dynamic chapters content, which are only refreshed on update or when the cache expires, you can still do so with the <code>fictioneer_filter_static_content</code> filter.</p><p>Administrators can disable the content caching per chapter.</p>', 'fictioneer' )
+                    'fictioneer_purge_all_caches',
+                    __( 'Purge all caches on content updates', 'fictioneer' ),
+                    __( 'Inefficient but makes sure everything is up-to-date.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -1552,8 +1629,49 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_static_partials',
+                    __( 'Enable caching of partials', 'fictioneer' ),
+                    __( 'Caches parts of the page as static HTML files to speed up loading. Do not use this together with a cache plugin.', 'fictioneer' ),
+                    __( '<p>With this feature enabled, the theme caches parts of the page that never change as static HTML files, pulling them up on subsequent requests to save resources. Unlike full caching, this only affects some modals, menus, and chapter contents. Use this only if cache plugins are not an option.</p><p>Plugins that change the content of chapters may not work without further adjustments. If you need to apply dynamic chapters content, which are only refreshed on update or when the cache expires, you can still do so with the <code>fictioneer_filter_static_content</code> filter.</p><p>Administrators can disable the content caching per chapter.</p>', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_cache_compatibility',
+                    __( 'Enable compatibility mode for caching', 'fictioneer' ),
+                    __( 'Make the theme aware of unknown caching plugins.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_public_cache_compatibility',
+                    __( 'Enable compatibility mode for public caching', 'fictioneer' ),
+                    __( 'For serving public caches to logged-in users. Exceptions for administrators and moderators are recommended.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_private_cache_compatibility',
+                    __( 'Enable compatibility mode for private caching', 'fictioneer' ),
+                    __( 'For serving private caches to logged-in users. Also useful if you do not serve caches to logged-in users at all.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
                     'fictioneer_enable_lastpostmodified_caching',
-                    __( 'Cache last post modified date as Transient', 'fictioneer' ),
+                    __( 'Enable Transient caching for last post modified', 'fictioneer' ),
                     __( 'The responsible query can be extremely slow.', 'fictioneer' ),
                     sprintf(
                       __( '<p>The query responsible for <a href="%s" target="_blank">finding the last modified post date</a> can be extremely slow if you have a large database, potentially causing your site to crash under heavy traffic.</p><p>While persistent object caching, if available, should prevent this, that has proven unreliable. This solution caches the date string in a simple database row for 5 minutes, which is a fast and safe approach.</p>', 'fictioneer' ),
@@ -1566,48 +1684,8 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_purge_all_caches',
-                    __( 'Purge all caches on content updates', 'fictioneer' ),
-                    __( 'Inefficient but makes sure everything is up-to-date.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_cache_compatibility',
-                    __( 'Enable cache compatibility mode', 'fictioneer' ),
-                    __( 'Make the theme aware of unknown caching plugins.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_public_cache_compatibility',
-                    __( 'Enable public cache compatibility mode', 'fictioneer' ),
-                    __( 'For serving public caches to logged-in users. Exceptions for administrators and moderators are recommended.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_private_cache_compatibility',
-                    __( 'Enable private cache compatibility mode', 'fictioneer' ),
-                    __( 'For serving private caches to logged-in users. Also useful if you do not serve caches to logged-in users at all.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
                     'fictioneer_disable_menu_transients',
-                    __( 'Disable menu Transient caching', 'fictioneer' ),
+                    __( 'Disable Transient caching for menus', 'fictioneer' ),
                     __( 'Only do this if you render dynamic content in the menus.', 'fictioneer' ),
                     __( 'Compiling navigation menus is an extensive operation that involves multiple database queries. If you are not displaying dynamic content, such as points or other constantly changing data, it is best to cache the menus to avoid repeating the same queries for identical results.', 'fictioneer' )
                   );
@@ -1618,7 +1696,7 @@ $images = get_template_directory_uri() . '/img/documentation/';
                 <?php
                   fictioneer_settings_label_checkbox(
                     'fictioneer_disable_chapter_list_transients',
-                    __( 'Disable chapter list Transient caching', 'fictioneer' ),
+                    __( 'Disable Transient caching for chapter lists', 'fictioneer' ),
                     __( 'Only do this if lists on story pages are outdated.', 'fictioneer' ),
                     __( 'Compiling grouped chapter lists on story pages can place significant strain on your server, especially if you have hundreds of chapters per story that all need to be queried. Only disable this if your stories are small (fewer than 50 chapters) or if you have another solution, such as a caching plugin.', 'fictioneer' )
                   );
@@ -1629,42 +1707,9 @@ $images = get_template_directory_uri() . '/img/documentation/';
                 <?php
                   fictioneer_settings_label_checkbox(
                     'fictioneer_disable_shortcode_transients',
-                    __( 'Disable shortcode Transient caching', 'fictioneer' ),
+                    __( 'Disable Transient caching for shortcodes', 'fictioneer' ),
                     __( 'Only do this if shortcodes are not properly updated.', 'fictioneer' ),
                     __( 'Shortcodes rely on complex queries with many optional parameters, which can be slow and resource-intensive if you use too many or have a very large database. Caching them in Transients for a period (default is 300 seconds) significantly reduces server strain but may conflict with other caching solutions.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_ajax_comment_form',
-                    __( 'Enable AJAX comment form', 'fictioneer' ),
-                    __( 'Load the comment form via AJAX to circumvent caching.', 'fictioneer' ),
-                    __( 'The AJAX comment form avoids conflicts with caching, especially issues with dynamic security tokens that are unique to each user. By loading the form after the page has fully loaded, it circumvents the cache, though it may require more server resources.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_ajax_comments',
-                    __( 'Enable AJAX comment section', 'fictioneer' ),
-                    __( 'Load the comment section and form via AJAX. More server work but circumvents caching.', 'fictioneer' ),
-                    __( 'The AJAX comment section avoids conflicts with caching, including the AJAX comment form, ensuring that comments are always up-to-date. By loading the comments after the page has fully loaded, it circumvents the cache, though it may require more server resources.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_ajax_authentication',
-                    __( 'Enable AJAX user authentication', 'fictioneer' ),
-                    __( 'Check for user login state after the page has been loaded to get around anonymizing caching strategies.', 'fictioneer' ),
-                    __( 'This is a <em>last-resort measure</em> for aggressive caching strategies, such as options to serve public caches to logged-in users. It queries for the user’s login state after the page has loaded. This requires more server resources, but can help when everything else fails.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -1681,57 +1726,20 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_disable_header_image_preload',
-                    __( 'Disable preloading of header image', 'fictioneer' ),
-                    __( 'Not by default compatible with all image CDNs.', 'fictioneer' ),
-                    __( 'Preloading the header image can speed up your LCP time (Largest Contentful Paint), resulting in a better user experience and search rank. However, this typically clashes with image CDNs because the preload URL can differ from the CDN-provided URL, resulting in an incorrect preload, making your site actually slower.', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_rewrite_chapter_permalinks',
-                    __( 'Rewrite chapter permalinks to include story', 'fictioneer' ),
-                    __( 'Becomes <code>/story/story-slug/chapter-slug[-n]</code>. You must flush your permalinks and purge the theme caches.', 'fictioneer' ),
-                    __( 'Stories and chapters are separate posts that are associated but not hierarchically linked. As a result, the permalink of a chapter does not include the story by default. Enabling this setting adds an alias to include the story in the chapter’s permalink. However, chapter slugs must still be globally unique, and a number will be appended in case of a conflict (e.g. <code>.../story/story-slug/chapter-slug-1</code>).', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_anti_flicker',
-                    __( 'Enable anti-flicker script', 'fictioneer' ),
-                    __( 'Hides the page until the document is fully parsed.', 'fictioneer' ),
-                    __( '<p>Rendering of the site begins while the HTML document is still being parsed, from top to bottom. This can cause the layout to flicker and shift for a split second if styles are applied to grouped elements that are still missing their counterparts. Not great, not terrible.</p><p>This script prevents such flickers by making the site invisible until the entire document has been parsed, which means the site technically appears a split second later. However, if the script is blocked, the site will remain invisible. This is extremely unlikely, though.</p>', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_global_splide',
-                    __( 'Enable Splide slider globally', 'fictioneer' ),
-                    __( 'Instead of limiting it to shortcodes.', 'fictioneer' ),
-                    sprintf(
-                      __( 'Normally, the <a href="%s" target="_blank" rel="noopener noreferrer">Splide slider</a> script and style are only loaded when a shortcode with the required parameter is found in the post content. However, if you want to use Splide in other ways, you can enable the assets globally here.', 'fictioneer' ),
-                      'https://splidejs.com/guides/options/'
-                    )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
                     'fictioneer_disable_properties',
                     __( 'Disable Fictioneer CSS properties', 'fictioneer' ),
                     __( 'Only do this if you define everything yourself.', 'fictioneer' ),
                     __( 'If you do not understand what this option does, you have no business enabling it. This is generally a poor life choice.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_disable_splide',
+                    __( 'Disable Splide slider integration', 'fictioneer' ),
+                    __( 'Removes both the script and style.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -1833,17 +1841,6 @@ $images = get_template_directory_uri() . '/img/documentation/';
                     'fictioneer_disable_comment_pagination',
                     __( 'Disable theme comment pagination', 'fictioneer' ),
                     __( 'Return to the default WordPress pagination (no-AJAX).', 'fictioneer' )
-                  );
-                ?>
-              </div>
-
-              <div class="fictioneer-card__row">
-                <?php
-                  fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_extended_alert_queries',
-                    __( 'Enable extended alert queries', 'fictioneer' ),
-                    __( 'Allows to limit custom alerts to users and roles.', 'fictioneer' ),
-                    __( 'This option is intended purely for developers. The theme does not include a built-in interface for creating alerts restricted to specific user IDs or roles. It also makes the queries slower.', 'fictioneer' )
                   );
                 ?>
               </div>

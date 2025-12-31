@@ -141,7 +141,7 @@ do_action( 'rss_tag_pre', 'rss2' );
 
         // Data
         $pub_date = mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false );
-        $og_image = fictioneer_get_seo_image( $post->ID );
+        $og_image = \Fictioneer\SEO\Meta::image( $post->ID );
 
         // <-- Start HTML
         ?>

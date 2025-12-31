@@ -34,10 +34,32 @@
 @use '_showcase';
 @use '_search';
 @use '_sidebar';
-
+@use '_post-list';
 @use '_notifications';
 @use '_lightbox';
 
+// Stories
+@use '_story';
+
+// Chapters
+@use '_chapter';
+@use '_paragraph-tools';
+@use '_reader-settings';
+@use '_suggestions';
+@use '_progress_bar';
+@use '_tts';
+@use '_micro-menu';
+
+// Collections
+@use '_collections';
+
+// Recommendations
+@use '_recommendation';
+
+// Archive
+@use '_archive';
+
+// Overrides
 @use '_browser-hacks';
 @use '_print';
 @use '_minimal';

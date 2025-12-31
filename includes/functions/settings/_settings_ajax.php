@@ -1,8 +1,12 @@
 <?php
 
+use Fictioneer\Log;
+
 // =============================================================================
 // VALIDATION
 // =============================================================================
+
+use Fictioneer\Utils_Admin;
 
 /**
  * Validate settings AJAX request
@@ -50,7 +54,7 @@ function fictioneer_ajax_delete_epub() {
     // Check if deletion was successful
     if ( ! file_exists( $path ) ) {
       // Log
-      fictioneer_log(
+      Log::add(
         sprintf(
           _x(
             'Deleted file from server: %s',
@@ -111,7 +115,7 @@ function fictioneer_ajax_purge_schema() {
     // Delete schema stored in post meta
     if ( $post_id && delete_post_meta( $post_id, 'fictioneer_schema' ) ) {
       // Log
-      fictioneer_log(
+      Log::add(
         sprintf(
           _x(
             'Purged schema graph of #%s',
@@ -205,7 +209,7 @@ function fictioneer_ajax_purge_all_schemas() {
     );
 
     // Log
-    fictioneer_log(
+    Log::add(
       sprintf(
         __( 'Purging all schema graphs... %1$s/%2$s', 'fictioneer' ),
         ( $offset + $limit ) < $total ? ( $offset + $limit ) : $total,
@@ -227,7 +231,7 @@ function fictioneer_ajax_purge_all_schemas() {
     fictioneer_purge_all_caches();
 
     // Log
-    fictioneer_log( __( 'Finished purging all schema graphs.', 'fictioneer' ) );
+    Log::add( __( 'Finished purging all schema graphs.', 'fictioneer' ) );
 
     // ... all done
     wp_send_json_success(
@@ -281,7 +285,7 @@ function fictioneer_ajax_recount_words() {
   // Count words and update
   if ( ! empty( $results ) ) {
     foreach ( $results as $post ) {
-      update_post_meta( $post->ID, '_word_count', fictioneer_count_words( $post->ID, $post->post_content ) );
+      update_post_meta( $post->ID, '_word_count', Utils_Admin::count_words( $post->ID, $post->post_content ) );
     }
 
     if ( ! $max_pages ) {

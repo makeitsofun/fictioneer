@@ -1,6 +1,10 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
+use Fictioneer\Customizer;
+use Fictioneer\Log;
 
 // =============================================================================
 // ADMIN INCLUDES
@@ -103,23 +107,23 @@ function fictioneer_dynamic_editor_css() {
     "
     .
     implode( '', array_map( function( $prop ) use ( $mode ) {
-      return "--bg-{$prop}: " . fictioneer_hsl_code( fictioneer_get_theme_color( "{$mode}_bg_{$prop}" ) ) . ';';
+      return "--bg-{$prop}: " . Utils::get_hsl_code( Utils::get_theme_color( "{$mode}_bg_{$prop}" ) ) . ';';
     }, ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] ) )
     .
     implode( '', array_map( function( $prop ) use ( $mode ) {
-      return "--fg-{$prop}: " . fictioneer_hsl_font_code( fictioneer_get_theme_color( "{$mode}_fg_{$prop}" ) ) . ';';
+      return "--fg-{$prop}: " . Utils::get_hsl_font_code( Utils::get_theme_color( "{$mode}_fg_{$prop}" ) ) . ';';
     }, ['100', '200', '300', '400', '500', '600', '700', '800', '900', '950', 'tinted', 'inverted'] ) )
     .
     "
-    --primary-400: " . fictioneer_get_theme_color( $mode . '_primary_400' ) . ";
-    --primary-500: " . fictioneer_get_theme_color( $mode . '_primary_500' ) . ";
-    --primary-600: " . fictioneer_get_theme_color( $mode . '_primary_600' ) . ";
-    --red-400: " . fictioneer_get_theme_color( $mode . '_red_400' ) . ";
-    --red-500: " . fictioneer_get_theme_color( $mode . '_red_500' ) . ";
-    --red-600: " . fictioneer_get_theme_color( $mode . '_red_600' ) . ";
-    --green-400: " . fictioneer_get_theme_color( $mode . '_green_400' ) . ";
-    --green-500: " . fictioneer_get_theme_color( $mode . '_green_500' ) . ";
-    --green-600: " . fictioneer_get_theme_color( $mode . '_green_600' ) . ";
+    --primary-400: " . Utils::get_theme_color( $mode . '_primary_400' ) . ";
+    --primary-500: " . Utils::get_theme_color( $mode . '_primary_500' ) . ";
+    --primary-600: " . Utils::get_theme_color( $mode . '_primary_600' ) . ";
+    --red-400: " . Utils::get_theme_color( $mode . '_red_400' ) . ";
+    --red-500: " . Utils::get_theme_color( $mode . '_red_500' ) . ";
+    --red-600: " . Utils::get_theme_color( $mode . '_red_600' ) . ";
+    --green-400: " . Utils::get_theme_color( $mode . '_green_400' ) . ";
+    --green-500: " . Utils::get_theme_color( $mode . '_green_500' ) . ";
+    --green-600: " . Utils::get_theme_color( $mode . '_green_600' ) . ";
     ";
 
   $css .= ( $mode === 'dark' ) ? "
@@ -201,7 +205,7 @@ function fictioneer_dynamic_editor_css() {
     $css .= ".components-button.is-secondary{background: rgb(255 255 255 / 90%);}.components-button.is-secondary:hover:not(:disabled,[aria-disabled=true],.is-pressed){background: color-mix(in srgb,var(--wp-components-color-accent,var(--wp-admin-theme-color,#3858e9)) 4%, rgb(255 255 255 / 95%))}";
   }
 
-  wp_add_inline_style( 'wp-edit-blocks', fictioneer_minify_css( $css ) );
+  wp_add_inline_style( 'wp-edit-blocks', Utils::minify_css( $css ) );
 };
 
 if ( ! get_option( 'fictioneer_disable_dynamic_editor_styles' ) ) {
@@ -827,7 +831,6 @@ function fcntr_admin( $key, $escape = false ) {
       'fcn_dashboard_access' => _x( 'Dashboard Access', 'Capability translation', 'fictioneer' ),
       'fcn_show_badge' => _x( 'Show Badge', 'Capability translation', 'fictioneer' ),
       'upload_files' => _x( 'Upload Files', 'Capability translation', 'fictioneer' ),
-      'edit_files' => _x( 'Edit Files', 'Capability translation', 'fictioneer' ),
       'fcn_moderate_post_comments' => _x( 'Moderate Post Comments', 'Capability translation', 'fictioneer' ),
       'fcn_allow_self_delete' => _x( 'Allow Self Delete', 'Capability translation', 'fictioneer' ),
       'read' => _x( 'Read', 'Capability translation', 'fictioneer' ),
@@ -935,6 +938,7 @@ function fcntr_admin( $key, $escape = false ) {
       'edit_private_fcn_recommendations' => _x( 'Edit Private Recommendations', 'Capability translation', 'fictioneer' ),
       'delete_private_fcn_recommendations' => _x( 'Delete Private Recommendations', 'Capability translation', 'fictioneer' ),
       'fcn_no_filters' => _x( 'No Filters', 'Capability translation', 'fictioneer' ),
+      'fcn_unfiltered_css' => _x( 'Unfiltered CSS', 'Capability translation', 'fictioneer' ),
     );
   }
 
@@ -1089,10 +1093,10 @@ function fictioneer_look_for_issues() {
   global $wpdb;
 
   // Setup
-  $cache_dir = fictioneer_get_theme_cache_dir( 'looking_for_issues' );
-  $dynamic_scripts_path = $cache_dir . '/dynamic-scripts.js';
-  $bundled_fonts_path = $cache_dir . '/bundled-fonts.css';
-  $customize_css_path = $cache_dir . '/customize.css';
+  $cache_dir = Utils::get_cache_dir( 'looking_for_issues' );
+  $dynamic_scripts_path = $cache_dir . 'dynamic-scripts.js';
+  $bundled_fonts_path = $cache_dir . 'bundled-fonts.css';
+  $customize_css_path = $cache_dir . 'customize.css';
   $issues = [];
 
   // Cache directory set up?
@@ -1114,7 +1118,7 @@ function fictioneer_look_for_issues() {
 
   // Call build methods if necessary
   if ( ! file_exists( $customize_css_path ) ) {
-    fictioneer_build_customize_css();
+    Customizer::build_customizer_css();
   }
 
   if ( ! file_exists( $dynamic_scripts_path ) ) {
@@ -1192,14 +1196,14 @@ function fictioneer_look_for_issues() {
   $site_url = get_option( 'siteurl' );
   $home_url = get_option( 'home' );
 
-  if ( strpos( $site_url, 'https://' ) !== 0 && ! fictioneer_is_local_environment() ) {
+  if ( strpos( $site_url, 'https://' ) !== 0 && wp_get_environment_type() !== 'local' ) {
     $issues[] = sprintf(
       __( 'Your <strong>Site URL</strong> does not start with <code>%s</code>. This can lead to security issues, browsers refusing to access the page, and required scripts not loading.', 'fictioneer' ),
       'https://'
     );
   }
 
-  if ( strpos( $home_url, 'https://' ) !== 0 && ! fictioneer_is_local_environment() ) {
+  if ( strpos( $home_url, 'https://' ) !== 0 && wp_get_environment_type() !== 'local' ) {
     $issues[] = sprintf(
       __( 'Your <strong>Home URL</strong> does not start with <code>%s</code>. This can lead to security issues, browsers refusing to access the page, and required scripts not loading.', 'fictioneer' ),
       'https://'
@@ -1282,7 +1286,7 @@ function fictioneer_look_for_issues() {
   );
 
   // Log
-  fictioneer_log( $update );
+  Log::add( $update );
 }
 
 /**
@@ -1407,7 +1411,7 @@ function fictioneer_log_page_assignment_update( $option, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**
@@ -1503,7 +1507,7 @@ function fictioneer_log_phrase_update( $option, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**
@@ -1611,7 +1615,7 @@ function fictioneer_log_connection_update( $connection, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**
@@ -1684,7 +1688,7 @@ if ( ! wp_doing_ajax() ) {
 
 function fictioneer_ajax_get_chapter_group_options() {
   // Validate
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_nonce' );
+  $user = Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_nonce' );
   $story_id = isset( $_GET['story_id'] ) ? fictioneer_validate_id( $_GET['story_id'], 'fcn_story' ) : null;
 
   if ( ! is_admin() || ! wp_doing_ajax() ) {
@@ -1702,7 +1706,7 @@ function fictioneer_ajax_get_chapter_group_options() {
   // Setup
   global $wpdb;
 
-  $story = fictioneer_get_story_data( $story_id, false );
+  $story = \Fictioneer\Story::get_data( $story_id, false );
   $groups = [];
 
   // Query groups
@@ -1769,7 +1773,7 @@ function fictioneer_ajax_reset_theme_colors() {
   // Setup
   $mods = get_theme_mods();
   $theme = get_option( 'stylesheet' );
-  $fictioneer_colors = fictioneer_get_theme_colors_array();
+  $fictioneer_colors = Utils::get_theme_colors();
 
   // Abort if...
   if ( ! is_array( $fictioneer_colors ) || empty( $fictioneer_colors ) ) {
@@ -1785,8 +1789,8 @@ function fictioneer_ajax_reset_theme_colors() {
   update_option( "theme_mods_{$theme}", $mods );
 
   // Refresh custom files
-  fictioneer_build_customize_css();
-  fictioneer_build_customize_css( 'preview' );
+  Customizer::build_customizer_css();
+  Customizer::build_customizer_css( 'preview' );
   fictioneer_build_dynamic_scripts();
 
   // Finish

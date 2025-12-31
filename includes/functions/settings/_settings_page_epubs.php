@@ -101,7 +101,7 @@ class Fictioneer_Epubs_Table extends WP_List_Table {
     );
 
     if ( $story ) {
-      $story_data = fictioneer_get_story_data( $story->ID, false );
+      $story_data = \Fictioneer\Story::get_data( $story->ID, false );
       $download_stats = get_post_meta( $story->ID, 'fictioneer_epub_downloads', true );
       $download_stats = is_array( $download_stats ) ? $download_stats : [0];
       $downloads_version = end( $download_stats );
@@ -206,8 +206,8 @@ class Fictioneer_Epubs_Table extends WP_List_Table {
 
   protected function sort_by_words( $data, $order ) {
     usort( $data, function( $a, $b ) use ( $order ) {
-      $a_story = fictioneer_get_story_data( absint( pathinfo( $a )['filename'] ) );
-      $b_story = fictioneer_get_story_data( absint( pathinfo( $b )['filename'] ) );
+      $a_story = \Fictioneer\Story::get_data( absint( pathinfo( $a )['filename'] ) );
+      $b_story = \Fictioneer\Story::get_data( absint( pathinfo( $b )['filename'] ) );
 
       if ( strtolower( $order ) === 'asc' ) {
         return absint( $a_story['word_count'] ) < absint( $b_story['word_count'] ) ? -1 : 1;

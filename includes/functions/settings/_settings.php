@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils_Admin;
+
 // =============================================================================
 // INCLUDES
 // =============================================================================
@@ -186,12 +188,12 @@ function fictioneer_settings_seo_screen_options() {
 function fictioneer_save_screen_options( $status, $option, $value ) {
   // ePUBs per page
   if ( $option === 'fictioneer_epubs_per_page' ) {
-    fictioneer_update_user_meta( get_current_user_id(), $option, $value );
+    Utils_Admin::update_user_meta( get_current_user_id(), $option, $value );
   }
 
   // Updated per page
   if ( $option === 'fictioneer_seo_items_per_page' ) {
-    fictioneer_update_user_meta( get_current_user_id(), $option, $value );
+    Utils_Admin::update_user_meta( get_current_user_id(), $option, $value );
   }
 
   return $status;

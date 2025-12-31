@@ -7,7 +7,7 @@ use Fictioneer\Sanitizer;
 // =============================================================================
 
 /**
- * Toggle maintenance mode from settings with message
+ * Toggle maintenance mode from settings with message.
  *
  * @since 5.0.0
  * @since 5.12.0 - Exclude Customizer preview.
@@ -30,7 +30,7 @@ add_action( 'get_header', 'fictioneer_maintenance_mode' );
 // =============================================================================
 
 /**
- * Remove clutter and don't provide information to potential attackers
+ * Remove clutter and don't provide information to potential attackers.
  */
 
 if ( get_option( 'fictioneer_remove_head_clutter' ) ) {
@@ -48,7 +48,7 @@ if ( ! get_option( 'fictioneer_enable_xmlrpc' ) ) {
 // =============================================================================
 
 /**
- * Remove default sitemaps if custom sitemaps are enabled
+ * Remove default sitemaps if custom sitemaps are enabled.
  */
 
 if ( get_option( 'fictioneer_enable_sitemap' ) && ! fictioneer_seo_plugin_active() ) {
@@ -56,11 +56,11 @@ if ( get_option( 'fictioneer_enable_sitemap' ) && ! fictioneer_seo_plugin_active
 }
 
 // =============================================================================
-// CUSTOMIZE EXCERPTS
+// EXCERPTS
 // =============================================================================
 
 /**
- * Change excerpt length
+ * Change excerpt length.
  *
  * @since 4.0.0
  *
@@ -73,7 +73,7 @@ function fictioneer_custom_excerpt_length( $length ) {
 add_filter( 'excerpt_length', 'fictioneer_custom_excerpt_length' );
 
 /**
- * Replace excerpt ellipsis
+ * Replace excerpt ellipsis.
  *
  * @since 5.2.5
  *
@@ -86,11 +86,11 @@ function fictioneer_excerpt_ellipsis() {
 add_filter( 'excerpt_more', 'fictioneer_excerpt_ellipsis' );
 
 // =============================================================================
-// CUSTOMIZE ADMIN BAR
+// ADMIN BAR
 // =============================================================================
 
 /**
- * Reduce admin bar based on setting
+ * Reduce admin bar items.
  *
  * @since 5.0.0
  */
@@ -114,11 +114,11 @@ if ( get_option( 'fictioneer_reduce_admin_bar' ) ) {
 }
 
 // =============================================================================
-// LOGOUT REDIRECT
+// LOGOUT
 // =============================================================================
 
 /**
- * Change redirect after logout
+ * Change redirect after logout.
  *
  * @since 4.0.0
  *
@@ -156,12 +156,8 @@ if ( get_option( 'fictioneer_logout_redirects_home' ) ) {
   add_filter( 'logout_url', 'fictioneer_logout_redirect', 10, 2 );
 }
 
-// =============================================================================
-// CUSTOM LOGOUT
-// =============================================================================
-
 /**
- * Add route to logout script
+ * Add route to logout script.
  *
  * @since 5.0.0
  */
@@ -175,7 +171,7 @@ if ( FICTIONEER_LOGOUT_ENDPOINT && ! get_option( 'fictioneer_disable_theme_logou
 }
 
 /**
- * Logout without _wpnonce and no login screen
+ * Logout without _wpnonce and no login screen.
  *
  * @since 5.0.0
  */
@@ -220,7 +216,7 @@ if ( FICTIONEER_LOGOUT_ENDPOINT && ! get_option( 'fictioneer_disable_theme_logou
 
 if ( ! function_exists( 'fictioneer_get_logout_url' ) ) {
   /**
-   * Fictioneer logout URL with optional redirect
+   * Fictioneer logout URL with optional redirect.
    *
    * @since 5.0.0
    *
@@ -249,12 +245,8 @@ if ( ! function_exists( 'fictioneer_get_logout_url' ) ) {
   }
 }
 
-// =============================================================================
-// AFTER LOGOUT CLEANUP
-// =============================================================================
-
 /**
- * Make sure local storage is cleared on logout
+ * Make sure local storage is cleared on logout.
  *
  * @since 5.0.0
  * @since 5.26.1 - Use wp_print_inline_script_tag().
@@ -280,7 +272,7 @@ add_action( 'login_form', 'fictioneer_after_logout_cleanup' );
 // =============================================================================
 
 /**
- * Show custom post types in tag and category archives
+ * Show custom post types in tag and category archives.
  *
  * @since 4.0.0
  * @link https://wordpress.stackexchange.com/a/28147/223620
@@ -312,7 +304,7 @@ add_action( 'pre_get_posts', 'fictioneer_extend_taxonomy_pages' );
 // =============================================================================
 
 /**
- * Re-queries the term counts for the tax cloud
+ * Re-queries the term counts for the tax cloud.
  *
  * @since 5.26.1
  * @link https://developer.wordpress.org/reference/hooks/get_terms/
@@ -373,11 +365,11 @@ if ( get_option( 'fictioneer_exclude_non_stories_from_cloud_counts' ) ) {
 }
 
 // =============================================================================
-// MODIFY RSS FEEDS
+// RSS FEEDS
 // =============================================================================
 
 /**
- * Get template for story feed (chapters)
+ * Get template for story feed (chapters).
  *
  * @since 4.0.0
  */
@@ -387,7 +379,7 @@ function fictioneer_story_rss_template() {
 }
 
 /**
- * Add feed for story (chapters)
+ * Add feed for story (chapters).
  *
  * @since 4.0.0
  */
@@ -397,7 +389,7 @@ function fictioneer_story_rss() {
 }
 
 /**
- * Add custom main feed
+ * Add custom main feed.
  *
  * @since 4.0.0
  */
@@ -425,7 +417,7 @@ if ( get_option( 'fictioneer_enable_theme_rss' ) ) {
 }
 
 /**
- * Ensures RSS excerpts are valid in XML
+ * Ensure RSS excerpts are valid in XML.
  *
  * @since 5.21.1
  *
@@ -443,7 +435,7 @@ function fictioneer_filter_rss_excerpt( $excerpt ) {
 add_filter( 'the_excerpt_rss', 'fictioneer_filter_rss_excerpt' );
 
 /**
- * Removes protected posts from RSS feeds.
+ * Remove protected posts from RSS feeds.
  *
  * @since 5.27.3
  *
@@ -463,12 +455,8 @@ if ( get_option( 'fictioneer_exclude_protected_from_rss' ) ) {
   add_filter( 'fictioneer_filter_rss_story_query_args', 'fictioneer_exclude_protected_from_rss' );
 }
 
-// =============================================================================
-// OUTPUT RSS
-// =============================================================================
-
 /**
- * Output RSS feed
+ * Render RSS feed link.
  *
  * @since 5.0.0
  *
@@ -532,7 +520,7 @@ if ( get_option( 'fictioneer_enable_theme_rss' ) ) {
 // =============================================================================
 
 /**
- * Remove the "Protected" prefix from titles
+ * Remove the "Protected" prefix from titles.
  *
  * @since 3.0
  */
@@ -547,7 +535,7 @@ add_filter( 'protected_title_format', 'fictioneer_remove_protected_text' );
 // =============================================================================
 
 /**
- * Changes password form and fixes redirect error
+ * Change password form and fixes redirect error.
  *
  * @since 4.0.0
  * @license CC BY-SA 4.0
@@ -582,7 +570,7 @@ function fictioneer_password_form() {
 add_filter( 'the_password_form', 'fictioneer_password_form' );
 
 /**
- * Append Patreon unlock info after password form
+ * Append Patreon unlock info after password form.
  *
  * @since 5.15.0
  *
@@ -610,7 +598,7 @@ function fictioneer_unlock_with_patreon( $form ) {
 
   // Patreon data
   $patreon_post_data = fictioneer_get_post_patreon_data( $post );
-  $patreon_user_data = fictioneer_get_user_patreon_data();
+  $patreon_user_data =  \Fictioneer\User::get_user_patreon_data();
 
   if ( empty( $patreon_post_data ) ) {
     return $form;
@@ -1386,7 +1374,7 @@ add_filter( 'block_editor_settings_all', 'fictioneer_disable_font_library' );
 /**
  * Accelerate AJAX requests by exiting early
  *
- * Note: Requests are validated with fictioneer_get_validated_ajax_user(),
+ * Note: Requests are validated with \Fictioneer\Utils_Admin::get_validated_ajax_user(),
  * making sure that AJAX functions without "_nopriv" are not executed for
  * unauthenticated users.
  *
@@ -1871,3 +1859,112 @@ function fictioneer_robots_txt_exclusions( $output, $public ) {
   return $output;
 }
 add_filter( 'robots_txt', 'fictioneer_robots_txt_exclusions', 10, 2 );
+
+// =============================================================================
+// THEME SAVE HOOKS
+// =============================================================================
+
+/**
+ * Snapshot pre-update post + meta in `$GLOBALS`.
+ *
+ * Note: Stores an associative array with 'post' (array),
+ * 'meta' (array), and 'timestamp' (int).
+ *
+ * @since 5.34.0
+ *
+ * @param int     $post_id  Post ID.
+ * @param WP_Post $post     Post object.
+ * @param bool    $update   Whether this is an existing post being updated.
+ */
+
+function fictioneer_snapshot_post( $post_id, $post_after, $post_before ) {
+  if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+    return;
+  }
+
+  $old_post = array(
+    'ID' => $post_before->ID,
+    'post_type' => $post_before->post_type,
+    'post_status' => $post_before->post_status,
+    'post_title' => $post_before->post_title,
+    'post_excerpt' => $post_before->post_excerpt,
+    'post_content' => $post_before->post_content,
+    'post_parent' => $post_before->post_parent,
+    'menu_order' => $post_before->menu_order,
+    'post_author' => $post_before->post_author,
+    'post_password' => $post_before->post_password,
+    'post_name' => $post_before->post_name,
+    'post_date_gmt' => $post_before->post_date_gmt,
+    'post_modified_gmt' => $post_before->post_modified_gmt
+  );
+
+  $old_meta = get_post_meta( $post_id );
+
+  $GLOBALS['fictioneer_post_snapshot'][ $post_id ] = [
+    'post' => $old_post,
+    'meta' => is_array( $old_meta ) ? $old_meta : [],
+    'timestamp' => time()
+  ];
+}
+add_action( 'post_updated', 'fictioneer_snapshot_post', 1, 3 );
+
+/**
+ * Fire unified transition hook with old/new post + old/new meta.
+ *
+ * @since 5.34.0
+ *
+ * @param int     $post_id  Post ID.
+ * @param WP_Post $post     Post object.
+ * @param bool    $update   Whether this is an existing post being updated.
+ */
+
+function fictioneer_post_transition( $post_id, $post, $update ) {
+  if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+    return;
+  }
+
+  if ( ! isset( $GLOBALS['fictioneer_post_snapshot'][ $post_id ] ) ) {
+    return;
+  }
+
+  $snapshot = $GLOBALS['fictioneer_post_snapshot'][ $post_id ];
+
+  $old_post = $snapshot['post'] ?? [];
+  $old_meta = $snapshot['meta'] ?? [];
+
+  $new_post = array(
+    'ID' => $post->ID,
+    'post_type' => $post->post_type,
+    'post_status' => $post->post_status,
+    'post_title' => $post->post_title,
+    'post_excerpt' => $post->post_excerpt,
+    'post_content' => $post->post_content,
+    'post_parent' => $post->post_parent,
+    'menu_order' => $post->menu_order,
+    'post_author' => $post->post_author,
+    'post_password' => $post->post_password,
+    'post_name' => $post->post_name,
+    'post_date_gmt' => $post->post_date_gmt,
+    'post_modified_gmt' => $post->post_modified_gmt
+  );
+
+  $new_meta = get_post_meta( $post_id );
+  $new_meta = is_array( $new_meta ) ? $new_meta : [];
+
+  /**
+   * Fires after a post transitions from old to new state.
+   *
+   * @since 5.34.0
+   *
+   * @param int     $post_id   Post ID.
+   * @param array   $old_post  Old post fields snapshot.
+   * @param array   $new_post  New post fields.
+   * @param array   $old_meta  Old meta fields snapshot.
+   * @param array   $new_meta  New meta fields.
+   * @param WP_Post $post      Post object.
+   * @param bool    $update    Whether this was an update.
+   */
+
+  do_action( 'fictioneer_post_transition', $post_id, $old_post, $new_post, $old_meta, $new_meta, $post, $update );
+}
+add_action( 'save_post', 'fictioneer_post_transition', 99, 3 );

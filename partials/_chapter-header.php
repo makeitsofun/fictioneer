@@ -11,7 +11,7 @@
  * @see single-fcn_chapter.php
  *
  * @internal $args['story_post']        Optional. Post object of the story.
- * @internal $args['story_data']        Optional. Story data from fictioneer_get_story_data().
+ * @internal $args['story_data']        Optional. Story data from \Fictioneer\Story::get_data().
  * @internal $args['chapter_id']        The chapter ID.
  * @internal $args['chapter_title']     Safe chapter title.
  * @internal $args['chapter_password']  Chapter password or empty string.

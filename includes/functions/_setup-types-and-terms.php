@@ -254,6 +254,20 @@ if ( get_option( 'fictioneer_rewrite_chapter_permalinks' ) ) {
  */
 
 function fictioneer_add_chapter_rewrite_rules() {
+  // Comment pagination — chapter with story
+  add_rewrite_rule(
+    '^story/([^/]+)/([^/]+)/comment-page-([0-9]{1,})/?$',
+    'index.php?post_type=fcn_chapter&name=$matches[2]&cpage=$matches[3]',
+    'top'
+  );
+
+  // Comment pagination — standalone chapter
+  add_rewrite_rule(
+    '^chapter/([^/]+)/comment-page-([0-9]{1,})/?$',
+    'index.php?post_type=fcn_chapter&name=$matches[1]&cpage=$matches[2]',
+    'top'
+  );
+
   // Rule for chapters with story
   add_rewrite_rule(
     '^story/([^/]+)/([^/]+)/?$',

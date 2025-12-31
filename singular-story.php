@@ -63,7 +63,7 @@ get_header(
               'partials/_story-header',
               null,
               array(
-                'story_data' => fictioneer_get_story_data( $story_id ),
+                'story_data' => \Fictioneer\Story::get_data( $story_id ),
                 'story_id' => $story_id,
                 'context' => 'shortcode'
               )

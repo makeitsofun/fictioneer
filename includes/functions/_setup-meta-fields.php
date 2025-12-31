@@ -1,6 +1,8 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
+use Fictioneer\Utils_Admin;
 
 // Array: Example collection of Font Awesome icons
 if ( ! defined( 'FICTIONEER_EXAMPLE_CHAPTER_ICONS' ) ) {
@@ -534,7 +536,7 @@ function fictioneer_get_metabox_select( $post, $meta_key, $options, $args = [] )
 }
 
 /**
- * Returns HTML for a textarea meta field
+ * Return HTML for a textarea meta field.
  *
  * @since 5.7.4
  *
@@ -589,7 +591,7 @@ function fictioneer_get_metabox_textarea( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a image meta field
+ * Return HTML for a image meta field.
  *
  * @since 5.7.4
  *
@@ -648,7 +650,7 @@ function fictioneer_get_metabox_image( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for an eBook meta field
+ * Return HTML for an eBook meta field.
  *
  * @since 5.8.0
  *
@@ -747,7 +749,7 @@ function fictioneer_get_metabox_ebook( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a token array meta field
+ * Return HTML for a token array meta field.
  *
  * @since 5.7.4
  *
@@ -844,7 +846,7 @@ function fictioneer_get_metabox_tokens( $post, $meta_key, $options, $args = [] )
 }
 
 /**
- * Returns HTML for an icon class meta field
+ * Return HTML for an icon class meta field.
  *
  * @since 5.7.4
  *
@@ -908,7 +910,7 @@ function fictioneer_get_metabox_icons( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for an editor meta field
+ * Return HTML for an editor meta field.
  *
  * Note: As of WordPress 6.3.1, the TinyMCE editor does not properly load in
  * Firefox if the visual tab is preselected. It does work if you switch from
@@ -978,7 +980,7 @@ function fictioneer_get_metabox_editor( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a relationship meta field
+ * Return HTML for a relationship meta field.
  *
  * @since 5.8.0
  *
@@ -1227,7 +1229,7 @@ function fictioneer_callback_relationship_chapters( $selected, $meta_key, $args 
       get_date_from_gmt( $chapter->post_date_gmt, get_option( 'time_format' ) )
     );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
-    $label = fictioneer_get_post_status_label( $chapter->post_status );
+    $label = Utils_Admin::get_post_status_label( $chapter->post_status );
 
     if ( $chapter->fictioneer_chapter_hidden ?? 0 ) {
       $title = "{$title} (" . _x( 'Unlisted', 'Chapter assignment flag.', 'fictioneer' ) . ")";
@@ -1309,7 +1311,7 @@ function fictioneer_ajax_get_relationship_chapters( $post_id, $meta_key ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $chapter, 'admin-ajax-get-relationship-chapters' );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
-    $label = fictioneer_get_post_status_label( $chapter->post_status );
+    $label = Utils_Admin::get_post_status_label( $chapter->post_status );
 
     // Update title if necessary
     if ( get_post_meta( $chapter->ID, 'fictioneer_chapter_hidden', true ) ) {
@@ -1393,7 +1395,7 @@ function fictioneer_get_relationship_chapter_details( $chapter ) {
 
   $info[] = sprintf(
     _x( '<strong>Status:</strong>&nbsp;%s', 'Chapter assignment info.', 'fictioneer' ),
-    fictioneer_get_post_status_label( $chapter->post_status )
+    Utils_Admin::get_post_status_label( $chapter->post_status )
   );
 
   $info[] = sprintf(
@@ -1586,7 +1588,7 @@ function fictioneer_ajax_get_relationship_story_pages( $post_id, $meta_key ) {
 function fictioneer_callback_relationship_collection( $selected, $meta_key, $args = [] ) {
   foreach ( $selected as $item ) {
     $title = fictioneer_get_safe_title( $item, 'admin-callback-relationship-collection' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
 
     // Start HTML ---> ?>
@@ -1677,7 +1679,7 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
   foreach ( $query->posts as $item ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $item, 'admin-ajax-get-relationship-collection' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
 
     // Build and append item
@@ -1731,7 +1733,7 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
 function fictioneer_callback_relationship_featured( $selected, $meta_key, $args = [] ) {
   foreach ( $selected as $item ) {
     $title = fictioneer_get_safe_title( $item, 'admin-callback-relationship-featured' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
 
     // Start HTML ---> ?>
@@ -1806,7 +1808,7 @@ function fictioneer_ajax_get_relationship_featured( $post_id, $meta_key ) {
   foreach ( $query->posts as $item ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $item, 'admin-ajax-get-relationship-featured' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
 
     // Build and append item
@@ -2163,7 +2165,7 @@ function fictioneer_render_story_data_metabox( $post ) {
   $output['fictioneer_story_chapters'] = fictioneer_get_metabox_relationships(
     $post,
     'fictioneer_story_chapters',
-    fictioneer_sql_get_story_chapter_relationship_data( $post->ID ),
+    Utils_admin::get_story_chapter_relationship_data( $post->ID ),
     'fictioneer_callback_relationship_chapters',
     array(
       'label' => _x( 'Chapters', 'Story chapters meta field label.', 'fictioneer' ),
@@ -2572,7 +2574,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Custom story CSS
   if ( isset( $_POST['fictioneer_story_css'] ) && current_user_can( 'fcn_custom_page_css', $post_id ) ) {
-    $fields['fictioneer_story_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_story_css'] );
+    $fields['fictioneer_story_css'] = Sanitizer::sanitize_css( wp_unslash( $_POST['fictioneer_story_css'] ) );
   }
 
   // Short description (required)
@@ -2591,7 +2593,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     $previous_chapter_ids = fictioneer_get_story_chapter_ids( $post_id );
 
     // Filter out non-valid chapter IDs
-    $chapter_ids = fictioneer_sql_filter_valid_chapter_ids( $post_id, $_POST['fictioneer_story_chapters'] );
+    $chapter_ids = Sanitizer_Admin::filter_valid_chapter_ids( $post_id, $_POST['fictioneer_story_chapters'] );
 
     if ( empty( $chapter_ids ) ) {
       $fields['fictioneer_story_chapters'] = []; // Ensure empty meta is removed
@@ -2607,7 +2609,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     }
 
     // Remember when chapters have been added
-    if ( fictioneer_sql_has_new_story_chapters( $post_id, $chapter_ids, $previous_chapter_ids ) ) {
+    if ( Utils_Admin::has_new_story_chapters( $post_id, $chapter_ids, $previous_chapter_ids ) ) {
       update_post_meta( $post_id, 'fictioneer_chapters_added', current_time( 'mysql', true ) );
     }
 
@@ -2621,7 +2623,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     current_user_can( 'fcn_story_pages', $post_id )
   ) {
     // Filter out non-valid page IDs
-    $page_ids = fictioneer_sql_filter_valid_page_ids( $post_author_id, $_POST['fictioneer_story_custom_pages'] );
+    $page_ids = Sanitizer_Admin::filter_valid_page_ids( $post_author_id, $_POST['fictioneer_story_custom_pages'] );
 
     if ( empty( $page_ids ) ) {
       $fields['fictioneer_story_custom_pages'] = []; // Ensure empty meta is removed
@@ -2673,7 +2675,9 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
     // Custom ePUB CSS
     if ( isset( $_POST['fictioneer_story_epub_custom_css'] ) && current_user_can( 'fcn_custom_epub_css', $post_id ) ) {
-      $fields['fictioneer_story_epub_custom_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_story_epub_custom_css'] );
+      $fields['fictioneer_story_epub_custom_css'] = Sanitizer::sanitize_css(
+        wp_unslash( $_POST['fictioneer_story_epub_custom_css'] )
+      );
     }
   }
 
@@ -2743,7 +2747,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // --- Save ------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_story_metaboxes' );
 
@@ -2980,7 +2984,7 @@ function fictioneer_render_chapter_data_metabox( $post ) {
   $output['fictioneer_magic_quote_test'] = fictioneer_get_magic_quote_test();
 
   // Story
-  $story_selection = fictioneer_sql_get_chapter_story_selection( $post_author_id, $current_story_id );
+  $story_selection = Utils_Admin::get_chapter_story_selection( $post_author_id, $current_story_id );
   $stories = $story_selection['stories'];
 
   $author_warning = $story_selection['other_author'] ? ' ' . __( '<strong>Warning:</strong> The selected story belongs to another author. If you change the selection, you cannot go back.', 'fictioneer' ) : '';
@@ -3228,7 +3232,11 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
   }
 
   // Story
-  if ( isset( $_POST['fictioneer_chapter_story'] ) && ! ( $_POST['fictioneer_chapter_story_override'] ?? 0 ) ) {
+  if (
+    ! wp_doing_cron() &&
+    isset( $_POST['fictioneer_chapter_story'] ) &&
+    empty( $_POST['fictioneer_chapter_story_override'] )
+  ) {
     $story_id = fictioneer_validate_id( $_POST['fictioneer_chapter_story'], 'fcn_story' );
     $current_story_id = (int) fictioneer_get_chapter_story_id( $post_id );
 
@@ -3248,7 +3256,7 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
       $invalid_story = false;
 
       if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
-        $co_authored_stories = fictioneer_sql_get_co_authored_story_ids( $post_author_id );
+        $co_authored_stories = Utils_Admin::get_co_authored_story_ids( $post_author_id );
 
         $invalid_story = $story_author_id != $post_author_id && ! in_array( $story_id, $co_authored_stories );
       }
@@ -3331,7 +3339,7 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
 
   // --- Save ------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_chapter_metaboxes' );
 
@@ -3696,7 +3704,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
 
   // Custom page CSS
   if ( isset( $_POST['fictioneer_custom_css'] ) && current_user_can( 'fcn_custom_page_css', $post_id ) ) {
-    $fields['fictioneer_custom_css'] = Sanitizer::sanitize_css( $_POST['fictioneer_custom_css'] );
+    $fields['fictioneer_custom_css'] = Sanitizer::sanitize_css( wp_unslash( $_POST['fictioneer_custom_css'] ) );
   }
 
   // Short name
@@ -3739,7 +3747,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
   // Story blogs
   if ( isset( $_POST['fictioneer_post_story_blogs'] ) && $post_type === 'post' ) {
     $story_blogs = wp_parse_id_list( $_POST['fictioneer_post_story_blogs'] );
-    $story_blogs = fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $post_author_id );
+    $story_blogs = Sanitizer_Admin::filter_valid_blog_story_ids( $story_blogs, $post_author_id );
 
     $fields['fictioneer_post_story_blogs'] = array_values( array_map( 'strval', $story_blogs ) );
   }
@@ -3864,7 +3872,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
 
   // --- Save --------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_extra_metabox' );
 
@@ -4017,7 +4025,7 @@ function fictioneer_save_support_links_metabox( $post_id ) {
 
   // --- Save --------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_support_links_metabox' );
 
@@ -4130,7 +4138,7 @@ function fictioneer_save_post_metaboxes( $post_id ) {
 
   // Featured posts
   if ( isset( $_POST['fictioneer_post_featured'] ) ) {
-    $item_ids = fictioneer_sql_filter_valid_featured_ids( $_POST['fictioneer_post_featured'] );
+    $item_ids = Sanitizer_Admin::filter_valid_featured_ids( $_POST['fictioneer_post_featured'] );
 
     if ( empty( $item_ids ) ) {
       $fields['fictioneer_post_featured'] = []; // Ensure empty meta is removed
@@ -4145,66 +4153,9 @@ function fictioneer_save_post_metaboxes( $post_id ) {
 
   // --- Save --------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
-
-  // --- After update ------------------------------------------------------------
-
-  // Update relationship registry
-  if ( isset( $_POST['fictioneer_post_featured'] ) ) {
-    fictioneer_update_post_relationship_registry( $post_id );
-  }
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_post_metaboxes' );
-
-/**
- * Update relationship registry for 'post' post types
- *
- * @since 5.0.0
- *
- * @param int $post_id  The post ID.
- */
-
-function fictioneer_update_post_relationship_registry( $post_id ) {
-  // Setup
-  $registry = fictioneer_get_relationship_registry();
-  $featured = get_post_meta( $post_id, 'fictioneer_post_featured', true );
-
-  // Update relationships
-  $registry[ $post_id ] = [];
-
-  if ( is_array( $featured ) && ! empty( $featured ) ) {
-    foreach ( $featured as $featured_id ) {
-      $registry[ $post_id ][ $featured_id ] = 'is_featured';
-
-      if ( ! isset( $registry[ $featured_id ] ) ) {
-        $registry[ $featured_id ] = [];
-      }
-
-      $registry[ $featured_id ][ $post_id ] = 'featured_by';
-    }
-  } else {
-    $featured = [];
-  }
-
-  // Check for and remove outdated direct references
-  foreach ( $registry as $key => $entry ) {
-    // Skip if...
-    if ( absint( $key ) < 1 || ! is_array( $entry ) || in_array( $key, $featured ) ) {
-      continue;
-    }
-
-    // Unset if in array
-    unset( $registry[ $key ][ $post_id ] );
-
-    // Remove node if empty
-    if ( empty( $registry[ $key ] ) ) {
-      unset( $registry[ $key ] );
-    }
-  }
-
-  // Update database
-  fictioneer_save_relationship_registry( $registry );
-}
 
 // =============================================================================
 // COLLECTION META FIELDS
@@ -4355,7 +4306,7 @@ function fictioneer_save_collection_metaboxes( $post_id ) {
 
   // Collection items
   if ( isset( $_POST['fictioneer_collection_items'] ) ) {
-    $item_ids = fictioneer_sql_filter_valid_collection_ids( $_POST['fictioneer_collection_items'] );
+    $item_ids = Sanitizer_Admin::filter_valid_collection_ids( $_POST['fictioneer_collection_items'] );
 
     if ( empty( $item_ids ) ) {
       $fields['fictioneer_collection_items'] = []; // Ensure empty meta is removed
@@ -4370,7 +4321,7 @@ function fictioneer_save_collection_metaboxes( $post_id ) {
 
   // --- Save --------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_collection_metaboxes' );
 
@@ -4553,7 +4504,7 @@ function fictioneer_save_recommendation_metaboxes( $post_id ) {
 
   // --- Save --------------------------------------------------------------------
 
-  fictioneer_bulk_update_post_meta( $post_id, $fields );
+  Utils_Admin::bulk_update_post_meta( $post_id, $fields );
 }
 add_action( 'save_post', 'fictioneer_save_recommendation_metaboxes' );
 
@@ -4771,11 +4722,11 @@ function fictioneer_save_seo_metabox( $post_id, $post ) {
   // Discourage
   if ( isset( $_POST['fictioneer_discourage_search_engines'] ) ) {
     $discourage = Sanitizer::sanitize_bool_num( $_POST['fictioneer_discourage_search_engines'] );
-    fictioneer_update_post_meta( $post_id, 'fictioneer_discourage_search_engines', $discourage );
+    Utils_Admin::update_post_meta( $post_id, 'fictioneer_discourage_search_engines', $discourage );
   }
 
   // Save fields
-  fictioneer_update_post_meta( $post_id, 'fictioneer_seo_fields', $seo_data );
+  Utils_Admin::update_post_meta( $post_id, 'fictioneer_seo_fields', $seo_data );
 
   // Purge meta cache
   delete_post_meta( $post_id, 'fictioneer_seo_cache' );
@@ -5055,7 +5006,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
       }
 
       if ( $tiers === 'remove' ) {
-        fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', 0 );
+        Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', 0 );
       } elseif ( is_array( $tiers ) ) {
         $allowed_tiers = get_option( 'fictioneer_connection_patreon_tiers' );
         $allowed_tiers = is_array( $allowed_tiers ) ? $allowed_tiers : [];
@@ -5066,7 +5017,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
           $tiers = array_unique( $tiers );
           $tiers = array_values( $tiers );
 
-          fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', $tiers );
+          Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_tiers', $tiers );
         }
       }
     }
@@ -5079,7 +5030,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
         continue;
       }
 
-      fictioneer_update_post_meta( $post_id, 'fictioneer_patreon_lock_amount', absint( $amount ) );
+      Utils_Admin::update_post_meta( $post_id, 'fictioneer_patreon_lock_amount', absint( $amount ) );
     }
   }
 }
@@ -5223,11 +5174,11 @@ function fictioneer_save_chapter_bulk_edit( $updated_post_ids, $shared_post_data
       foreach ( $updated_post_ids as $post_id ) {
         reset( $update_fields );
 
-        fictioneer_update_post_meta( $post_id, key( $update_fields ), current( $update_fields ) );
+        Utils_Admin::update_post_meta( $post_id, key( $update_fields ), current( $update_fields ) );
       }
     } else {
       foreach ( $updated_post_ids as $post_id ) {
-        fictioneer_bulk_update_post_meta( $post_id, $update_fields );
+        Utils_Admin::bulk_update_post_meta( $post_id, $update_fields );
       }
     }
   }

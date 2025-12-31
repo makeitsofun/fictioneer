@@ -42,7 +42,7 @@ if ( ! function_exists( 'fictioneer_build_story_comment' ) ) {
     }
 
     // Get badge (if any)
-    $badge = fictioneer_get_comment_badge( get_user_by( 'id', $comment->user_id ), $comment, $post->post_author );
+    $badge = \Fictioneer\User::get_comment_badge( get_user_by( 'id', $comment->user_id ), $comment, $post->post_author );
 
     // Start HTML ---> ?>
     <div class="fictioneer-comment__header">
@@ -166,7 +166,7 @@ add_action( 'rest_api_init', 'fictioneer_register_endpoint_get_story_comments' )
 
 function fictioneer_rest_get_story_comments( WP_REST_Request $request ) {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_rest_get_story_comments', 10 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_rest_get_story_comments', 10 );
 
   // Validations
   $story_id = $request->get_param( 'post_id' );
@@ -186,7 +186,7 @@ function fictioneer_rest_get_story_comments( WP_REST_Request $request ) {
 
   // Setup
   $page = $request->get_param( 'page' );
-  $story = fictioneer_get_story_data( $story_id, true, array( 'refresh_comment_count' => true ) );
+  $story = \Fictioneer\Story::get_data( $story_id, true, array( 'refresh_comment_count' => true ) );
   $chapter_ids = $story['chapter_ids']; // Only contains publicly visible chapters
   $comments_per_page = get_option( 'comments_per_page' );
   $chapter_data = [];

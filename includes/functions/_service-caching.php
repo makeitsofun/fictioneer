@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // DISABLE CACHING
 // =============================================================================
@@ -84,7 +86,7 @@ if ( ! function_exists( 'fictioneer_caching_active' ) ) {
   /**
    * Check whether caching is active.
    *
-   * Checks for a number of known caching plugins or the cache
+   * Note: Checks for a number of known caching plugins or the cache
    * compatibility option for anything not covered.
    *
    * @since 4.0.0
@@ -152,31 +154,6 @@ if ( ! defined( 'FICTIONEER_ENABLE_STORY_CARD_CACHING' ) ) {
 // =============================================================================
 
 /**
- * Whether to enable Transients for shortcodes.
- *
- * @since 5.6.3
- * @since 5.23.1 - Do not turn off with cache plugin.
- * @since 5.25.0 - Refactored with option.
- *
- * @param string $shortcode  The shortcode in question.
- *
- * @return boolean Either true or false.
- */
-
-function fictioneer_enable_shortcode_transients( $shortcode = null ) {
-  global $pagenow;
-
-  if ( is_customize_preview() || is_admin() || $pagenow === 'post.php' ) {
-    return false;
-  }
-
-  $bool = FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION > -1 &&
-    ! get_option( 'fictioneer_disable_shortcode_transients' );
-
-  return apply_filters( 'fictioneer_filter_enable_shortcode_transients', $bool, $shortcode );
-}
-
-/**
  * Whether to enable Transients for story chapter lists.
  *
  * @since 5.25.0
@@ -221,6 +198,74 @@ function fictioneer_enable_menu_transients( $location ) {
     $location
   );
 }
+
+// =============================================================================
+// PURGE CACHES NEW (WIP)
+// =============================================================================
+
+/**
+ * Helper to invalidate the story chapter posts cache.
+ *
+ * @since 5.34.0
+ *
+ * @param int $post_id  Post ID.
+ */
+
+function fictioneer_invalidate_story_chapter_posts_cache( $post_id ) {
+  $post_type = get_post_type( $post_id );
+
+  if ( $post_type === 'fcn_story' ) {
+    \Fictioneer\Story::bump_story_chapter_cache_version( $post_id );
+
+    return;
+  }
+
+  if ( $post_type === 'fcn_chapter' ) {
+    $story_id = get_post_meta( $post_id, 'fictioneer_chapter_story', true );
+
+    if ( $story_id ) {
+      \Fictioneer\Story::bump_story_chapter_cache_version( $story_id );
+    }
+  }
+}
+add_action( 'trashed_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+add_action( 'untrashed_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+add_action( 'before_delete_post', 'fictioneer_invalidate_story_chapter_posts_cache' );
+
+/**
+ * Watch transitions of story and chapter posts.
+ *
+ * @since 5.34.0
+ *
+ * @param int     $post_id   Post ID.
+ * @param array   $old_post  Post fields before update.
+ * @param array   $new_post  Post fields after update.
+ * @param array   $old_meta  Post meta fields before update.
+ * @param array   $new_meta  Post meta fields after update.
+ * @param WP_Post $post      Current post object.
+ */
+
+function fictioneer_watch_story_and_chapter_transitions( $post_id, $old_post, $new_post, $old_meta, $new_meta, $post ) {
+  if ( $post->post_type === 'fcn_story' ) {
+    \Fictioneer\Story::bump_story_chapter_cache_version( $post_id );
+
+    return;
+  }
+
+  if ( $post->post_type === 'fcn_chapter' ) {
+    $old_story_id = $old_meta['fictioneer_chapter_story'] ?? [];
+    $old_story_id = (int) ( empty( $old_story_id ) ? 0 : $old_story_id[0] );
+
+    $new_story_id = $new_meta['fictioneer_chapter_story'] ?? [];
+    $new_story_id = (int) ( empty( $new_story_id ) ? 0 : $new_story_id[0] );
+
+    if ( $old_story_id !== $new_story_id ) {
+      \Fictioneer\Story::bump_story_chapter_cache_version( $old_story_id );
+      \Fictioneer\Story::bump_story_chapter_cache_version( $new_story_id );
+    }
+  }
+}
+add_action( 'fictioneer_post_transition', 'fictioneer_watch_story_and_chapter_transitions', 10, 6 );
 
 // =============================================================================
 // PURGE CACHES
@@ -540,50 +585,6 @@ if ( ! function_exists( 'fictioneer_refresh_post_caches' ) ) {
       }
     }
 
-    // Purge relationships
-    if ( FICTIONEER_RELATIONSHIP_PURGE_ASSIST ) {
-      $registry = fictioneer_get_relationship_registry();
-
-      // Always purge...
-      foreach ( $registry['always'] as $key => $entry ) {
-        delete_post_meta( $key, 'fictioneer_schema' );
-        fictioneer_purge_post_cache( $key );
-      }
-
-      // Direct relationships
-      if ( isset( $registry[ $post_id ] ) ) {
-        foreach ( $registry[ $post_id ] as $key => $entry ) {
-          delete_post_meta( $key, 'fictioneer_schema' );
-          fictioneer_purge_post_cache( $key );
-        }
-      }
-
-      // Purge post relationships
-      $relation = false;
-
-      switch ( $post_type ) {
-        case 'post':
-          $relation = 'ref_posts';
-          break;
-        case 'fcn_chapter':
-          $relation = 'ref_chapters';
-          break;
-        case 'fcn_story':
-          $relation = 'ref_stories';
-          break;
-        case 'fcn_recommendation':
-          $relation = 'ref_recommendations';
-          break;
-      }
-
-      if ( $relation ) {
-        foreach ( $registry[ $relation ] as $key => $entry ) {
-          delete_post_meta( $key, 'fictioneer_schema' );
-          fictioneer_purge_post_cache( $key );
-        }
-      }
-    }
-
     // Restore actions
     fictioneer_toggle_stud_actions( 'fictioneer_refresh_post_caches', true, 20 );
     fictioneer_toggle_stud_actions( 'fictioneer_purge_transients_after_update', true, 10 );
@@ -596,96 +597,6 @@ if ( ! function_exists( 'fictioneer_refresh_post_caches' ) ) {
 
 if ( FICTIONEER_CACHE_PURGE_ASSIST && fictioneer_caching_active( 'purge_assist' ) ) {
   fictioneer_toggle_stud_actions( 'fictioneer_refresh_post_caches', true, 20 );
-}
-
-// =============================================================================
-// RELATIONSHIP REGISTRY
-//
-// The relationship directory array is not fail-safe. Technically, it can happen
-// that while the registry is pulled for updating by one post, it is also pulled
-// by another, causing the last to override the first without the first's data.
-// However, this is unlikely and not the end of the world.
-//
-// A possible solution would be to create a new database table for registry
-// updates which is processed by a worker occasionally. Cannot be bothered tho.
-// =============================================================================
-
-/**
- * Return relationship registry from options table.
- *
- * @since 5.0.0
- *
- * @return array The balanced array.
- */
-
-function fictioneer_get_relationship_registry() {
-  // Setup
-  $registry = get_option( 'fictioneer_relationship_registry', [] );
-  $registry = is_array( $registry ) ? $registry : [];
-
-  // Important nodes
-  $nodes = ['ref_posts', 'ref_chapters', 'ref_stories', 'ref_recommendations', 'always'];
-
-  foreach ( $nodes as $node ) {
-    if ( ! isset( $registry[ $node ] ) ) {
-      $registry[ $node ] = [];
-    }
-
-    if ( ! is_array( $registry[ $node ] ) ) {
-      $registry[ $node ]  = [];
-    }
-  }
-
-  // Return
-  return $registry;
-}
-
-/**
- * Save relationship registry to options table.
- *
- * @since 5.0.0
- *
- * @param array $registry Current registry to override the stored option.
- *
- * @return array True if the value was updated, false otherwise.
- */
-
-function fictioneer_save_relationship_registry( $registry ) {
-  return update_option( 'fictioneer_relationship_registry', $registry );
-}
-
-/**
- * Remove relationships on delete.
- *
- * @since 5.0.0
- *
- * @param int $post_id The deleted post ID.
- */
-
-function fictioneer_delete_relationship( $post_id ) {
-  // Setup
-  $registry = fictioneer_get_relationship_registry();
-
-  // Remove node (if set)
-  unset( $registry[ $post_id ] );
-
-  // Remove references (if any)
-  foreach ( $registry as $key => $entry ) {
-    unset( $registry[ $key ][ $post_id ] );
-  }
-
-  unset( $registry['ref_posts'][ $post_id ] );
-  unset( $registry['ref_chapters'][ $post_id ] );
-  unset( $registry['ref_stories'][ $post_id ] );
-  unset( $registry['ref_recommendations'][ $post_id ] );
-  unset( $registry['always'][ $post_id ] );
-
-  // Update database
-  fictioneer_save_relationship_registry( $registry );
-}
-
-if ( FICTIONEER_RELATIONSHIP_PURGE_ASSIST ) {
-  add_action( 'delete_post', 'fictioneer_delete_relationship', 100 );
 }
 
 // =============================================================================
@@ -722,10 +633,6 @@ if ( ! function_exists( 'fictioneer_track_chapter_and_story_updates' ) ) {
 
     // If there is a story...
     if ( $story_id ) {
-      // Decides when cached story/chapter data need to be refreshed (only used for Follows)
-      // Beware: This is an option, not a Transient!
-      update_option( 'fictioneer_story_or_chapter_updated_timestamp', time() * 1000 );
-
       // Clear meta caches
       delete_post_meta( $story_id, 'fictioneer_story_data_collection' );
       delete_post_meta( $story_id, 'fictioneer_story_chapter_index_html' );
@@ -842,7 +749,7 @@ function fictioneer_get_cache_salt() {
 
 function fictioneer_create_html_cache_directory( $dir = null ) {
   // Setup
-  $default_dir = fictioneer_get_theme_cache_dir( 'create_html_cache_directory' ) . '/html/';
+  $default_dir = Utils::get_cache_dir( 'create_html_cache_directory' ) . 'html/';
   $dir = $dir ?? $default_dir;
   $result = true;
 
@@ -902,7 +809,7 @@ function fictioneer_get_cached_partial( $slug, $identifier = '', $expiration = n
   // Setup
   $args_hash = md5( serialize( $args ) . $identifier . fictioneer_get_cache_salt() );
   $static_file = $slug . ( $name ? "-{$name}" : '' ) . "-{$args_hash}.html";
-  $path = fictioneer_get_theme_cache_dir( 'get_cached_partial' ) . '/html/' . $static_file;
+  $path = Utils::get_cache_dir( 'get_cached_partial' ) . 'html/' . $static_file;
 
   // Make sure directory exists and handle failure
   if ( ! fictioneer_create_html_cache_directory( dirname( $path ) ) ) {
@@ -952,7 +859,7 @@ function fictioneer_clear_all_cached_partials() {
   $done = true;
 
   // Setup
-  $cache_dir = fictioneer_get_theme_cache_dir( 'clear_all_cached_partials' ) . '/html/';
+  $cache_dir = Utils::get_cache_dir( 'clear_all_cached_partials' ) . 'html/';
 
   // Regenerate cache salt
   fictioneer_generate_cache_salt();
@@ -974,7 +881,7 @@ function fictioneer_clear_all_cached_partials() {
 
     if ( file_exists( $path ) ) {
       if ( ! $todo( $path ) ) {
-        error_log( "Failed to delete {$path}." );
+        error_log( "[Fictioneer] Failed to delete cached partial: {$path}." );
       }
     }
   }
@@ -1013,7 +920,7 @@ function fictioneer_get_static_content( $more_link_text = \null, $strip_teaser =
 
   // Setup
   $hash = md5( $post->ID . fictioneer_get_cache_salt() );
-  $dir = fictioneer_get_theme_cache_dir( 'get_static_content' ) . '/html/' . substr( $hash, 0, 2 );
+  $dir = Utils::get_cache_dir( 'get_static_content' ) . 'html/' . substr( $hash, 0, 2 );
   $path = "{$dir}/{$hash}_{$post->ID}.html";
 
   // Make sure directory exists and handle failure
@@ -1072,7 +979,7 @@ function fictioneer_the_static_content( $more_link_text = \null, $strip_teaser =
 function fictioneer_clear_cached_content( $post_id ) {
   // Setup
   $hash = md5( $post_id . fictioneer_get_cache_salt() );
-  $dir = fictioneer_get_theme_cache_dir( 'clear_cached_content' ) . '/html/' . substr( $hash, 0, 2 );
+  $dir = Utils::get_cache_dir( 'clear_cached_content' ) . 'html/' . substr( $hash, 0, 2 );
   $path = "{$dir}/{$hash}_{$post_id}.html";
 
   // Delete file

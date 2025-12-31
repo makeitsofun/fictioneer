@@ -254,7 +254,7 @@ The [plugin ecosystem](https://wordpress.org/plugins/) of WordPress is vast and 
       </ul><br>
       <strong>[Fictioneer: General] Compatibility:</strong>
       <ul>
-        <li>- [x] Enable cache compatibility mode</li>
+        <li>- [x] Enable compatibility mode for caching</li>
         <li>- [x] Enable AJAX user authentication</li>
         <li>- [x] Enable AJAX comment form (best performance) ... or ... comment section (best compatibility)</li>
       </ul>
@@ -393,7 +393,7 @@ Technically just another plugin, but one that will make your site significantly 
       </ul><br>
       <strong>[General] Compatibility:</strong>
       <ul>
-        <li>- [x] Enable public cache compatibility mode</li>
+        <li>- [x] Enable compatibility mode for public caching</li>
         <li>- [x] Enable AJAX user authentication</li>
         <li>- [x] Enable AJAX comment form (best performance) ... or ... comment section (best compatibility)</li>
       </ul>
@@ -827,7 +827,7 @@ The button colors are based on the background `var(--bg-x)` and foreground `var(
 
 ```css
 /* Dark Mode */
-:root, :root[data-theme=base] {
+:root {
   --button-font-weight: 500;
   --button-box-shadow: none;
   --button-color-active: var(--fg-inverted);
@@ -1550,7 +1550,6 @@ define( 'CONSTANT_NAME', value );
 | FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION | integer | Expiration duration for shortcode Transients in seconds. Default `300`.
 | FICTIONEER_STORY_COMMENT_COUNT_TIMEOUT | integer | Timeout between comment count refreshes for stories in _seconds_. Default `900`.
 | FICTIONEER_REQUESTS_PER_MINUTE | integer | Maximum requests per minute and action if the rate limit is enabled. Default `5`.
-| FICTIONEER_QUERY_ID_ARRAY_LIMIT | integer | Maximum allowed IDs in 'post__{not}_in' query arguments. Default `1000`.
 | FICTIONEER_PATREON_EXPIRATION_TIME | integer | Time until a user’s Patreon data expires in seconds. Default `WEEK_IN_SECONDS`.
 | FICTIONEER_PARTIAL_CACHE_EXPIRATION_TIME | integer | Time until a cached partial expires in seconds. Default `4 * HOUR_IN_SECONDS`.
 | FICTIONEER_CARD_CACHE_LIMIT | integer | Number of story cards cached if the feature is enabled. Default `50`.
@@ -1561,9 +1560,7 @@ define( 'CONSTANT_NAME', value );
 | FICTIONEER_ALERT_EXPIRATION | integer | How long alerts are kept in the database in seconds. Default `7776000` (90 days).
 | FICTIONEER_SITEMAP_ENTRIES_PER_PAGE | integer | How many entries per page the sitemap shows. Default `2000`.
 | FICTIONEER_CACHE_PURGE_ASSIST | boolean | Whether to call the cache purge assist function on post updates. Default `true`.
-| FICTIONEER_RELATIONSHIP_PURGE_ASSIST | boolean | Whether to purge related post caches. Default `true`.
 | FICTIONEER_SHOW_SEARCH_IN_MENUS | boolean | Whether to show search page links in menus. Default `true`.
-| FICTIONEER_THEME_SWITCH | boolean | Whether to show the theme switch in child themes (back to base). Default `true`.
 | FICTIONEER_ATTACHMENT_PAGES | boolean | Whether to enable pages for attachments (no theme templates). Default `false`.
 | FICTIONEER_SHOW_OAUTH_HASHES | boolean | Whether to show OAuth ID hashes in user profiles (admin only). Default `false`.
 | FICTIONEER_DISALLOWED_KEY_NOTICE | boolean | Whether to show feedback for rejected comment content. Default `true`.

@@ -2,6 +2,7 @@
 
 use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // UTILITY
@@ -88,43 +89,43 @@ function fictioneer_update_frontend_profile() {
   // Hide custom badge?
   if ( isset( $_POST['fictioneer_hide_badge'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_hide_badge'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_hide_badge', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_hide_badge', $checkbox_value );
   }
 
   // Always use gravatar?
   if ( isset( $_POST['fictioneer_enforce_gravatar'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_enforce_gravatar'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_enforce_gravatar', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_enforce_gravatar', $checkbox_value );
   }
 
   // Disable avatar?
   if ( isset( $_POST['fictioneer_disable_avatar'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_disable_avatar'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_disable_avatar', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_disable_avatar', $checkbox_value );
   }
 
   // Lock avatar?
   if ( isset( $_POST['fictioneer_lock_avatar'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_lock_avatar'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_lock_avatar', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_lock_avatar', $checkbox_value );
   }
 
   // Override assigned badge?
   if ( isset( $_POST['fictioneer_disable_badge_override'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_disable_badge_override'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_disable_badge_override', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_disable_badge_override', $checkbox_value );
   }
 
   // Always subscribe to comments?
   if ( isset( $_POST['fictioneer_comment_reply_notifications'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_comment_reply_notifications'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_comment_reply_notifications', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_comment_reply_notifications', $checkbox_value );
   }
 
   // Keep read alerts?
   if ( isset( $_POST['fictioneer_show_read_alerts'] ) ) {
     $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_show_read_alerts'] );
-    fictioneer_update_user_meta( $user_id, 'fictioneer_show_read_alerts', $checkbox_value );
+    Utils_Admin::update_user_meta( $user_id, 'fictioneer_show_read_alerts', $checkbox_value );
   }
 
   // Redirect
@@ -205,7 +206,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
   if ( ( $sender_is_moderator || $sender_is_admin ) && ! $admin_protection  ) {
     // Disable avatar checkbox
     if ( isset( $_POST['fictioneer_admin_disable_avatar'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_avatar',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_avatar'] )
@@ -214,7 +215,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable reporting capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_reporting'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_reporting',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_reporting'] )
@@ -223,7 +224,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable renaming capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_renaming'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_renaming',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_renaming'] )
@@ -232,7 +233,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable commenting capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_commenting'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_commenting',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_commenting'] )
@@ -241,7 +242,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable comment editing capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_comment_editing'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_comment_editing',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_comment_editing'] )
@@ -250,7 +251,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable post comment moderation capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_post_comment_moderation'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_post_comment_moderation',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_post_comment_moderation'] )
@@ -259,7 +260,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Disable comment notification capability checkbox
     if ( isset( $_POST['fictioneer_admin_disable_comment_notifications'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_comment_notifications',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_comment_notifications'] )
@@ -268,7 +269,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Always hold comments for moderation
     if ( isset( $_POST['fictioneer_admin_always_moderate_comments'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_always_moderate_comments',
         Sanitizer::sanitize_bool( $_POST['fictioneer_admin_always_moderate_comments'] )
@@ -277,7 +278,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     // Custom moderation message shown in profile
     if ( isset( $_POST['fictioneer_admin_moderation_message'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_admin_moderation_message',
         sanitize_text_field( $_POST['fictioneer_admin_moderation_message'] ?? '' )
@@ -288,14 +289,14 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
   // Account fields...
   if ( $sender_is_admin && ! $admin_protection ) {
     // Badge override string
-    fictioneer_update_user_meta(
+    Utils_Admin::update_user_meta(
       $updated_user_id,
       'fictioneer_badge_override',
       sanitize_text_field( $_POST['fictioneer_badge_override'] ?? '' )
     );
 
     // External avatar URL
-    fictioneer_update_user_meta(
+    Utils_Admin::update_user_meta(
       $updated_user_id,
       'fictioneer_external_avatar_url',
       Sanitizer::sanitize_url_https( $_POST['fictioneer_external_avatar_url'] ?? '' )
@@ -303,32 +304,56 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
 
     if ( FICTIONEER_SHOW_OAUTH_HASHES ) {
       // Discord OAuth ID (sensible data)
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_discord_id_hash',
         sanitize_text_field( $_POST['fictioneer_discord_id_hash'] ?? '' )
       );
 
       // Google OAuth ID (sensible data)
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_google_id_hash',
         sanitize_text_field( $_POST['fictioneer_google_id_hash'] ?? '' )
       );
 
       // Twitch OAuth ID (sensible data)
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_twitch_id_hash',
         sanitize_text_field( $_POST['fictioneer_twitch_id_hash'] ?? '' )
       );
 
       // Patreon OAuth ID (sensible data)
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_patreon_id_hash',
         sanitize_text_field( $_POST['fictioneer_patreon_id_hash'] ?? '' )
       );
+    }
+
+    // Capabilities
+    $user = get_user_by( 'id', $updated_user_id );
+
+    if ( $user instanceof WP_User ) {
+      $caps = array(
+        'fcn_custom_page_css' => 'fictioneer_cap_fcn_custom_page_css',
+        'fcn_unfiltered_css' => 'fictioneer_cap_fcn_unfiltered_css',
+        'fcn_shortcodes' => 'fictioneer_cap_fcn_shortcodes',
+        'fcn_custom_page_header' => 'fictioneer_cap_fcn_custom_page_header'
+      );
+
+      foreach ( $caps as $cap => $field ) {
+        if ( ! isset( $_POST[ $field ] ) ) {
+          continue;
+        }
+
+        if ( Sanitizer::sanitize_bool( $_POST[ $field ] ) ) {
+          $user->add_cap( $cap );
+        } else {
+          $user->remove_cap( $cap );
+        }
+      }
     }
   }
 }
@@ -369,7 +394,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
   if ( $sender_is_owner || $sender_is_admin ) {
     // Enforce gravatar checkbox
     if ( isset( $_POST['fictioneer_enforce_gravatar'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_enforce_gravatar',
         Sanitizer::sanitize_bool( $_POST['fictioneer_enforce_gravatar'] )
@@ -378,7 +403,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Disable avatar checkbox
     if ( isset( $_POST['fictioneer_disable_avatar'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_disable_avatar',
         Sanitizer::sanitize_bool( $_POST['fictioneer_disable_avatar'] )
@@ -387,7 +412,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Lock avatar checkbox
     if ( isset( $_POST['fictioneer_lock_avatar'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_lock_avatar',
         Sanitizer::sanitize_bool( $_POST['fictioneer_lock_avatar'] )
@@ -396,7 +421,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Hide badge checkbox
     if ( isset( $_POST['fictioneer_hide_badge'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_hide_badge',
         Sanitizer::sanitize_bool( $_POST['fictioneer_hide_badge'] )
@@ -405,7 +430,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Disable badge override checkbox
     if ( isset( $_POST['fictioneer_disable_badge_override'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_disable_badge_override',
         Sanitizer::sanitize_bool( $_POST['fictioneer_disable_badge_override'] )
@@ -414,7 +439,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Always subscribe to reply email notifications
     if ( isset( $_POST['fictioneer_comment_reply_notifications'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_comment_reply_notifications',
         Sanitizer::sanitize_bool( $_POST['fictioneer_comment_reply_notifications'] )
@@ -423,7 +448,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Keep read alerts
     if ( isset( $_POST['fictioneer_show_read_alerts'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_show_read_alerts',
         Sanitizer::sanitize_bool( $_POST['fictioneer_show_read_alerts'] )
@@ -432,7 +457,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Editor dark mode colors?
     if ( isset( $_POST['fictioneer_enable_editor_dark_colors'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_enable_editor_dark_colors',
         Sanitizer::sanitize_bool( $_POST['fictioneer_enable_editor_dark_colors'] )
@@ -441,7 +466,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Editor background color?
     if ( isset( $_POST['fictioneer_editor_background_color'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_editor_background_color',
         sanitize_hex_color( $_POST['fictioneer_editor_background_color'] ?? '' )
@@ -474,7 +499,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Patreon link (if any)
     if ( isset( $_POST['fictioneer_user_patreon_link'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_user_patreon_link',
         Sanitizer::sanitize_url( $_POST['fictioneer_user_patreon_link'], null, '#^https://(www\.)?patreon\.com(?:/|$)#i' )
@@ -483,7 +508,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Ko-Fi link (if any)
     if ( isset( $_POST['fictioneer_user_kofi_link'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_user_kofi_link',
         Sanitizer::sanitize_url( $_POST['fictioneer_user_kofi_link'], null, '#^https://(www\.)?ko-fi\.com(?:/|$)#i' )
@@ -492,7 +517,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // SubscribeStar link (if any)
     if ( isset( $_POST['fictioneer_user_subscribestar_link'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_user_subscribestar_link',
         Sanitizer::sanitize_url(
@@ -505,7 +530,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // PayPal link (if any)
     if ( isset( $_POST['fictioneer_user_paypal_link'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_user_paypal_link',
         Sanitizer::sanitize_url(
@@ -518,7 +543,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Donation link (if any)
     if ( isset( $_POST['fictioneer_user_donation_link'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_user_donation_link',
         Sanitizer::sanitize_url_https( $_POST['fictioneer_user_donation_link'] )
@@ -527,7 +552,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
 
     // Support message (if any)
     if ( isset( $_POST['fictioneer_support_message'] ) ) {
-      fictioneer_update_user_meta(
+      Utils_Admin::update_user_meta(
         $updated_user_id,
         'fictioneer_support_message',
         sanitize_text_field( $_POST['fictioneer_support_message'] ?? '' )
@@ -698,11 +723,11 @@ function fictioneer_admin_profile_clear_data_node() {
   // Clear data
   switch ( $node ) {
     case 'comments':
-      $result = fictioneer_soft_delete_user_comments( $profile_user_id );
+      $result = \Fictioneer\Utils_Admin::soft_delete_user_comments( $profile_user_id );
       $result = is_array( $result ) ? $result['complete'] : $result;
       break;
     case 'comment-subscriptions':
-      $result = fictioneer_update_user_meta( $profile_user_id, 'fictioneer_comment_reply_validator', time() );
+      $result = Utils_Admin::update_user_meta( $profile_user_id, 'fictioneer_comment_reply_validator', time() );
       break;
     case 'follows':
       $result = delete_user_meta( $profile_user_id, 'fictioneer_user_follows' );
@@ -715,7 +740,7 @@ function fictioneer_admin_profile_clear_data_node() {
       break;
     case 'bookmarks':
       // Bookmarks are only parsed client-side and stored as JSON string
-      $result = fictioneer_update_user_meta( $profile_user_id, 'fictioneer_bookmarks', '{}' );
+      $result = Utils_Admin::update_user_meta( $profile_user_id, 'fictioneer_bookmarks', '{}' );
       break;
   }
 
@@ -1072,7 +1097,7 @@ function fictioneer_admin_profile_fields_fingerprint( $profile_user ) {
   <tr class="user-fictioneer-fingerprint-wrap">
     <th><label for="fictioneer_support_message"><?php _e( 'Fingerprint', 'fictioneer' ); ?></label></th>
     <td>
-      <input type="text" value="<?php echo esc_attr( fictioneer_get_user_fingerprint( $profile_user->ID ) ); ?>" class="regular-text" disabled>
+      <input type="text" value="<?php echo esc_attr( Utils::get_user_fingerprint( $profile_user->ID ) ); ?>" class="regular-text" disabled>
       <p class="description"><?php _e( 'Your unique hash. Used to distinguish commenters.', 'fictioneer' ); ?></p>
     </td>
   </tr>
@@ -1718,7 +1743,7 @@ function fictioneer_admin_profile_post_unlocks( $profile_user ) {
 
           <?php foreach ( $posts as $post ) : ?>
             <?php
-              $type = fictioneer_get_post_type_label( $post->post_type );
+              $type = Utils_Admin::get_post_type_label( $post->post_type );
               $title = fictioneer_get_safe_title( $post->ID );
               $item_title = sprintf(
                 _x( 'Author: %s | Title: %s', 'Unlock post item.', 'fictioneer' ),
@@ -1745,14 +1770,14 @@ function fictioneer_admin_profile_post_unlocks( $profile_user ) {
 add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_post_unlocks', 9 );
 
 /**
- * Searches for posts to unlock via AJAX
+ * AJAX: Searches for posts to unlock.
  *
  * @since 5.16.0
  */
 
 function fictioneer_ajax_search_posts_to_unlock() {
   // Validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'search_posts' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'search_posts' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -1798,7 +1823,7 @@ function fictioneer_ajax_search_posts_to_unlock() {
     wp_send_json_success( array( 'html' => '' ) );
   } else {
     foreach ( $posts->posts as $post ) {
-      $type = fictioneer_get_post_type_label( $post->post_type );
+      $type = Utils_Admin::get_post_type_label( $post->post_type );
       $title = fictioneer_get_safe_title( $post->ID );
       $item_title = sprintf(
         _x( 'Author: %s | Title: %s', 'Unlock post item.', 'fictioneer' ),
@@ -1863,7 +1888,7 @@ function fictioneer_update_admin_unlocked_posts( $updated_user_id ) {
 
     $post_ids = array_map( 'strval', $query->posts );
 
-    fictioneer_update_user_meta( $updated_user_id, 'fictioneer_post_unlocks', $post_ids );
+    Utils_Admin::update_user_meta( $updated_user_id, 'fictioneer_post_unlocks', $post_ids );
   }
 }
 add_action( 'personal_options_update', 'fictioneer_update_admin_unlocked_posts' );
@@ -1886,7 +1911,7 @@ function fictioneer_admin_profile_patreon( $profile_user ) {
   // Setup
   $editing_user_is_owner = $profile_user->ID === get_current_user_id();
   $editing_user_is_admin = fictioneer_is_admin( get_current_user_id() );
-  $data = fictioneer_get_user_patreon_data( $profile_user );
+  $data =  \Fictioneer\User::get_user_patreon_data( $profile_user );
 
   // Abort conditions...
   if ( ! $editing_user_is_admin && ! $editing_user_is_owner ) {
@@ -2306,6 +2331,65 @@ function fictioneer_admin_profile_external_avatar( $profile_user ) {
   <?php // <--- End HTML
 }
 add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_external_avatar', 50 );
+
+// =============================================================================
+// SHOW CAPABILITY SECTION
+// =============================================================================
+
+/**
+ * Render HTML for the capabilities section in the wp-admin user profile.
+ *
+ * @since 5.34.0
+ *
+ * @param WP_User $profile_user  The profile user object. Not necessarily the one
+ *                               currently editing the profile!
+ */
+
+function fictioneer_admin_profile_capabilities( $profile_user ) {
+  // Abort conditions...
+  if ( ! current_user_can( 'manage_options' ) ) {
+    return;
+  }
+
+  // Start HTML ---> ?>
+  <tr class="user-moderation-flags-wrap">
+    <th><?php _e( 'Additional Capabilities' ); ?></th>
+    <td>
+      <fieldset>
+        <div>
+          <label for="fictioneer_cap_fcn_custom_page_css" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_custom_page_css" value="0">
+            <input name="fictioneer_cap_fcn_custom_page_css" type="checkbox" id="fictioneer_cap_fcn_custom_page_css" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_custom_page_css'] ), false ); ?> value="1">
+            <span><?php _ex( 'Custom Page CSS', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_unfiltered_css" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_unfiltered_css" value="0">
+            <input name="fictioneer_cap_fcn_unfiltered_css" type="checkbox" id="fictioneer_cap_fcn_unfiltered_css" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_unfiltered_css'] ), false ); ?> value="1">
+            <span><?php _ex( 'Unfiltered CSS', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_shortcodes" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_shortcodes" value="0">
+            <input name="fictioneer_cap_fcn_shortcodes" type="checkbox" id="fictioneer_cap_fcn_shortcodes" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_shortcodes'] ), false ); ?> value="1">
+            <span><?php _ex( 'Shortcodes', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_custom_page_header" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_custom_page_header" value="0">
+            <input name="fictioneer_cap_fcn_custom_page_header" type="checkbox" id="fictioneer_cap_fcn_custom_page_header" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_custom_page_header'] ), false ); ?> value="1">
+            <span><?php _ex( 'Custom Page Header', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+      </fieldset>
+    </td>
+  </tr>
+  <?php // <--- End HTML
+}
+add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_capabilities', 60 );
 
 // =============================================================================
 // DANGER ZONE SECTION

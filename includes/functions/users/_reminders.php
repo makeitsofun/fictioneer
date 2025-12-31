@@ -53,18 +53,17 @@ if ( ! wp_doing_ajax() ) {
 // =============================================================================
 
 /**
- * Set Reminder for a story via AJAX
- *
+ * AJAX: Set Reminder for a story.
  *
  * @since 5.0.0
  */
 
 function fictioneer_ajax_toggle_reminder() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_toggle_reminder' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_toggle_reminder' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -119,17 +118,17 @@ if ( get_option( 'fictioneer_enable_reminders' ) ) {
 // =============================================================================
 
 /**
- * Clears a user's Reminders via AJAX
+ * AJAX: Clears a user's Reminders.
  *
  * @since 5.0.0
  */
 
 function fictioneer_ajax_clear_my_reminders() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_reminders' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_clear_my_reminders' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_clear_reminders' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_reminders' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -152,14 +151,14 @@ if ( get_option( 'fictioneer_enable_reminders' ) ) {
 // =============================================================================
 
 /**
- * Sends the HTML for list of remembered stories via AJAX
+ * AJAX: Sends the HTML for list of remembered stories.
  *
  * @since 4.3.0
  */
 
 function fictioneer_ajax_get_reminders_list() {
   // Validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! is_user_logged_in() ) {
     wp_send_json_error( array( 'error' => 'You must be logged in.' ) );

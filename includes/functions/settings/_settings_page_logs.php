@@ -6,6 +6,10 @@
  * @subpackage Fictioneer
  * @since 5.0.0
  */
+
+
+use Fictioneer\Log;
+
 ?>
 
 <div class="fictioneer-settings">
@@ -21,7 +25,7 @@
           <h3 class="fictioneer-card__header"><?php _e( 'Fictioneer Log', 'fictioneer' ); ?></h3>
           <div class="fictioneer-card__content">
             <div class="fictioneer-card__row">
-              <?php echo fictioneer_get_log(); ?>
+              <?php echo Log::get(); ?>
             </div>
           </div>
         </div>
@@ -32,7 +36,7 @@
           <h3 class="fictioneer-card__header"><?php _e( 'WP Debug Log', 'fictioneer' ); ?></h3>
           <div class="fictioneer-card__content">
             <div class="fictioneer-card__row">
-              <?php echo fictioneer_get_wp_debug_log(); ?>
+              <?php echo Log::get_debug(); ?>
             </div>
           </div>
         </div>

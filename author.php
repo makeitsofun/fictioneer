@@ -43,7 +43,7 @@ $current_page = get_query_var( 'pg', 1 ) ?: 1;
 $order = Sanitizer::sanitize_query_var( $_GET['order'] ?? 0, ['desc', 'asc'], 'desc' );
 $author_page = get_the_author_meta( 'fictioneer_author_page', $author_id );
 $author_page = $author_page > 0 ? $author_page : false;
-$author_statistics = fictioneer_get_author_statistics( $author_id );
+$author_statistics = \Fictioneer\Stats::get_author_statistics( $author_id );
 $max_pages = 1;
 $tabs = [];
 

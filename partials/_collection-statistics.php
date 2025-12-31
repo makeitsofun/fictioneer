@@ -25,7 +25,7 @@
 defined( 'ABSPATH' ) OR exit;
 
 // Setup
-$statistics = fictioneer_get_collection_statistics( $args['collection_id'] );
+$statistics = \Fictioneer\Stats::get_collection_statistics( $args['collection_id'] );
 
 ?>
 

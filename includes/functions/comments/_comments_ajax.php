@@ -162,7 +162,7 @@ function fictioneer_ajax_get_comment_section() {
     // Start HTML ---> ?>
     <nav class="pagination comments-pagination _padding-top">
       <?php
-        $steps = fictioneer_balance_pagination_array( $max_pages, $page );
+        $steps = \Fictioneer\Utils_Admin::balance_pagination_array( $max_pages, $page );
 
         foreach ( $steps as $step ) {
           switch ( $step ) {
@@ -303,7 +303,7 @@ function fictioneer_ajax_submit_comment() {
 
   // Check against disallow list (Settings > Discussion) if not admin
   if ( ! fictioneer_is_admin( $user->ID ) ) {
-    $offenders = fictioneer_check_comment_disallowed_list(
+    $offenders = \Fictioneer\Utils_Admin::check_comment_disallowed_list(
       $comment_data['author'] ?? '',
       $comment_data['email'] ?? '',
       '',
@@ -362,7 +362,7 @@ function fictioneer_ajax_submit_comment() {
 
   if ( empty( $notification_validator ) ) {
     $notification_validator = time();
-    fictioneer_update_user_meta( wp_get_current_user(), 'fictioneer_comment_reply_validator', $notification_validator );
+    \Fictioneer\Utils_Admin::update_user_meta( wp_get_current_user(), 'fictioneer_comment_reply_validator', $notification_validator );
   }
 
   /*
@@ -438,7 +438,7 @@ function fictioneer_ajax_edit_comment() {
 
   // Setup
   $comment_id = isset( $_POST['comment_id'] ) ? fictioneer_validate_id( $_POST['comment_id'] ) : false;
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   // Validations
   if ( ! $user || ! $comment_id || ! isset( $_POST['content'] ) ) {
@@ -499,7 +499,7 @@ function fictioneer_ajax_edit_comment() {
 
   // Check against disallow list (Settings > Discussion) if not admin
   if ( ! fictioneer_is_admin( $user->ID ) ) {
-    $offenders = fictioneer_check_comment_disallowed_list( '', '', '', $_POST['content'], '', '' );
+    $offenders = \Fictioneer\Utils_Admin::check_comment_disallowed_list( '', '', '', $_POST['content'], '', '' );
 
     // Only show error for keys in content, no need to tell
     // someone his name or email address is blocked, etc.
@@ -574,7 +574,7 @@ function fictioneer_ajax_delete_my_comment() {
 
   // Setup
   $comment_id = (int) ( $_POST['comment_id'] ?? 0 );
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   // Validations
   if ( ! $user || ! $comment_id || $comment_id < 1 ) {

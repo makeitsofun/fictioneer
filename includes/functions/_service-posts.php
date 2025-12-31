@@ -1,5 +1,8 @@
 <?php
 
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
+
 // =============================================================================
 // LOG POST UPDATES HELPER
 // =============================================================================
@@ -34,7 +37,7 @@
   );
 
   // Log
-  fictioneer_log( $message );
+  \Fictioneer\Log::add( $message );
 }
 
 // =============================================================================
@@ -211,7 +214,7 @@ function fictioneer_save_word_count( $post_id ) {
   }
 
   // Count
-  $word_count = fictioneer_count_words( $post_id );
+  $word_count = Utils_Admin::count_words( $post_id );
 
   // Save
   update_post_meta( $post_id, '_word_count', $word_count );
@@ -414,7 +417,7 @@ function fictioneer_remove_chapter_from_story( $chapter_id ) {
   }
 
   // Update story
-  $chapters = fictioneer_unset_by_value( $chapter_id, $chapters );
+  $chapters = Utils::array_unset_by_value( $chapter_id, $chapters );
 
   update_post_meta( $story_id, 'fictioneer_story_chapters', $chapters );
   update_post_meta( $story_id, 'fictioneer_chapters_modified', current_time( 'mysql', true ) );
@@ -527,9 +530,35 @@ function fictioneer_expire_post_password( $required, $post ) {
     $current_date_utc = current_time( 'mysql', true );
 
     if ( strtotime( $current_date_utc ) > strtotime( $password_expiration_date_utc ) ) {
+      global $wpdb;
+
       delete_post_meta( $post->ID, 'fictioneer_post_password_expiration_date' );
       fictioneer_refresh_post_caches( $post->ID );
-      wp_update_post( array( 'ID' => $post->ID, 'post_password' => '' ) );
+
+      $wpdb->update(
+        $wpdb->posts,
+        [ 'post_password' => '' ],
+        [ 'ID' => $post->ID ],
+        [ '%s' ],
+        [ '%d' ]
+      );
+
+      clean_post_cache( $post->ID );
+
+      $post_before = $post;
+      $post_after = get_post( $post->ID );
+
+      do_action( 'edit_post', $post->ID, $post_after );
+      do_action( "edit_post_{$post_after->post_type}", $post->ID, $post_after );
+
+      do_action( "save_post_{$post_after->post_type}", $post->ID, $post_after, true );
+      do_action( 'save_post', $post->ID, $post_after, true );
+
+      do_action( 'wp_insert_post', $post->ID, $post_after, true );
+
+      do_action( 'post_updated', $post->ID, $post_after, $post_before );
+
+      wp_after_insert_post( $post_after, true, $post_before );
 
       do_action( 'fictioneer_expired_post_password', $post, $password_expiration_date_utc );
 
@@ -585,14 +614,14 @@ function fictioneer_increment_story_comment_count( $comment_id ) {
   }
 
   $story_id = fictioneer_get_chapter_story_id( $comment->comment_post_ID );
-  $story_data = $story_id ? fictioneer_get_story_data( $story_id ) : null;
+  $story_data = $story_id ? \Fictioneer\Story::get_data( $story_id ) : null;
 
   // Increment comment count (will be recounted at some later point)
   if ( $story_data ) {
     $story_data['comment_count'] = $story_data['comment_count'] + 1;
     update_post_meta( $story_id, 'fictioneer_story_data_collection', $story_data );
 
-    fictioneer_sql_update_comment_count( $story_id, $story_data['comment_count'] );
+    Utils_Admin::update_comment_count( $story_id, $story_data['comment_count'] );
   }
 }
 
@@ -613,14 +642,14 @@ function fictioneer_decrement_story_comment_count( $comment_id ) {
   }
 
   $story_id = fictioneer_get_chapter_story_id( $comment->comment_post_ID );
-  $story_data = $story_id ? fictioneer_get_story_data( $story_id ) : null;
+  $story_data = $story_id ? \Fictioneer\Story::get_data( $story_id ) : null;
 
   // Decrement comment count (will be recounted at some later point)
   if ( $story_data ) {
     $story_data['comment_count'] = max( 0, $story_data['comment_count'] - 1 );
     update_post_meta( $story_id, 'fictioneer_story_data_collection', $story_data );
 
-    fictioneer_sql_update_comment_count( $story_id, $story_data['comment_count'] );
+    Utils_Admin::update_comment_count( $story_id, $story_data['comment_count'] );
   }
 }
 

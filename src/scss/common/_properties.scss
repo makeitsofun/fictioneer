@@ -2,13 +2,6 @@
 @use '_mixins' as *;
 @use '_variables' as *;
 
-// =============================================================================
-// WEAK - CANNOT OVERRIDE CHILD THEME VIA SITE SETTINGS
-//
-// Properties in a single scope lack the specificity to override child theme
-// definitions in the same scope.
-// =============================================================================
-
 :root {
   // === CONFIGURATION =========================================================
 
@@ -73,30 +66,7 @@
   }
 }
 
-// =============================================================================
-// STRONG - CAN OVERRIDE CHILD THEME VIA SITE SETTINGS
-//
-// In addition to the base :root and nested scopes, these properties also
-// answer to the :root[data-theme=base] selector of higher specificity. This
-// means if the user selects the base theme via the Site Settings, definitions
-// in the child theme can be overridden unless preventive measures are taken.
-// =============================================================================
-
-:root[data-mode=dark] {
-  body {
-    --wp--preset--color--vivid-red: var(--red-400); // Change for dark mode
-    --wp--preset--color--vivid-cyan-blue: #26aeeb; // Change for dark mode
-    --wp--preset--color--vivid-purple: #c792fc; // Change for dark mode
-
-    ::selection {
-      background-color: var(--text-selection-background);
-      color: var(--text-selection-color);
-      text-shadow: none;
-    }
-  }
-}
-
-:root, :root[data-theme=base] {
+:root {
   // === UNSORTED ==============================================================
 
   --theme-color-base: 219 15 17; // 800
@@ -701,8 +671,7 @@
   }
 }
 
-:root.minimal,
-:root[data-theme=base].minimal {
+:root.minimal {
   --site-title-heading-color: var(--fg-300);
   --site-title-tagline-color: var(--fg-300);
   --site-title-text-shadow: none;
@@ -731,6 +700,20 @@
   --card-box-shadow: 0 0 0 1px var(--card-frame-border-color, rgb(0 0 0 / 20%)); // Override custom style
   --card-drop-shadow: 0 0 1px var(--card-frame-border-color, rgb(0 0 0 / 30%)); // Override custom style
   --card-style-border-width: 1px;
+}
+
+:root[data-mode=dark] {
+  body {
+    --wp--preset--color--vivid-red: var(--red-400); // Change for dark mode
+    --wp--preset--color--vivid-cyan-blue: #26aeeb; // Change for dark mode
+    --wp--preset--color--vivid-purple: #c792fc; // Change for dark mode
+
+    ::selection {
+      background-color: var(--text-selection-background);
+      color: var(--text-selection-color);
+      text-shadow: none;
+    }
+  }
 }
 
 // =============================================================================

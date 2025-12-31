@@ -32,16 +32,20 @@ function ffcnr_get_avatar_url( $user, $size = 96 ) {
   $filtered = apply_filters( 'ffcnr_get_avatar_url', '', $user, $size, $meta, $options );
 
   if ( ! empty( $filtered ) ) {
-    return $filtered;
+    return (string) $filtered;
   }
 
   // Custom avatar
   if (
     ! $disabled &&
     ! ( $meta['fictioneer_enforce_gravatar'] ?? 0 ) &&
-    ( $meta['fictioneer_external_avatar_url'] ?? 0 )
+    ! empty( $meta['fictioneer_external_avatar_url'] )
   ) {
-    return $meta['fictioneer_external_avatar_url'];
+    $url = (string) $meta['fictioneer_external_avatar_url'];
+
+    if ( function_exists( 'wp_http_validate_url' ) && wp_http_validate_url( $url ) ) {
+      return $url;
+    }
   }
 
   // Gravatar
@@ -56,11 +60,13 @@ function ffcnr_get_avatar_url( $user, $size = 96 ) {
       'retro' => 'retro'
     );
 
-    $default = $gravatar_styles[ $default ];
+    $default = $gravatar_styles[ $default ] ?? 'mm';
     $email_hash = $disabled ? 'foobar' : md5( mb_strtolower( trim( $user->user_email ) ) );
 
     return "https://www.gravatar.com/avatar/{$email_hash}?s={$size}&d={$default}";
   }
+
+  return '';
 }
 
 /**
@@ -74,7 +80,7 @@ function ffcnr_get_avatar_url( $user, $size = 96 ) {
  */
 
 function ffcnr_is_admin( $user ) {
-  return $user->caps['manage_options'] ?? false;
+  return (bool) ( $user->caps['manage_options'] ?? false );
 }
 
 /**
@@ -88,10 +94,12 @@ function ffcnr_is_admin( $user ) {
  */
 
 function ffcnr_is_author( $user ) {
-  return ($user->caps['publish_posts'] ?? false) ||
-    ($user->caps['publish_fcn_stories'] ?? false) ||
-    ($user->caps['publish_fcn_chapters'] ?? false) ||
-    ($user->caps['publish_fcn_collections'] ?? false);
+  return (bool) (
+    ( $user->caps['publish_posts'] ?? false ) ||
+    ( $user->caps['publish_fcn_stories'] ?? false ) ||
+    ( $user->caps['publish_fcn_chapters'] ?? false ) ||
+    ( $user->caps['publish_fcn_collections'] ?? false )
+  );
 }
 
 /**
@@ -105,7 +113,7 @@ function ffcnr_is_author( $user ) {
  */
 
 function ffcnr_is_moderator( $user ) {
-  return $user->caps['moderate_comments'] ?? false;
+  return (bool) ( $user->caps['moderate_comments'] ?? false );
 }
 
 /**
@@ -119,7 +127,7 @@ function ffcnr_is_moderator( $user ) {
  */
 
 function ffcnr_is_editor( $user ) {
-  return $user->caps['edit_others_posts'] ?? false;
+  return (bool) ( $user->caps['edit_others_posts'] ?? false );
 }
 
 /**
@@ -136,7 +144,7 @@ function ffcnr_is_editor( $user ) {
 function fictioneer_load_follows( $user ) {
   // Setup
   $follows = ffcnr_get_user_meta( $user->ID, 'fictioneer_user_follows', 'fictioneer' );
-  $timestamp = time() * 1000;
+  $timestamp = time() * 1000; // Compatible with Date.now() in JavaScript
 
   // Validate/Initialize
   if ( empty( $follows ) || ! is_array( $follows ) || ! array_key_exists( 'data', $follows ) ) {
@@ -159,10 +167,7 @@ function fictioneer_load_follows( $user ) {
 }
 
 /**
- * Returns a user's Reminders
- *
- * Get a user's Reminders array from the database or creates a new one if it
- * does not yet exist.
+ * Return a user's Reminders.
  *
  * @since 5.27.0
  * @see includes/functions/users/_reminders.php
@@ -193,10 +198,7 @@ function fictioneer_load_reminders( $user ) {
 }
 
 /**
- * Returns a user's Checkmarks
- *
- * Get a user's Checkmarks array from the database or creates a new one if it
- * does not yet exist.
+ * Return a user's Checkmarks.
  *
  * @since 5.27.0
  * @see includes/functions/users/_checkmarks.php
@@ -209,7 +211,7 @@ function fictioneer_load_reminders( $user ) {
 function fictioneer_load_checkmarks( $user ) {
   // Setup
   $checkmarks = ffcnr_get_user_meta( $user->ID, 'fictioneer_user_checkmarks', 'fictioneer' );
-  $timestamp = time() * 1000;
+  $timestamp = time() * 1000; // Compatible with Date.now() in JavaScript
 
   // Validate/Initialize
   if ( empty( $checkmarks ) || ! is_array( $checkmarks ) || ! array_key_exists( 'data', $checkmarks ) ) {
@@ -227,9 +229,10 @@ function fictioneer_load_checkmarks( $user ) {
 }
 
 /**
- * Returns an unique MD5 hash for the user.
+ * Return an unique-enough MD5 hash for the user.
  *
  * @since 5.27.0
+ * @since 5.34.0 - Refactored.
  * @see includes/functions/_helpers-users.php
  *
  * @param stdClass $user  User to get the fingerprint for.
@@ -242,14 +245,7 @@ function fictioneer_get_user_fingerprint( $user ) {
     return '';
   }
 
-  $fingerprint = ffcnr_get_user_meta( $user->ID, 'fictioneer_user_fingerprint', 'fictioneer' );
-
-  if ( empty( $fingerprint ) ) {
-    $fingerprint = md5( $user->user_login . $user->ID );
-    ffcnr_update_user_meta( $user->ID, 'fictioneer_user_fingerprint', $fingerprint );
-  }
-
-  return $fingerprint;
+  return md5( 'fictioneer|' . $user->ID . '|' . $user->user_registered );
 }
 
 /**
@@ -291,7 +287,7 @@ function fictioneer_get_alerts( $args = [] ) {
   $filtered_params = [];
 
   if ( ! empty( $args['types'] ) ) {
-    $types = array_filter( array_map( 'sanitize_key', $args['types'] ) );
+    $types = array_filter( array_map( 'sanitize_key', (array) $args['types'] ) );
 
     if ( $types ) {
       $has_filters = true;
@@ -302,7 +298,7 @@ function fictioneer_get_alerts( $args = [] ) {
   }
 
   if ( ! empty( $args['post_ids'] ) ) {
-    $post_ids = array_filter( array_map( 'intval', $args['post_ids'] ) );
+    $post_ids = array_filter( array_map( 'intval', (array) $args['post_ids'] ) );
     $post_ids = array_filter( $post_ids, function( $value ) { return $value > 0; } );
 
     if ( $post_ids ) {
@@ -314,7 +310,7 @@ function fictioneer_get_alerts( $args = [] ) {
   }
 
   if ( ! empty( $args['story_ids'] ) ) {
-    $story_ids = array_filter( array_map( 'intval', $args['story_ids'] ) );
+    $story_ids = array_filter( array_map( 'intval', (array) $args['story_ids'] ) );
     $story_ids = array_filter( $story_ids, function( $value ) { return $value > 0; } );
 
     if ( $story_ids ) {
@@ -333,7 +329,7 @@ function fictioneer_get_alerts( $args = [] ) {
   if ( ! empty( $args['roles'] ) ) {
     $role_where = ['roles IS NULL'];
 
-    foreach ( $args['roles'] as $role ) {
+    foreach ( (array) $args['roles'] as $role ) {
       $role = sanitize_key( $role );
 
       if ( $role ) {
@@ -350,7 +346,7 @@ function fictioneer_get_alerts( $args = [] ) {
   if ( ! empty( $args['user_ids'] ) ) {
     $user_where = ['users IS NULL'];
 
-    foreach ( $args['user_ids'] as $user_id ) {
+    foreach ( (array) $args['user_ids'] as $user_id ) {
       $user_id = max( (int) $user_id, 0 );
 
       if ( $user_id > 0 ) {
@@ -367,7 +363,7 @@ function fictioneer_get_alerts( $args = [] ) {
   if ( ! empty( $args['tags'] ) ) {
     $tag_where = ['tags IS NULL'];
 
-    foreach ( $args['tags'] as $tag ) {
+    foreach ( (array) $args['tags'] as $tag ) {
       $tag = sanitize_key( $tag );
 
       if ( $tag ) {
@@ -420,7 +416,7 @@ function fictioneer_get_alerts( $args = [] ) {
   }
 
   if ( ffcnr_get_option( 'fictioneer_enable_extended_alert_queries' ) && ! empty( $args['for_roles'] ) ) {
-    $roles = array_filter( array_map( 'sanitize_key', $args['for_roles'] ) );
+    $roles = array_filter( array_map( 'sanitize_key', (array) $args['for_roles'] ) );
 
     if ( ! empty( $roles ) ) {
       $role_clauses = [];
@@ -450,7 +446,7 @@ function fictioneer_get_alerts( $args = [] ) {
   $filtered_results = [];
 
   foreach ( $results as &$row ) {
-    if ( in_array( (int) $row['ID'], $exclude_ids ) ) {
+    if ( in_array( (int) $row['ID'], $exclude_ids, true ) ) {
       continue;
     }
 
@@ -480,15 +476,19 @@ function ffcnr_get_user_data() {
 
   // Load options
   $options = ffcnr_load_options([
-    'fictioneer_enable_reminders', 'fictioneer_enable_checkmarks',
-    'fictioneer_enable_bookmarks', 'fictioneer_enable_follows',
-    'fictioneer_enable_alerts', 'fictioneer_alert_date_format'
+    'fictioneer_enable_reminders',
+    'fictioneer_enable_checkmarks',
+    'fictioneer_enable_bookmarks',
+    'fictioneer_enable_follows',
+    'fictioneer_enable_alerts',
+    'fictioneer_alert_date_format'
   ]);
 
   // Setup
   $user = ffcnr_get_current_user( $options );
-  $logged_in = !!($user ? $user->ID : 0);
-  $nonce = ffcnr_create_nonce( 'fictioneer_nonce', $logged_in ? $user->ID : 0 );
+  $logged_in = (bool) ( $user ? $user->ID : 0 );
+  $nonce = $logged_in ? ffcnr_create_nonce( 'fictioneer_nonce', $user->ID ) : '';
+
   $data = array(
     'user_id' => $logged_in ? $user->ID : 0,
     'timestamp' => time() * 1000, // Compatible with Date.now() in JavaScript
@@ -504,7 +504,9 @@ function ffcnr_get_user_data() {
     'isAuthor' => false,
     'isEditor' => false,
     'nonce' => $nonce,
-    'nonceHtml' => '<input id="fictioneer-ajax-nonce" name="fictioneer-ajax-nonce" type="hidden" value="' . $nonce . '">'
+    'nonceHtml' => $nonce
+      ? '<input id="fictioneer-ajax-nonce" name="fictioneer-ajax-nonce" type="hidden" value="' . esc_attr( $nonce ) . '">'
+      : ''
   );
 
   if ( $logged_in ) {
@@ -522,7 +524,7 @@ function ffcnr_get_user_data() {
 
   // --- ALERTS ---------------------------------------------------------------
 
-  if ( $logged_in && $options['fictioneer_enable_alerts'] ) {
+  if ( $logged_in && ! empty( $options['fictioneer_enable_alerts'] ) ) {
     $follows = $options['fictioneer_enable_follows'] ? fictioneer_load_follows( $user ) : [];
 
     $read_alerts = ffcnr_get_user_meta( $user->ID, 'fictioneer_read_alerts', 'fictioneer' ) ?: [];
@@ -553,25 +555,25 @@ function ffcnr_get_user_data() {
 
   // --- FOLLOWS ---------------------------------------------------------------
 
-  if ( $logged_in && $options['fictioneer_enable_follows'] ) {
+  if ( $logged_in && ! empty( $options['fictioneer_enable_follows'] ) ) {
     $data['follows'] = fictioneer_load_follows( $user );
   }
 
   // --- REMINDERS -------------------------------------------------------------
 
-  if ( $logged_in && $options['fictioneer_enable_reminders'] ) {
+  if ( $logged_in && ! empty( $options['fictioneer_enable_reminders'] ) ) {
     $data['reminders'] = fictioneer_load_reminders( $user );
   }
 
   // --- CHECKMARKS ------------------------------------------------------------
 
-  if ( $logged_in && $options['fictioneer_enable_checkmarks'] ) {
+  if ( $logged_in && ! empty( $options['fictioneer_enable_checkmarks'] ) ) {
     $data['checkmarks'] = fictioneer_load_checkmarks( $user );
   }
 
   // --- BOOKMARKS -------------------------------------------------------------
 
-  if ( $logged_in && $options['fictioneer_enable_bookmarks'] ) {
+  if ( $logged_in && ! empty( $options['fictioneer_enable_bookmarks'] ) ) {
     $bookmarks = ffcnr_get_user_meta( $user->ID, 'fictioneer_bookmarks', 'fictioneer' );
     $data['bookmarks'] = $bookmarks ? $bookmarks : '{}';
   }
@@ -586,9 +588,9 @@ function ffcnr_get_user_data() {
 
   // Response
   header( 'Content-Type: application/json; charset=utf-8' );
-  header( 'HTTP/1.1 200 OK' );
-  echo json_encode( array( 'success' => true, 'data' => $data ) );
-  exit;
+  http_response_code( 200 );
+
+  echo wp_json_encode( array( 'success' => true, 'data' => $data ) );
 }
 
 ffcnr_get_user_data();

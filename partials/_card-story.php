@@ -35,7 +35,7 @@ if ( $card_cache_active ) {
 
 // Setup
 $post_id = $post->ID;
-$story = fictioneer_get_story_data( $post_id );
+$story = \Fictioneer\Story::get_data( $post_id );
 $story_link = ( $story['redirect'] ?? 0 ) ?: get_permalink( $post_id );
 $latest = $args['show_latest'] ?? FICTIONEER_SHOW_LATEST_CHAPTERS_ON_STORY_CARDS;
 $chapter_limit = max( 0, FICTIONEER_STORY_CARD_CHAPTER_LIMIT );

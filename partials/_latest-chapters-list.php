@@ -96,7 +96,7 @@ if ( ! empty( $args['author_ids'] ) ) {
 
 // Taxonomies?
 if ( ! empty( $args['taxonomies'] ) ) {
-  $query_args['tax_query'] = fictioneer_get_shortcode_tax_query( $args );
+  $query_args['tax_query'] = \Fictioneer\Shortcodes\Shortcode::tax_query_args( $args );
 }
 
 // Excluded tags?
@@ -128,7 +128,7 @@ if ( $args['only_protected'] ) {
 $query_args = apply_filters( 'fictioneer_filter_shortcode_latest_chapters_query_args', $query_args, $args );
 
 // Query chapters
-$entries = fictioneer_shortcode_query( $query_args );
+$entries = \Fictioneer\Shortcodes\Shortcode::query( $query_args );
 
 // Extra attributes
 $attributes = [];
@@ -176,7 +176,7 @@ if ( $splide ) {
 
             // Continue setup
             $title = fictioneer_get_safe_title( $post_id, 'shortcode-latest-chapters-list' );
-            $story = $story_id ? fictioneer_get_story_data( $story_id, false ) : null; // Does not refresh comment count!
+            $story = $story_id ? \Fictioneer\Story::get_data( $story_id, false ) : null; // Does not refresh comment count!
             $permalink = get_permalink( $post_id );
             $chapter_rating = get_post_meta( $post_id, 'fictioneer_chapter_rating', true );
             $words = fictioneer_get_word_count( $post_id );

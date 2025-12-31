@@ -84,14 +84,18 @@ class Fictioneer_Seo_Table extends WP_List_Table {
 
   public function column_default( $item, $column_name ) {
     $schema = get_post_meta( $item->ID, 'fictioneer_schema', true );
-    $schema_text = stripslashes( json_encode( json_decode( $schema ), JSON_PRETTY_PRINT ) );
+    $schema_text = '';
+
+    if ( is_array( $schema ) && isset( $schema['schema'], $schema['ttl'], $schema['v'] ) ) {
+      $schema_text = stripslashes( wp_json_encode( json_decode( $schema['schema'] ), JSON_PRETTY_PRINT ) );
+    }
 
     switch ( $column_name ) {
       case 'title':
-        $image = fictioneer_get_seo_image( $item->ID );
+        $image = \Fictioneer\SEO\Meta::image( $item->ID );
         $image_url = $image ? $image['url'] : get_template_directory_uri() . '/img/no_image_placeholder.svg';
         $link = get_the_permalink( $item->ID );
-        $title = fictioneer_truncate( fictioneer_get_seo_title( $item->ID ), 48 );
+        $title = fictioneer_truncate( \Fictioneer\SEO\Meta::title( $item->ID ), 48 );
         $template = get_page_template_slug( $item->ID );
         $is_excluded = in_array( $template, ['singular-bookshelf.php', 'singular-bookmarks.php', 'user-profile.php'] );
 
@@ -113,7 +117,7 @@ class Fictioneer_Seo_Table extends WP_List_Table {
         );
         break;
       case 'description':
-        echo fictioneer_get_seo_description( $item->ID );
+        echo \Fictioneer\SEO\Meta::description( $item->ID );
 
         if ( $schema ) {
           echo "<div data-schema-id='{$item->ID}' hidden>{$schema_text}</div>";

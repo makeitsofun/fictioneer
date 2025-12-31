@@ -60,7 +60,7 @@ Filters the data to be returned as JSON by the `fictioneer_ajax_get_user_data()`
 ---
 
 ### `apply_filters( 'fictioneer_filter_allowed_chapter_permalinks', $statuses )`
-Filters the array of chapter statuses that control whether the chapter permalink is rendered in the `fictioneer_prepare_chapter_groups()` function. By default, the statuses only include `['publish']`.
+Filters the array of chapter statuses that control whether the chapter permalink is rendered in the `\Fictioneer\Story::prepare_chapter_groups()` function. By default, the statuses only include `['publish']`.
 
 **Note:** Used by `fictioneer_story_chapters()`. If you enable the `FICTIONEER_LIST_SCHEDULED_CHAPTERS` constant, the filter will be used to treat scheduled chapters as published.
 
@@ -304,6 +304,20 @@ Filters the intermediate output array of term HTML nodes (tags, genres, fandoms,
 * $post (WP_Post) – The current post object.
 * $args (array) – Arguments passed to the shortcode.
 * $story_data (array|null) – Collection of story post data. Unsafe.
+
+---
+
+### `apply_filters( 'fictioneer_filter_chapter_aggregates_sql', $sql, $story_id, $chapter_ids, $statuses, $variant )`
+Filters the prepared raw SQL used to query chapters in the `\Fictioneer\Story::get_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
+
+**Warning:** Of all filters that can mess up your site, this one can mess up your site the most.
+
+**Parameters:**
+* $sql (string) – Prepared and safe SQL query.
+* $story_id (int) – ID of the story.
+* $chapter_ids (array) – IDs of all associated chapters, in order.
+* $statuses (array) – Array of allowed post statuses to query (already filtered).
+* $variant (string) – Either `'small'` (multi-joins) or `'large'` (ID-scoped) depending on strategy.
 
 ---
 
@@ -647,7 +661,7 @@ Filters the boolean return value of the `fictioneer_enable_chapter_list_transien
 ---
 
 ### `apply_filters( 'fictioneer_filter_enable_shortcode_transients', $bool, $shortcode )`
-Filters the boolean return value of the `fictioneer_enable_shortcode_transients()` function. By default, this depends on the `FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION` constant being greater than -1 and the `fictioneer_disable_shortcode_transients` option being off. This can conflict with external object caches.
+Filters the boolean return value of the `\Fictioneer\Shortcodes\Shortcode::transients_enabled()` function. By default, this depends on the `FICTIONEER_SHORTCODE_TRANSIENT_EXPIRATION` constant being greater than -1 and the `fictioneer_disable_shortcode_transients` option being off. This can conflict with external object caches.
 
 **Parameter:**
 * $bool (boolean) – Whether the Transients are enabled or not.
@@ -687,8 +701,17 @@ Filters the array of support links returned for the current post (or post ID if 
 
 ---
 
+### `apply_filters( 'fictioneer_filter_get_story_data_batch_limit', $limit, $story_id )`
+Filters the maximum number of chapter IDs processed per batch when querying chapter data. Larger values reduce the number of queries but increase SQL size; smaller values increase batching but can reduce query overhead on very large stories.
+
+**Parameters:**
+* $limit (int) – Maximum chapter IDs per batch. Default 800; minimum 100; maximum 2000.
+* $story_id (int) – Current story (post) ID.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_get_story_data_indexed_chapter_statuses', $statuses, $story_id )`
-Filters the array of chapter statuses that can be appended to a story’s `indexed_chapter_ids` array in the `fictioneer_get_story_data()` function. These chapters are a subset of the queried chapters, which need to be filtered separately. By default, the statuses are `['publish']`.
+Filters the array of chapter statuses that can be appended to a story’s `indexed_chapter_ids` array in the `\Fictioneer\Story::get_data()` function. These chapters are a subset of the queried chapters, which need to be filtered separately. By default, the statuses are `['publish']`.
 
 **Note:** If you enable the `FICTIONEER_LIST_SCHEDULED_CHAPTERS` constant, the filter will be used to treat scheduled chapters as published.
 
@@ -709,7 +732,7 @@ add_filter( 'fictioneer_filter_get_story_data_indexed_chapter_statuses', 'child_
 ---
 
 ### `apply_filters( 'fictioneer_filter_get_story_data_queried_chapter_statuses', $statuses, $story_id )`
-Filters the array of queried chapter statuses in the `fictioneer_get_story_data()` function. These chapters may appear in lists but cannot necessarily be navigated to (for example, `'future'` chapters). By default, the statuses are `['publish']`.
+Filters the array of queried chapter statuses in the `\Fictioneer\Story::get_data()` function. These chapters may appear in lists but cannot necessarily be navigated to (for example, `'future'` chapters). By default, the statuses are `['publish']`.
 
 **Note:** If you enable the `FICTIONEER_LIST_SCHEDULED_CHAPTERS` constant, the filter will be used to treat scheduled chapters as published.
 
@@ -729,16 +752,12 @@ add_filter( 'fictioneer_filter_get_story_data_queried_chapter_statuses', 'child_
 
 ---
 
-### `apply_filters( 'fictioneer_filter_get_story_data_sql', $sql, $story_id, $chapter_ids, $statuses )`
-Filters the prepared raw SQL used to query chapters in the `fictioneer_get_story_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
-
-**Warning:** Of all filters that can mess up your site, this one can mess up your site the most.
+### `apply_filters( 'fictioneer_filter_get_story_data_switch_threshold', $threshold, $story_id )`
+Filters the chapter-count threshold up to which the multi-join query is used. Above this threshold, the query switches to the chunked `IN (...)` strategy (with meta scoped to the chapter IDs), which is typically faster for large chapter counts.
 
 **Parameters:**
-* $sql (string) – Prepared and safe SQL query.
-* $story_id (int) – ID of the story.
-* $chapter_ids (array) – IDs of all associated chapters, in order.
-* $statuses (array) – Array of allowed post statuses to query (already filtered).
+* $threshold (int) – Up to which chapter count the multi-join query is used. Default 225.
+* $story_id (int) – Current story (post) ID.
 
 ---
 
@@ -910,7 +929,7 @@ Filters the intermediate output array of comment actions before it is imploded a
 ---
 
 ### `apply_filters( 'fictioneer_filter_comment_badge', $output, $user, $args )`
-Filters the HTML of the `fictioneer_get_comment_badge( $user, $comment, $post_author_id )` function before it is returned for rendering. The badge class and label are inserted into `<div class="fictioneer-comment__badge CLASS"><span>LABEL</span></div>`. Possible label classes are `is-author`, `is-admin`, `is-moderator`, `is-supporter`, and `badge-override`.
+Filters the HTML of the `\Fictioneer\User::get_comment_badge( $user, $comment, $post_author_id )` function before it is returned for rendering. The badge class and label are inserted into `<div class="fictioneer-comment__badge CLASS"><span>LABEL</span></div>`. Possible label classes are `is-author`, `is-admin`, `is-moderator`, `is-supporter`, and `badge-override`.
 
 **Parameters:**
 * $output (string) – Complete HTML of the comment badge or empty string.
@@ -936,7 +955,7 @@ function child_get_patreon_tier_badge( $badge_html, $user, $args ) {
   }
 
   // Patreon data
-  $membership = fictioneer_get_user_patreon_data( $user );
+  $membership = \Fictioneer\User::get_user_patreon_data( $user );
   $tier_id = array_key_first( $membership['tiers'] ?? [] );
 
   if ( empty( $membership ) || empty( $tier_id ) ) {
@@ -1010,11 +1029,30 @@ Filters the form fields of the `fictioneer_contact_form` shortcode.
 ---
 
 ### `apply_filters( 'fictioneer_filter_co_authored_ids', $story_ids, $author_id )`
-Filters the array of story IDs co-authored by the specified author ID, as queried and returned by the `fictioneer_sql_get_co_authored_story_ids()` function. These IDs are used to query selectable story chapters and validate permissions for chapter assignment and appending.
+Filters the array of story IDs co-authored by the specified author ID, as queried and returned by the `\Fictioneer\Utils_Admin::get_co_authored_story_ids()` function. These IDs are used to query selectable story chapters and validate permissions for chapter assignment and appending.
 
 **Parameters:**
 * $story_ids (int[]) – Array of story IDs.
 * $author_id (int) – Co-author ID.
+
+---
+
+### `apply_filters( 'fictioneer_filter_css_snippet_{snippet}', $css, $success )`
+Filters the CSS snippet for certain theme options before they are appended to the customize.css building string.
+
+**$args:**
+* $css (string) - CSS snippet or empty if not found/readable.
+* $success (bool) - Whether the snippet file was successfully read.
+
+---
+
+### `apply_filters( 'fictioneer_filter_custom_permalink', $permalink, $chapter, $leavename )`
+Filters the custom permalinks derived from post-like objects. Only applied for chapter list links, only if the \[Enable optimized chapter post queries\] option is enabled, and only if `$chapter` is not a `WP_Post`. Note that the default `post_type_link` filter is not applied.
+
+**$args:**
+* $permalink (string) - Custom permalink.
+* $chapter (object) - Chapter data object.
+* $leavename (bool) - Optional. Whether to keep the %postname% placeholder. Default false.
 
 ---
 
@@ -1025,27 +1063,20 @@ Refer to `/includes/functions/_customizer-settings.php` to see the default choic
 
 ---
 
-### `apply_filters( 'fictioneer_filter_css_snippet_{snippet}', $css )`
-Filters the CSS snippet for certain theme options before they are appended to the customize.css building string.
-
-Refer to `/includes/functions/_customizer.php` to see all snippets.
-
----
-
 ### `apply_filters( 'fictioneer_filter_default_search_form_args', $args )`
 Filters the default search form arguments for the search page (not the shortcode). Most of them do not make sense to change for the search page, likely only the preselect type ('any', 'post', 'fcn_story', 'fcn_chapter', 'fcn_collection', or 'fcn_recommendation').
 
 **$args:**
-* $simple (boolean|null) – Whether to show the simple form. Default null.
-* $expanded (boolean|null) – Whether the form should be expanded. Default null.
-* $placeholder (string|null) – The placeholder message. Default null.
-* $preselect_type (string|null) – The preselected post type. Default null.
-* $preselect_tags (string|null) – Comma-separated list of tag IDs. Default null.
-* $preselect_genres (string|null) – Comma-separated list of genre IDs. Default null.
-* $preselect_fandoms (string|null) – Comma-separated list of fandom IDs. Default null.
-* $preselect_characters (string|null) – Comma-separated list of character IDs. Default null.
-* $preselect_warnings (string|null) – Comma-separated list of content warning IDs. Default null.
-* $cache (boolean|null) – Whether to account for caching. Default null.
+* 'simple' (boolean|null) – Whether to show the simple form. Default null.
+* 'expanded' (boolean|null) – Whether the form should be expanded. Default null.
+* 'placeholder' (string|null) – The placeholder message. Default null.
+* 'preselect_type' (string|null) – The preselected post type. Default null.
+* 'preselect_tags' (string|null) – Comma-separated list of tag IDs. Default null.
+* 'preselect_genres' (string|null) – Comma-separated list of genre IDs. Default null.
+* 'preselect_fandoms' (string|null) – Comma-separated list of fandom IDs. Default null.
+* 'preselect_characters' (string|null) – Comma-separated list of character IDs. Default null.
+* 'preselect_warnings' (string|null) – Comma-separated list of content warning IDs. Default null.
+* 'cache' (boolean|null) – Whether to account for caching. Default null.
 
 **Example:**
 ```php
@@ -1151,7 +1182,7 @@ Filters the webhook used for the Discord notification about a new stories.
 ---
 
 ### `apply_filters( 'fictioneer_filter_falsy_meta_allow_list', $allowed )`
-Filters the array of meta keys allowed to be saved as "falsy" ("", 0, null, false, []) instead of being deleted when updated via theme functions. Applies to post, comment, and user meta fields. This does not affect the core update functions. See `fictioneer_update_user_meta(…)`, `fictioneer_update_comment_meta(…)`, and `fictioneer_update_post_meta(…)`.
+Filters the array of meta keys allowed to be saved as "falsy" ("", 0, null, false, []) instead of being deleted when updated via theme functions. Applies to post, comment, and user meta fields. This does not affect the core update functions. See `\Fictioneer\Utils_Admin::update_user_meta(…)`, `\Fictioneer\Utils_Admin::update_comment_meta(…)`, and `\Fictioneer\Utils_Admin::update_post_meta(…)`.
 
 **Parameters:**
 * $allowed (array) – Array of allowed meta keys. Default empty.
@@ -1203,7 +1234,7 @@ Filters the configuration array for the story chapter list filter reel Splide sl
 ---
 
 ### `apply_filters( 'fictioneer_filter_fonts', $fonts )`
-Filters the return array of the `fictioneer_get_fonts()` function, used to set up the chapter font options.
+Filters the return array of the `\Fictioneer\Utils::get_fonts()` function, used to set up the chapter font options.
 
 **Parameters:**
 * $fonts (array) – Numeric array of font items with CSS name (`css`), display name (`name`), and fallbacks (`alt`).
@@ -1219,7 +1250,7 @@ Filters the return array of the `fictioneer_get_font_colors()` function, used to
 ---
 
 ### `apply_filters( 'fictioneer_filter_font_data', $fonts )`
-Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `fictioneer_get_font_data()` function reads the file system, which is potentially slow.
+Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `\Fictioneer\Utils_Admin::get_font_data()` function reads the file system, which is potentially slow.
 
 **Parameters:**
 * $fonts (array) – Array of font data.
@@ -1229,7 +1260,7 @@ Filters the font array compiled from all valid font folders and Google Fonts lin
 ### `apply_filters( 'fictioneer_filter_footnotes', $footnotes )`
 Filters the collection array of footnotes to be rendered.
 
-Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `fictioneer_get_font_data()` function reads the file system, which is potentially slow.
+Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `\Fictioneer\Utils_Admin::get_font_data()` function reads the file system, which is potentially slow.
 
 **Parameters:**
 * $footnotes (array) – Array of footnotes (ID => HTML).
@@ -1554,7 +1585,7 @@ Filters the intermediate output array of the `fictioneer_get_post_meta_items()` 
 ---
 
 ### `apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', $fonts )`
-Filters the font array before the bundled-fonts.css stylesheet is built in the `fictioneer_build_bundled_fonts()` function. This allows you to add, remove, or change fonts at the last opportunity. Note that the function reads the file system, which is potentially slow. The result is cached in the `fictioneer_chapter_fonts` option.
+Filters the font array before the bundled-fonts.css stylesheet is built in the `\Fictioneer\Utils_Admin::bundle_fonts()` function. This allows you to add, remove, or change fonts at the last opportunity. Note that the function reads the file system, which is potentially slow. The result is cached in the `fictioneer_chapter_fonts` option.
 
 **Parameters:**
 * $fonts (array) – Array of font data.
@@ -1597,6 +1628,26 @@ function child_add_custom_profile_support_field( $fields, $profile_user ) {
 }
 add_filter( 'fictioneer_filter_profile_fields_support', 'child_add_custom_profile_support_field', 10, 2 );
 ```
+
+---
+
+### `apply_filters( 'fictioneer_filter_query_batch_limit', $limit, $context )`
+Filters the maximum batch size for chunked queries, used to limit memory usage and prevent performance degradation when processing large datasets.
+
+**Parameters:**
+* $limit (int) – Current limit per batch.
+* $context (string) – Context of the filter.
+
+---
+
+### `apply_filters( 'fictioneer_filter_fast_story_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full )`
+Filters the maximum batch size for chunked queries, used to limit memory usage and prevent performance degradation when processing large datasets. Clamped between 100 and 2000. See `includes/classes/Story.php` for details.
+
+**Parameters:**
+* $meta_keys (array) – List of post meta keys to preload.
+*	$story_id (int|string) – ID of the parent story.
+*	$args (array) – WordPress query arguments. Only partially honored.
+*	$full (bool) – Whether the content is loaded as well. Default false.
 
 ---
 
@@ -1654,7 +1705,6 @@ Filters the intermediate output array of the `fictioneer_root_attributes()` func
 * 'class' (string) – CSS classes. Depends on options, can be empty.
 * 'data-mode-default' (string) – Mode of the site, light or dark. Default 'dark'.
 * 'data-site-width-default' (string) – Site width in pixels (without unit). Default '960'.
-* 'data-theme' (string) – Active theme or child theme. Default 'default'.
 * 'data-mode' (string) – Active theme mode. Default empty (dark).
 * 'data-font-weight' (string) – Current font weight set (default, thinner, or normal). Default 'default'.
 * 'data-primary-font' (string) – CSS name of primary font. Default 'Open Sans'.
@@ -1827,7 +1877,7 @@ Filters the WP_Query arguments in the `fictioneer_article_cards` shortcode. The 
 * $author__not_in (array|null) – `$args['excluded_authors']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $no_found_rows (boolean|null) – `true` if `$args['count'] > 0`
 
 **$args:**
@@ -1864,7 +1914,7 @@ Filters the WP_Query arguments in the `fictioneer_blog` shortcode.
 * $tag__not_in (array|null) – `$args['excluded_tags']`
 * $paged (int) – Current main query page number.
 * $posts_per_page (int) – `$args['posts_per_page']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 
 **$args:**
 * $posts_per_page (int) – The number of posts per page. Defaults to WordPress.
@@ -1915,7 +1965,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_chapters` shortcode. Th
 * $tag__not_in (array|null) – `$args['excluded_tags']`
 * $meta_key (string) – `'fictioneer_chapter_hidden'`
 * $meta_value (int) – `0`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 * $update_post_term_cache (boolean) – `false`
 
@@ -1986,7 +2036,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_recommendations` shortc
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2047,7 +2097,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_stories` shortcode. The
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2116,7 +2166,7 @@ Filters the WP_Query arguments in the `fictioneer_latest_updates` shortcode. The
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $no_found_rows (boolean) – `true`
 
 **$args:**
@@ -2193,7 +2243,7 @@ Filters the WP_Query arguments in the `fictioneer_showcase` shortcode. The optio
 * $author_name (string|null) – `$args['author']`
 * $category__not_in (array|null) – `$args['excluded_cats']`
 * $tag__not_in (array|null) – `$args['excluded_tags']`
-* $tax_query (array|null) – `fictioneer_get_shortcode_tax_query( $args )`
+* $tax_query (array|null) – `\Fictioneer\Shortcodes\Shortcode::tax_query_args( $args )`
 * $update_post_term_cache (boolean) – `false`
 * $no_found_rows (boolean) – `true`
 
@@ -2430,13 +2480,23 @@ Filters the intermediate output array of the `fictioneer_filter_media_buttons( $
 
 ---
 
+### `apply_filters( 'fictioneer_filter_seo_schema', $schema, $post, $image_data )`
+Filters the SEO schema array before it is encoded as JSON and returned. The schema is then cached, so this filter only applies when the cache becomes invalid or gets deleted.
+
+**Parameters:**
+* $schema (array) – SEO schema graph associative array.
+* $post (WP_Post|null) – Post object of the main query. Unsafe.
+* $image_data (array|false) – Image data of the open graph image (if any). Unsafe.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_splide_breakpoints', $breakpoints, $json_string, $uid )`
 Filters the associative array of Splide breakpoints returned by the `fictioneer_extract_splide_breakpoints()` function. These breakpoints are used to generate dynamic placeholder styles for a specific slider. Modifying the breakpoints at this stage is generally inadvisable, the filter exists primarily for completeness and edge cases.
 
 **Parameters:**
 * $breakpoints (array) – Breakpoint data or empty.
 * $json_string (string) – Stringified Splide JSON.
-* $uid (string|null) – Optional. Unique ID of the target element (only for reference).
+* $uid (string|null) – Unique ID of the target element (only for reference). Unsafe.
 
 ---
 
@@ -2566,7 +2626,7 @@ add_filter( 'fictioneer_filter_story_card_footer', 'child_add_item_to_story_card
 ---
 
 ### `apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids )`
-Filters the arguments for the story chapter posts query, an utility function called on story and chapter pages. There are two query variants depending on whether the `FICTIONEER_QUERY_ID_ARRAY_LIMIT` (1000) is exceeded or not.
+Filters the arguments for the story chapter posts query, an utility function called on story and chapter pages. There are two query variants depending on whether the threshold of 800 (see `fictioneer_filter_query_batch_limit`) is exceeded or not.
 
 **$query_args:**
 * $post_type (string) - Which post types to query. Default `'fcn_chapter'`.
@@ -2621,7 +2681,7 @@ Filters the intermediate output array in the `_story-header.php` partial before 
 
 **Parameters:**
 * $story_id (int) – The story ID.
-* $story (array) – Array with story data from `fictioneer_get_story_data()`.
+* $story (array) – Array with story data from `\Fictioneer\Story::get_data()`.
 
 ---
 
@@ -2731,7 +2791,7 @@ Filters the query arguments used for the taxonomy submenu `get_terms()` call.
 ---
 
 ### `apply_filters( 'fictioneer_filter_translations', $strings )`
-Filters the source array of selected translation strings used in the theme, see `fcntr()` function in `includes/functions/_utility.php`. You cannot translate the whole theme with this, but give it a personal touch.
+Deprecated. Use `'fictioneer_filter_translations_static'` instead.
 
 **Parameters:**
 * $strings (array) – Associative array of translation keys and values.
@@ -2739,7 +2799,11 @@ Filters the source array of selected translation strings used in the theme, see 
 ---
 
 ### `apply_filters( 'fictioneer_filter_translations_static', $strings )`
-Same as the `fictioneer_filter_translations` filter, but only applied once when the `fcntr()` function is first called and cached in a static variable to save system resources. Using this is recommended if possible.
+Filters the source array of selected translation strings used in the theme, see `fcntr()` function in `includes/functions/_utility.php`. You cannot translate the whole theme with this, but give it a personal touch. Only executed once, so best hook early in the `'init'` action.
+
+**Parameters:**
+* $strings (array) – Associative array of translation keys and values.
+
 
 ---
 

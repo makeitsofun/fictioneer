@@ -904,6 +904,8 @@ body[class*="fictioneer_page_"] {
   }
 
   .fictioneer-capability-checkbox {
+    cursor: pointer;
+
     &__input {
       display: none;
 

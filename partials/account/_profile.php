@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) OR exit;
 
 // Setup
 $current_user = $args['user'];
-$fingerprint = fictioneer_get_user_fingerprint( $current_user->ID );
+$fingerprint = \Fictioneer\Utils::get_user_fingerprint( $current_user->ID );
 $new_email = get_user_meta( $current_user->ID, '_new_email', true );
 $submit_url = admin_url( 'admin-post.php?action=fictioneer_update_frontend_profile' );
 $email_change_cancel_url = wp_nonce_url(

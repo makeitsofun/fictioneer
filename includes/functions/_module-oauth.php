@@ -388,7 +388,7 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
   $username = sanitize_user( $user_data['username'] );
   $nickname = sanitize_user( $user_data['nickname'] );
   $email = sanitize_email( $user_data['email'] );
-  $avatar = fictioneer_url_exists( $user_data['avatar'] ) ? $user_data['avatar'] : null;
+  $avatar = Utils_Admin::url_exists( $user_data['avatar'] ) ? $user_data['avatar'] : null;
   $merge_id = absint( $cookie['merge_id'] ?? 0 );
   $new = false;
   $merged = false;
@@ -465,30 +465,30 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
 
     // Set nickname and display name
     if ( $new ) {
-      fictioneer_update_user_meta( $wp_user->ID, 'nickname', $nickname );
+      Utils_Admin::update_user_meta( $wp_user->ID, 'nickname', $nickname );
       wp_update_user( array( 'ID' => $wp_user->ID, 'display_name' => $nickname ) );
     }
 
     // Set channel ID
     if ( $new || $merged ) {
-      fictioneer_update_user_meta( $wp_user->ID, "fictioneer_{$channel}_id_hash", $channel_id );
+      Utils_Admin::update_user_meta( $wp_user->ID, "fictioneer_{$channel}_id_hash", $channel_id );
     }
 
     // Update avatar
     if ( $avatar !== $current_avatar && ! get_the_author_meta( 'fictioneer_lock_avatar', $wp_user->ID ) ) {
-      fictioneer_update_user_meta( $wp_user->ID, 'fictioneer_external_avatar_url', $avatar );
+      Utils_Admin::update_user_meta( $wp_user->ID, 'fictioneer_external_avatar_url', $avatar );
     }
 
     // Handle Patreon
     if ( $channel === 'patreon' ) {
       if ( isset( $user_data['tiers'] ) && count( $user_data['tiers'] ) > 0 ) {
-        fictioneer_update_user_meta( $wp_user->ID, 'fictioneer_patreon_tiers', $user_data['tiers'] );
+        Utils_Admin::update_user_meta( $wp_user->ID, 'fictioneer_patreon_tiers', $user_data['tiers'] );
       } else {
         delete_user_meta( $wp_user->ID, 'fictioneer_patreon_tiers' );
       }
 
       if ( isset( $user_data['membership'] ) && ! empty( $user_data['membership'] ) ) {
-        fictioneer_update_user_meta( $wp_user->ID, 'fictioneer_patreon_membership', $user_data['membership'] );
+        Utils_Admin::update_user_meta( $wp_user->ID, 'fictioneer_patreon_membership', $user_data['membership'] );
       } else {
         delete_user_meta( $wp_user->ID, 'fictioneer_patreon_membership' );
       }

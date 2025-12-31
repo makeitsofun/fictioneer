@@ -303,31 +303,14 @@ global $wpdb;
         </div>
       </div>
 
-      <div class="fictioneer-card">
+      <?php /*<div class="fictioneer-card">
         <div class="fictioneer-card__wrapper">
           <h3 class="fictioneer-card__header"><?php _e( 'Repair Tools', 'fictioneer' ); ?></h3>
           <div class="fictioneer-card__content">
 
-            <div class="fictioneer-card__row">
-              <p><?php _e( '<strong>Reset post relationship registry.</strong> Warning, this should only ever be done if the registry either causes problems or has become corrupted. Without the registry, the cache purge assistance cannot find referenced posts. You will have to re-save every relevant post to rebuild the registry. Great fun.', 'fictioneer' ); ?></p>
-            </div>
-
-            <div class="fictioneer-card__row">
-              <details>
-                <summary><?php _e( 'Show registry array', 'fictioneer' ); ?></summary>
-                <code style="font-size: 10px; height: 256px;">
-                  <pre><?php print_r( fictioneer_get_relationship_registry() ); ?></pre>
-                </code>
-              </details>
-            </div>
-
-            <div class="fictioneer-card__row fictioneer-card__row--buttons">
-              <a class="button button--secondary" id="reset-post-relationship-registry" data-click="warning-dialog" data-dialog="<?php esc_attr_e( 'Are you sure? Repopulating the registry requires re-saving every single post or page you want to be covered. Manually.', 'fictioneer' ); ?>" href="<?php echo fictioneer_admin_action( 'fictioneer_reset_post_relationship_registry' ); ?>"><?php _e( 'Reset Registry', 'fictioneer' ); ?></a>
-            </div>
-
           </div>
         </div>
-      </div>
+      </div> */ ?>
 
       <?php do_action( 'fictioneer_admin_settings_tools' ); ?>
 

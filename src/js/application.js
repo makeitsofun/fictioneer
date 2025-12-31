@@ -1823,9 +1823,11 @@ _$$('.site-setting-font-weight').forEach(setting => {
  * Update hue rotate setting.
  *
  * @since 4.3.0
+ * @param {Number} value - Value of the setting.
+ * @param {Boolean} [silent=false] - Optional. Whether to not update the theme color meta tag.
  */
 
-function fcn_updateHueRotate(value) {
+function fcn_updateHueRotate(value, silent = false) {
   // Evaluate
   value = FcnUtils.clamp(0, 360, value ?? 0);
 
@@ -1842,7 +1844,9 @@ function fcn_updateHueRotate(value) {
   fcn_setSiteSettings();
 
   // Update theme color
-  fcn_updateThemeColor();
+  if (!silent) {
+    fcn_updateThemeColor();
+  }
 }
 
 /**
@@ -1872,9 +1876,11 @@ fcn_settingHueRotateText?.addEventListener('input', fcn_setHueRotate);
  * Update darken setting.
  *
  * @since 4.0.0
+ * @param {Number} value - Value of the setting.
+ * @param {Boolean} [silent=false] - Optional. Whether to not update the theme color meta tag.
  */
 
-function fcn_updateDarken(value = null) {
+function fcn_updateDarken(value = null, silent = false) {
   // Evaluate
   value = FcnUtils.clamp(-1, 1, value ?? fcn_siteSettings['darken']);
   value = Math.round((value + Number.EPSILON) * 100) / 100;
@@ -1895,7 +1901,9 @@ function fcn_updateDarken(value = null) {
   fcn_setSiteSettings();
 
   // Update theme color
-  fcn_updateThemeColor();
+  if (!silent) {
+    fcn_updateThemeColor();
+  }
 }
 
 /**
@@ -1945,9 +1953,11 @@ fcn_settingDarkenTexts.forEach(element => {
  * Update saturation setting.
  *
  * @since 4.3.0
+ * @param {Number} value - Value of the setting.
+ * @param {Boolean} [silent=false] - Optional. Whether to not update the theme color meta tag.
  */
 
-function fcn_updateSaturation(value = null) {
+function fcn_updateSaturation(value = null, silent = false) {
   // Evaluate
   value = FcnUtils.clamp(-1, 1, value ?? fcn_siteSettings['saturation']);
 
@@ -1967,7 +1977,9 @@ function fcn_updateSaturation(value = null) {
   fcn_setSiteSettings();
 
   // Update theme color
-  fcn_updateThemeColor();
+  if (!silent) {
+    fcn_updateThemeColor();
+  }
 }
 
 /**
@@ -2017,9 +2029,11 @@ fcn_settingSaturationTexts.forEach(element => {
  * Update font lightness setting.
  *
  * @since 5.12.2
+ * @param {Number} value - Value of the setting.
+ * @param {Boolean} [silent=false] - Optional. Whether to not update the theme color meta tag.
  */
 
-function fcn_updateFontLightness(value = null) {
+function fcn_updateFontLightness(value = null, silent = false) {
   // Evaluate
   value = FcnUtils.clamp(-1, 1, value ?? fcn_siteSettings['font-lightness'] ?? 1);
 
@@ -2039,7 +2053,9 @@ function fcn_updateFontLightness(value = null) {
   fcn_setSiteSettings();
 
   // Update theme color
-  fcn_updateThemeColor();
+  if (!silent) {
+    fcn_updateThemeColor();
+  }
 }
 
 /**
@@ -2179,18 +2195,18 @@ function fcn_applySiteSettings(value) {
         document.documentElement.classList.toggle('minimal', setting[1]);
         break;
       case 'darken':
-        fcn_updateDarken();
+        fcn_updateDarken(null, true);
         break;
       case 'saturation':
-        fcn_updateSaturation();
+        fcn_updateSaturation(null, true);
         break;
       case 'font-saturation':
         break;
       case 'font-lightness':
-        fcn_updateFontLightness();
+        fcn_updateFontLightness(null, true);
         break;
       case 'hue-rotate':
-        fcn_updateHueRotate(setting[1]);
+        fcn_updateHueRotate(setting[1], true);
         break;
       case 'font-weight':
         fcn_updateFontWeight();
@@ -2200,51 +2216,15 @@ function fcn_applySiteSettings(value) {
     }
   });
 
+  // Set theme color
+  fcn_updateThemeColor();
+
   // Update local storage
   fcn_setSiteSettings(value);
 }
 
 // Initialize
 fcn_applySiteSettings(fcn_siteSettings);
-
-// =============================================================================
-// SITE SETTINGS: THEME
-// =============================================================================
-
-function fcn_updateSiteTheme(theme) {
-  // Update root and settings
-  fcn_siteSettings['site-theme'] = theme;
-  document.documentElement.dataset.theme = theme;
-
-  // Update reset button
-  _$$$('site-setting-theme-reset').classList.toggle('_modified', theme != 'default');
-
-  // Apply
-  fcn_applySiteSettings(fcn_siteSettings);
-  fcn_updateThemeColor();
-}
-
-_$$('.site-setting-site-theme').forEach(element => {
-  // Initialize site theme select elements
-  element.value = fcn_siteSettings['site-theme'] ? fcn_siteSettings['site-theme'] : 'default';
-
-  // Modified?
-  _$$$('site-setting-theme-reset').classList.toggle('_modified', element.value != 'default');
-
-  // Listen for site theme changes
-  element.addEventListener('change', event => { fcn_updateSiteTheme(event.target.value) });
-});
-
-function fcn_resetSiteTheme() {
-  fcn_updateSiteTheme('default');
-  _$$('.site-setting-site-theme').forEach(element => { element.value = 'default'; });
-}
-
-// Listen for click on site theme reset button
-_$$$('site-setting-theme-reset')?.addEventListener('click', fcn_resetSiteTheme);
-
-// Initialize
-fcn_updateThemeColor();
 
 // =============================================================================
 // REVEAL IMAGE ON CLICK ON CONSENT BUTTON

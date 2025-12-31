@@ -155,6 +155,10 @@
       }
     }
 
+    :is(article, section, form, aside, blockquote, main, header, footer) p {
+      text-indent: 0 !important;
+    }
+
     .chapter-formatting {
       &.no-indent p {
         text-indent: 0 !important;

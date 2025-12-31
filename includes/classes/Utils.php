@@ -2,26 +2,92 @@
 
 namespace Fictioneer;
 
-use Fictioneer\Traits\Singleton_Trait;
-use Fictioneer\Utils_Admin;
+use Fictioneer\Fonts;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Utils {
-  use Singleton_Trait;
+final class Utils {
+  /**
+   * Return directory path of the theme cache.
+   *
+   * @since 5.23.1
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param string|null $context  Optional. Context of the call. Default null.
+   *
+   * @return string Path of the cache directory.
+   */
+
+  public static function get_cache_dir( $context = null ) : string {
+    static $checked = false;
+
+    $dir = apply_filters(
+      'fictioneer_filter_cache_dir',
+      WP_CONTENT_DIR . '/cache/fictioneer/',
+      $context
+    );
+
+    $dir = trailingslashit( $dir );
+
+    if ( ! $checked ) {
+      $checked = true;
+
+      if ( ! is_dir( $dir ) ) {
+        if ( ! wp_mkdir_p( $dir ) ) {
+          error_log(
+            sprintf(
+              '[Fictioneer] Failed to create cache directory: %s (context: %s)',
+              $dir,
+              $context ?? 'none'
+            )
+          );
+        }
+      }
+    }
+
+    return $dir;
+  }
+
+  /**
+   * Return theme cache URI.
+   *
+   * @since 5.23.1
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param string|null $context  The context of the call. Default null.
+   *
+   * @return string Theme cache URI.
+   */
+
+  public static function get_cache_uri( $context = null ) : string {
+    $uri = apply_filters(
+      'fictioneer_filter_cache_uri',
+      content_url( 'cache/fictioneer' ),
+      $context
+    );
+
+    return trailingslashit( $uri );
+  }
 
   /**
    * Wrapper for wp_parse_list() with optional sanitizer.
    *
-   * @since 5.33.2
+   * @since 5.34.0
    *
    * @param array|string $input_list  List of values.
+   * @param string|null  $sanitizer   Optional. Name of sanitizer function.
+   * @param string       $mode        Optional. Parsing mode (auto or comma). Default auto.
    *
    * @return array Array of values.
    */
 
-  public static function parse_list( array|string $input_list, string|null $sanitizer = null ) : array {
-    $values = wp_parse_list( $input_list ?? '' );
+  public static function parse_list( $input_list, $sanitizer = null, $mode = 'auto' ) : array {
+    if ( $mode === 'comma' && is_string( $input_list ) ) {
+      $input_list = str_replace( [ "\r", "\n" ], '', $input_list );
+      $values = array_map( 'trim', explode( ',', $input_list ) );
+    } else {
+      $values = wp_parse_list( $input_list );
+    }
 
     if ( $sanitizer && is_callable( $sanitizer ) ) {
       $values = array_map( $sanitizer, $values );
@@ -29,21 +95,28 @@ class Utils {
       $values = array_values( $values );
     }
 
-    return $values;
+    $values = array_filter(
+      $values,
+      static function( $v ) {
+        return $v !== '';
+      }
+    );
+
+    return array_values( $values );
   }
 
   /**
    * Extract aspect ratio values from string.
    *
    * @since 5.14.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param mixed $value  Aspect-ratio value (e.g. '16/9, '1.5/1').
    *
    * @return array Tuple of numerator (0) and denominator (1).
    */
 
-  public static function split_aspect_ratio( mixed $value ) : array {
+  public static function split_aspect_ratio( $value ) : array {
     if ( ! is_string( $value ) || ! str_contains( $value, '/' ) ) {
       return [ 1.0, 1.0 ];
     }
@@ -64,7 +137,7 @@ class Utils {
    * Return URL without query arguments or page number.
    *
    * @since 5.4.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @return string Clean URL.
    */
@@ -84,7 +157,7 @@ class Utils {
    * Return current main pagination page.
    *
    * @since 5.32.4
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @return int Current page or 1.
    */
@@ -100,14 +173,14 @@ class Utils {
    * Encrypt data.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param mixed $data  Data to encrypt.
    *
    * @return string|false Encrypted data or false on failure.
    */
 
-  public static function encrypt( mixed $data ) : string|false {
+  public static function encrypt( $data ) {
     $plaintext = json_encode( $data );
 
     if ( $plaintext === false ) {
@@ -146,14 +219,14 @@ class Utils {
    * Decrypt data.
    *
    * @since 5.19.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $payload  Data to decrypt.
    *
    * @return mixed Decrypted data.
    */
 
-  public static function decrypt( string $payload ) : mixed {
+  public static function decrypt( $payload ) {
     $raw = base64_decode( $payload, true );
 
     if ( $raw === false ) {
@@ -197,7 +270,7 @@ class Utils {
    * Add class to element HTML string.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string $html   HTML of the element.
    * @param string $class  CSS class string to be added.
@@ -205,7 +278,7 @@ class Utils {
    * @return string Element HTML with the class added.
    */
 
-  public static function add_class_to_element( string $html, string $class ) : string {
+  public static function add_class_to_element( $html, $class ) : string {
     if ( $html === '' || $class === '' ) {
       return $html;
     }
@@ -233,7 +306,7 @@ class Utils {
    * Return theme icon HTML set in the Customizer.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Utils class.
+   * @since 5.34.0 - Moved into Utils class.
    *
    * @param string      $name     Name of the icon.
    * @param string|null $default  Optional. Fallback icon, defaults to empty string.
@@ -246,7 +319,7 @@ class Utils {
    * @return string The icon HTML.
    */
 
-  public static function get_theme_icon( string $name, ?string $default = '', ?array $args = [] ) : string {
+  public static function get_theme_icon( $name, $default = '', $args = [] ) : string {
     static $cache = [];
 
     $id = isset( $args['id'] ) ? (string) $args['id'] : '';
@@ -296,5 +369,518 @@ class Utils {
     }
 
     return $icon;
+  }
+
+  /**
+   * [Delegate] Return associative array of theme colors.
+   *
+   * Notes: Considers both parent and child theme.
+   *
+   * @since 5.21.2
+   * @since 5.34.0 - Refactored and moved into Utils_Admin class.
+   *
+   * @return array Associative array of theme colors.
+   */
+
+  public static function get_theme_colors() : array {
+    return Utils_Admin::get_theme_colors();
+  }
+
+  /**
+   * [Delegate] Return theme color mod with default fallback.
+   *
+   * @since 5.12.0
+   * @since 5.21.2 - Refactored with theme colors helper function.
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string      $mod      Requested theme color.
+   * @param string|null $default  Optional. Default color code.
+   *
+   * @return string Requested color code or '#ff6347' (tomato) if not found.
+   */
+
+  public static function get_theme_color( $mod, $default = null ) : string {
+    return Utils_Admin::get_theme_color( $mod, $default );
+  }
+
+  /**
+   * [Delegate] Convert hex color to RGB array.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param string $value  The to be converted hex (six digits).
+   *
+   * @return array|bool RGB values as array or false on failure.
+   */
+
+  public static function hex_to_rgb( $value ) {
+    return Utils_Admin::hex_to_rgb( $value );
+  }
+
+  /**
+   * [Delegate] Convert RGB color array to HSL.
+   *
+   * @license MIT
+   * @author Simon Waldherr https://github.com/SimonWaldherr
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   * @link https://github.com/SimonWaldherr/ColorConverter.php
+   *
+   * @param array $value      To be converted RGB array (r, g, b).
+   * @param int   $precision  Optional. Rounding precision. Default 0.
+   *
+   * @return array HSL values as array.
+   */
+
+  public static function rgb_to_hsl( $value, $precision = 0 ) : array {
+    return Utils_Admin::rgb_to_hsl( $value, $precision );
+  }
+
+  /**
+   * [Delegate] Convert a hex color to a Fictioneer HSL code.
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $hex     Hex color.
+   * @param string $output  Switch output style. Default 'default'.
+   *
+   * @return string Converted HSL code.
+   */
+
+  public static function get_hsl_code( $hex, $output = 'default' ) : string {
+    return Utils_Admin::get_hsl_code( $hex, $output );
+  }
+
+  /**
+   * [Delegate] Convert a hex color to an HSL font code.
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $hex  Hex color.
+   *
+   * @return string Converted HSL font code.
+   */
+
+  public static function get_hsl_font_code( $hex ) : string {
+    return Utils_Admin::get_hsl_font_code( $hex );
+  }
+
+  /**
+   * [Delegate] Return a font family value.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $option        Name of the theme mod.
+   * @param string $font_default  Fallback font.
+   * @param string $mod_default   Default for get_theme_mod().
+   *
+   * @return string Ready to use font family value.
+   */
+
+  public static function get_font_family( $option, $font_default, $mod_default ) : string {
+    return Fonts::get_font_family( $option, $font_default, $mod_default );
+  }
+
+  /**
+   * [Delegate] Return a CSS font-family value, quoted if required.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Fonts class.
+   *
+   * @param string $font_value  Font family name (single family, no commas).
+   * @param string $quote       Optional. Wrapping character. Default '"'.
+   *
+   * @return string Ready to use font-family value.
+   */
+
+  public static function get_font_family_value( $font_value, $quote = '"' ) : string {
+    return Fonts::get_font_family_value( $font_value, $quote );
+  }
+
+  /**
+   * [Delegate] Return fonts data from a Google Fonts link.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $link  Google Fonts link.
+   *
+   * @return array|false|null Font data if successful, false if malformed,
+   *                          null if not a valid Google Fonts link.
+   */
+
+  public static function extract_font_from_google_link( $link ) {
+    return Fonts::extract_font_from_google_link( $link );
+  }
+
+  /**
+   * [Delegate] Return fonts included by the theme.
+   *
+   * Note: If a font.json contains a { "remove": true } node, the font will not
+   * be added to the result array and therefore removed from the site.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @return array Array of font data. Keys: skip, chapter, version, key, name,
+   *               family, type, styles, weights, charsets, formats, about, note,
+   *               sources, css_path, css_file, and in_child_theme.
+   */
+
+  public static function get_font_data() : array {
+    return Fonts::get_font_data();
+  }
+
+  /**
+   * [Delegate] Build bundled font stylesheet.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   */
+
+  public static function bundle_fonts() : void {
+    Fonts::bundle_fonts();
+  }
+
+  /**
+   * [Delegate] Return array of font items.
+   *
+   * Note: The css string can contain quotes in case of multiple words,
+   * such as "Roboto Mono".
+   *
+   * @since 5.1.1
+   * @since 5.10.0 - Refactor for font manager.
+   * @since 5.12.5 - Add theme mod for chapter body font.
+   * @since 5.34.0 - Moved into Fonts class.
+   *
+   * @return array Font items (css, name, and alt).
+   */
+
+  public static function get_fonts() : array {
+    return Fonts::get_fonts();
+  }
+
+  /**
+   * [Delegate] Return array of disabled font keys.
+   *
+   * @since 5.34.0
+   *
+   * @return array Disabled font keys.
+   */
+
+  public static function get_disabled_fonts() : array {
+    return Fonts::get_disabled_fonts();
+  }
+
+  /**
+   * Return minified CSS.
+   *
+   * @license CC BY-SA 4.0
+   * @author Qtax https://stackoverflow.com/users/107152/qtax
+   * @author lots0logs https://stackoverflow.com/users/2639936/lots0logs
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Utils class.
+   * @link https://stackoverflow.com/a/15195752/17140970
+   * @link https://stackoverflow.com/a/44350195/17140970
+   *
+   * @param string $string  CSS to be minified.
+   *
+   * @return string Minified CSS.
+   */
+
+  public static function minify_css( $css ) : string {
+    if ( ! $css || $css === '' ) {
+      return '';
+    }
+
+    $comments = <<<'EOS'
+    (?sx)
+        # don't change anything inside of quotes
+        ( "(?:[^"\\]++|\\.)*+" | '(?:[^'\\]++|\\.)*+' )
+    |
+        # comments
+        /\* (?> .*? \*/ )
+    EOS;
+
+    $everything_else = <<<'EOS'
+    (?six)
+        # don't change anything inside of quotes
+        ( "(?:[^"\\]++|\\.)*+" | '(?:[^'\\]++|\\.)*+' )
+    |
+        # spaces before and after ; and }
+        \s*+ ; \s*+ ( } ) \s*+
+    |
+        # all spaces around meta chars/operators (excluding + and -)
+        \s*+ ( [*$~^|]?+= | [{};,>~] | !important\b ) \s*+
+    |
+        # all spaces around + and - (in selectors only!)
+        \s*([+-])\s*(?=[^}]*{)
+    |
+        # spaces right of ( [ :
+        ( [[(:] ) \s++
+    |
+        # spaces left of ) ]
+        \s++ ( [])] )
+    |
+        # spaces left (and right) of : (but not in selectors)!
+        \s+(:)(?![^\}]*\{)
+    |
+        # spaces at beginning/end of string
+        ^ \s++ | \s++ \z
+    |
+        # double spaces to single
+        (\s)\s+
+    EOS;
+
+    $search_patterns  = array( "%{$comments}%", "%{$everything_else}%" );
+    $replace_patterns = array( '$1', '$1$2$3$4$5$6$7$8' );
+
+    return preg_replace( $search_patterns, $replace_patterns, $css );
+  }
+
+  /**
+   * Check whether a JSON is valid.
+   *
+   * @since 4.0.0
+   * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param string $data  JSON string hopeful.
+   *
+   * @return bool True if the JSON is valid, false if not.
+   */
+
+  public static function json_validate( $data ) : bool {
+    if ( ! is_string( $data ) ) {
+      return false;
+    }
+
+    $data = trim( $data );
+
+    if ( $data === '' ) {
+      return false;
+    }
+
+    // PHP 8.3 or higher
+    if ( function_exists( 'json_validate' ) ) {
+      return json_validate( $data );
+    }
+
+    json_decode( $data );
+
+    return json_last_error() === JSON_ERROR_NONE;
+  }
+
+  /**
+   * Get story status icon HTML.
+   *
+   * @since 5.34.0
+   *
+   * @param string $status  Status of the story.
+   *
+   * @return string HTML of the status icon.
+   */
+
+  public static function get_story_status_icon( $status ) : string {
+    $icon = Utils::get_theme_icon( 'icon_story_status_ongoing', '<i class="fa-solid fa-circle"></i>' );
+
+    if ( $status !== 'Ongoing' ) {
+      switch ( $status ) {
+        case 'Completed':
+          return Utils::get_theme_icon( 'icon_story_status_completed', '<i class="fa-solid fa-circle-check"></i>' );
+        case 'Oneshot':
+          return Utils::get_theme_icon( 'icon_story_status_oneshot', '<i class="fa-solid fa-circle-check"></i>' );
+        case 'Hiatus':
+          return Utils::get_theme_icon( 'icon_story_status_hiatus', '<i class="fa-solid fa-circle-pause"></i>' );
+        case 'Canceled':
+          return Utils::get_theme_icon( 'icon_story_status_canceled', '<i class="fa-solid fa-ban"></i>' );
+      }
+    }
+
+    return $icon;
+  }
+
+  /**
+   * [Delegate] Get post meta via get_post_meta() or from a post-like object.
+   *
+   * Note: Checks whether the given post is a WP_Post, otherwise
+   * it checks whether the object responds to `->meta`.
+   *
+   * @since 5.34.0
+   *
+   * @param object $post     Post-like object or WP_Post.
+   * @param string $key      Meta key.
+   * @param mixed  $default  Default value if meta does not exist.
+   *
+   * @return mixed Meta value (single).
+   */
+
+  public static function get_meta( $post, $key, $default = null ) {
+    return \Fictioneer\Post::get_meta( $post, $key, $default );
+  }
+
+  /**
+   * [Delegate] Get permalink via get_permalink() or custom build for post-like data.
+   *
+   * @since 5.34.0
+   *
+   * @param object $chapter    Post-like object with ->ID, ->post_name, ->post_type.
+   * @param int    $story_id   Used to get story slug to fill %story_slug% (if enabled).
+   * @param bool   $leavename  Optional. Keep %postname% placeholder. Default false.
+   *
+   * @return string Permalink.
+   */
+
+  public static function get_permalink( $chapter, $story_id, $leavename = false ) : string {
+    return \Fictioneer\Post::get_permalink( $chapter, $story_id, $leavename );
+  }
+
+  /**
+   * Get user by ID or email.
+   *
+   * @since 4.6.0
+   * @since 5.34.0 - Refactored and moved into Utils class.
+   *
+   * @param mixed $id_or_email  User ID or email address.
+   *
+   * @return WP_User|false Returns the user or false if not found.
+   */
+
+  public static function get_user_by_id_or_email( $id_or_email ) {
+    if ( is_object( $id_or_email ) && isset( $id_or_email->user_id ) ) {
+      $id = (int) $id_or_email->user_id;
+      return $id > 0 ? get_user_by( 'id', $id ) : false;
+    }
+
+    if ( is_numeric( $id_or_email ) ) {
+      $id = (int) $id_or_email;
+      return $id > 0 ? get_user_by( 'id', $id ) : false;
+    }
+
+    if ( is_string( $id_or_email ) ) {
+      $email = sanitize_email( $id_or_email );
+      return $email !== '' ? get_user_by( 'email', $email ) : false;
+    }
+
+    return false;
+  }
+
+  /**
+   * Unset the first occurrence of a value from an array.
+   *
+   * @since 5.7.5
+   * @since 5.34.0 - Refactored and moved into Utils class.
+   *
+   * @param mixed $value   The value to look for.
+   * @param array $array   The array to be modified.
+   * @param bool  $strict  Whether to use strict comparison. Default false.
+   *
+   * @return array The modified array.
+   */
+
+  public static function array_unset_by_value( $value, $array, $strict = false ) : array {
+    if ( $array === [] ) {
+      return $array;
+    }
+
+    $key = array_search( $value, $array, $strict );
+
+    if ( $key !== false ) {
+      unset( $array[ $key ] );
+    }
+
+    return $array;
+  }
+
+  /**
+   * Return an unique-enough MD5 hash for the user.
+   *
+   * In order to differentiate users on the frontend even if they have the same
+   * display name (which is possible) but without exposing any sensitive data,
+   * a simple cryptic hash is calculated.
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Refactored and moved into Utils class.
+   *
+   * @param int $user_id  User ID to get the hash for.
+   *
+   * @return string Unique fingerprint hash or empty string if not found.
+   */
+
+  public static function get_user_fingerprint( $user_id ) : string {
+    static $cache = [];
+
+    if ( $user_id <= 0 ) {
+      return '';
+    }
+
+    if ( isset( $cache[ $user_id ] ) ) {
+      return $cache[ $user_id ];
+    }
+
+    $user = get_user_by( 'ID', $user_id );
+
+    if ( ! $user ) {
+      return $cache[ $user_id ] = '';
+    }
+
+    $fingerprint = md5( 'fictioneer|' . $user_id . '|' . $user->user_registered );
+
+    $cache[ $user_id ] = $fingerprint;
+
+    return $fingerprint;
+  }
+
+  /**
+   * Mark a function as deprecated and inform when it has been used.
+   *
+   * @since 5.34.0
+   *
+   * @param string $function     The function that was called.
+   * @param string $version      The version of WordPress that deprecated the function.
+   * @param string $replacement  Optional. The function that should have been called. Default null.
+   */
+
+  public static function deprecated( $function, $version, $replacement ) {
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG && wp_get_environment_type() !== 'production' ) {
+      trigger_error(
+        sprintf(
+          '%s is deprecated since Fictioneer %s; use %s.',
+          $function,
+          $version,
+          $replacement
+        ),
+        E_USER_DEPRECATED
+      );
+    }
+  }
+
+  /**
+   * Cast a value to boolean with an optional default.
+   *
+   * @since 5.34.0
+   *
+   * @param mixed $value    Raw value.
+   * @param bool  $default  Optional. Default if value is empty.
+   *
+   * @return bool Parsed boolean value.
+   */
+
+  public static function bool( $value, $default = false ) : bool {
+    if ( $value === null || $value === '' ) {
+      return $default;
+    }
+
+    return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
   }
 }

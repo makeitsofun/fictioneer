@@ -2,18 +2,14 @@
 
 namespace Fictioneer;
 
-use Fictioneer\Traits\Singleton_Trait;
-
 defined( 'ABSPATH' ) OR exit;
 
-class Sanitizer_Admin {
-  use Singleton_Trait;
-
+final class Sanitizer_Admin {
   /**
    * Sanitize a selected option.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value            Value to be sanitized.
    * @param array $allowed_options  Allowed values to be checked against.
@@ -40,47 +36,117 @@ class Sanitizer_Admin {
    *
    * @since 5.7.4
    * @since 5.27.4 - Unslash string.
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Refactored and moved into Sanitizer_Admin class.
    *
-   * @param string $css  CSS to be sanitized. Expects slashed string.
+   * @param string|null $css       CSS to be sanitized.
+   * @param bool        $fonts     Whether to allow Google Fonts. Default false.
+   * @param bool        $feedback  Whether to return rejection feedback. Default true.
    *
    * @return string The sanitized string.
    */
 
-  public static function sanitize_css( string $css ) : string {
+  public static function sanitize_css( $css, $fonts = false, $feedback = true ) : string {
     $css = (string) ( $css ?? '' );
-    $css = wp_unslash( $css );
     $css = wp_kses_no_null( $css );
-    $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
-    $css = trim( $css );
 
-    if ( $css === '' ) {
-      return '';
+    $unfiltered = current_user_can( 'fcn_unfiltered_css' ) || current_user_can( 'manage_options' );
+
+    $validator = new \Fictioneer\CSS_Validator( $css, $feedback );
+
+    $validator->reject_excess_size( $unfiltered, 10 * 1024, 500 )
+      ->reject_html_open()
+      ->reject_danger_tokens()
+      ->reject_invalid_imports( $unfiltered || $fonts );
+
+    $buffer = $validator->without_imports();
+
+    $validator->reject_url( $unfiltered, $buffer )
+      ->reject_blocked_url_schemes( $buffer, ['javascript:', 'vbscript:', 'file:'] )
+      ->reject_unallowed_at_rules( $buffer, ['media', 'container', 'keyframes', 'supports'] )
+      ->reject_unbalanced_braces();
+
+    return $validator->result();
+  }
+
+  /**
+   * Detect whether any url() contains a dangerous scheme payload.
+   *
+   * @since 5.34.0
+   *
+   * @param string $css      CSS without comments.
+   * @param array  $schemes  List of schemes to block (with colon).
+   *                         Default ['javascript:', 'vbscript:', 'file:'].
+   *
+   * @return bool True if a dangerous scheme is detected inside any url().
+   */
+
+  public static function has_dangerous_url_scheme( $css, $schemes = ['javascript:', 'vbscript:', 'file:'] ) : bool {
+    if ( stripos( $css, 'url(' ) === false ) {
+      return false;
     }
 
-    $check = preg_replace( '#/\*.*?\*/#s', '', $css );
-    $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $check );
-
-    if ( strpos( $check, '<' ) !== false ) {
-      return '';
+    if ( ! preg_match_all( '/url\s*\(\s*([^)]+)\s*\)/i', $css, $matches, PREG_SET_ORDER ) ) {
+      return false;
     }
 
-    if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|@import\b|javascript\s*:)/i', $check ) ) {
-      return '';
+    foreach ( $matches as $m ) {
+      $raw = (string) ( $m[1] ?? '' );
+
+      if ( $raw === '' ) {
+        continue;
+      }
+
+      $norm = strtolower( $raw );
+
+      // Decode CSS hex escapes: \HHHHHH[optional whitespace]
+      for ( $i = 0; $i < 5; $i++ ) {
+        $next = preg_replace_callback(
+          '/\\\\([0-9a-f]{1,6})\s?/i',
+          function ( $mm ) {
+            $cp = hexdec( $mm[1] );
+
+            // Only keep visible ASCII
+            if ( $cp < 0x20 || $cp > 0x7E ) {
+              return '';
+            }
+
+            return chr( $cp );
+          },
+          $norm
+        );
+
+        if ( $next === null || $next === $norm ) {
+          break;
+        }
+
+        $norm = $next;
+      }
+
+      // Strip quotes and whitespace
+      $norm = preg_replace( '/["\'\s]+/', '', $norm );
+
+      if ( $norm === null || $norm === '' ) {
+        continue;
+      }
+
+      // Strip everything except letters, digits, colon
+      $norm = preg_replace( '/[^a-z0-9:]/', '', $norm );
+
+      if ( $norm === null || $norm === '' ) {
+        continue;
+      }
+
+      // Scheme check
+      foreach ( $schemes as $scheme ) {
+        $scheme = strtolower( (string) $scheme );
+
+        if ( $scheme !== '' && strpos( $norm, $scheme ) !== false ) {
+          return true;
+        }
+      }
     }
 
-    if ( preg_match( '/url\s*\(\s*[^)]*javascript\s*:/i', $check ) ) {
-      return '';
-    }
-
-    $open  = substr_count( $css, '{' );
-    $close = substr_count( $css, '}' );
-
-    if ( $open < 1 || $open !== $close ) {
-      return '';
-    }
-
-    return $css;
+    return false;
   }
 
   /**
@@ -89,14 +155,14 @@ class Sanitizer_Admin {
    * Removes malicious HTML, shortcodes, and blocks.
    *
    * @since 5.7.4
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
-   * @param string $content  Content to be sanitized.
+   * @param string|null $content  Content to be sanitized.
    *
    * @return string Sanitized content.
    */
 
-  public static function sanitize_meta_field_editor( string $content ) : string {
+  public static function sanitize_meta_field_editor( $content ) : string {
     if ( $content === null || $content === '' ) {
       return '';
     }
@@ -124,14 +190,14 @@ class Sanitizer_Admin {
    * Return sanitized icon HTML.
    *
    * @since 5.32.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
-   * @param string $html  Icon HTML.
+   * @param string|null $html  Icon HTML.
    *
    * @return string Sanitized icon HTML.
    */
 
-  public static function sanitize_icon_html( string $html ): string {
+  public static function sanitize_icon_html( $html ) : string {
     $html = trim( wp_unslash( $html ?? '' ) );
 
     if ( $html === '' ) {
@@ -253,14 +319,14 @@ class Sanitizer_Admin {
    * Sanitize a page ID and check whether it is valid.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Page ID to be sanitized.
    *
    * @return int Valid page ID or -1 if invalid or not a page.
    */
 
-  public static function sanitize_page_id( mixed $input ) : int {
+  public static function sanitize_page_id( $input ) : int {
     if ( ! is_scalar( $input ) ) {
       return -1;
     }
@@ -278,14 +344,14 @@ class Sanitizer_Admin {
    * Sanitize with absint() unless it is an empty string.
    *
    * @since 5.15.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Value to be sanitized.
    *
    * @return int|string Sanitized integer or an empty string.
    */
 
-  public static function sanitize_absint_or_empty_string( mixed $input ) : int|string {
+  public static function sanitize_absint_or_empty_string( $input ) {
     if ( $input === '' ) {
       return '';
     }
@@ -301,14 +367,14 @@ class Sanitizer_Admin {
    * problematic HTML.
    *
    * @since 4.6.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $input  Content for the cookie consent banner.
    *
    * @return string Sanitized content for the cookie consent banner.
    */
 
-  public static function sanitize_phrase_consent_banner( mixed $input ) : string {
+  public static function sanitize_phrase_consent_banner( $input ) : string {
     $default = __( 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Some features are not available without, but you can limit the site to strictly necessary cookies only. See <a href="[[privacy_policy_url]]" target="_blank" tabindex="1">Privacy Policy</a>.', 'fictioneer' );
 
     if ( ! is_string( $input ) ) {
@@ -335,14 +401,14 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for Google Fonts links.
    *
    * @since 5.10.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value  Textarea string.
    *
    * @return string Sanitized textarea string.
    */
 
-  public static function sanitize_google_fonts_links( mixed $value ) : string {
+  public static function sanitize_google_fonts_links( $value ) : string {
     $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
 
     if ( $value === '' ) {
@@ -377,14 +443,14 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for preload font links.
    *
    * @since 5.31.0
-   * @since 5.33.2 - Moved into Sanitizer class.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
    *
    * @param mixed $value  Textarea string.
    *
    * @return string Sanitized textarea string.
    */
 
-  public static function sanitize_preload_font_links( mixed $value ) : string {
+  public static function sanitize_preload_font_links( $value ) : string {
     $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
 
     if ( $value === '' ) {
@@ -444,5 +510,237 @@ class Sanitizer_Admin {
     }
 
     return implode( "\n", array_values( array_unique( $valid ) ) );
+  }
+
+  /**
+   * Filter out non-valid chapter array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $story_id     Story ID.
+   * @param int[] $chapter_ids  Array of chapter IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_chapter_ids( $story_id, $chapter_ids ) : array {
+    global $wpdb;
+
+    $chapter_ids = wp_parse_id_list( $chapter_ids );
+    $chapter_ids = array_values( array_filter( $chapter_ids ) );
+
+    if ( empty( $chapter_ids ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $chapter_ids ), '%d' ) );
+    $values = $chapter_ids;
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+      WHERE p.post_type = 'fcn_chapter'
+        AND p.ID IN ($placeholders)
+        AND p.post_status NOT IN ('trash', 'draft', 'auto-draft', 'inherit')";
+
+    if ( defined( 'FICTIONEER_FILTER_STORY_CHAPTERS' ) && FICTIONEER_FILTER_STORY_CHAPTERS ) {
+      $sql .= " AND pm.meta_key = %s AND pm.meta_value = %d";
+      $values[] = 'fictioneer_chapter_story';
+      $values[] = $story_id;
+    }
+
+    $query = $wpdb->prepare( $sql, ...$values );
+
+    $filtered_ids = $wpdb->get_col( $query );
+
+    return array_values( array_intersect( $chapter_ids, $filtered_ids ) );
+  }
+
+  /**
+   * Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $author_id  Author ID for the pages.
+   * @param int[] $page_ids   Array of page IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_page_ids( $author_id, $page_ids ) : array {
+    global $wpdb;
+
+    $page_ids = wp_parse_id_list( $page_ids );
+    $page_ids = array_values( array_filter( $page_ids ) );
+
+    if ( empty( $page_ids ) || FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY < 1 ) {
+      return [];
+    }
+
+    $page_ids = array_slice( $page_ids, 0, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY );
+
+    $placeholders = implode( ',', array_fill( 0, count( $page_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.post_type = 'page'
+        AND p.ID IN ($placeholders)
+        AND p.post_author = %d
+      LIMIT %d";
+
+    $query = $wpdb->prepare(
+      $sql,
+      ...array_merge( $page_ids, [ $author_id, FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY ] )
+    );
+
+    $filtered_page_ids = $wpdb->get_col( $query );
+
+    return array_values( array_intersect( $page_ids, $filtered_page_ids ) );
+  }
+
+  /**
+   * Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $item_ids  Array of collection item IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_collection_ids( $item_ids ) : array {
+    global $wpdb;
+
+    $item_ids = wp_parse_id_list( $item_ids );
+    $item_ids = array_values( array_filter( $item_ids ) );
+
+    if ( empty( $item_ids ) ) {
+      return [];
+    }
+
+    $forbidden = array_unique([
+      get_option( 'fictioneer_user_profile_page', 0 ),
+      get_option( 'fictioneer_bookmarks_page', 0 ),
+      get_option( 'fictioneer_stories_page', 0 ),
+      get_option( 'fictioneer_chapters_page', 0 ),
+      get_option( 'fictioneer_recommendations_page', 0 ),
+      get_option( 'fictioneer_collections_page', 0 ),
+      get_option( 'fictioneer_bookshelf_page', 0 ),
+      get_option( 'fictioneer_authors_page', 0 ),
+      get_option( 'fictioneer_404_page', 0 ),
+      get_option( 'page_on_front', 0 ),
+      get_option( 'page_for_posts', 0 )
+    ]);
+
+    $item_ids = array_diff( $item_ids, array_map( 'intval', $forbidden ) );
+
+    if ( empty( $item_ids ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $item_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        AND p.post_type IN ('post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation')
+        AND p.post_status IN ('publish', 'private', 'future')";
+
+    $filtered_item_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$item_ids ) );
+
+    return array_values( array_intersect( $item_ids, $filtered_item_ids ) );
+  }
+
+  /**
+   * Filter out non-valid featured array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $post_ids  Array of featured post IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_featured_ids( $post_ids ) : array {
+    global $wpdb;
+
+    $post_ids = wp_parse_id_list( $post_ids );
+    $post_ids = array_values( array_filter( $post_ids ) );
+
+    if ( empty( $post_ids ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $post_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        AND p.post_type IN ('post', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation')
+        AND p.post_status = 'publish'";
+
+    $filtered_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$post_ids ) );
+
+    return array_values( array_intersect( $post_ids, $filtered_ids ) );
+  }
+
+  /**
+   * Filter out non-valid blog story array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.30.0 - Refactored for optional author.
+   * @since 5.34.0 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[]    $story_blogs      Array of story blog IDs.
+   * @param int|null $story_author_id  Optional. Author ID of the story.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) : array {
+    global $wpdb;
+
+    $story_blogs = wp_parse_id_list( $story_blogs );
+    $story_blogs = array_values( array_filter( $story_blogs ) );
+
+    if ( empty( $story_blogs ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $story_blogs ), '%d' ) );
+
+    $where_author = $story_author_id !== null ? 'AND p.post_author = %d' : '';
+    $sql = "
+      SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        $where_author
+        AND p.post_type = 'fcn_story'
+        AND p.post_status IN ('publish', 'private', 'future')
+    ";
+
+    $args = $story_author_id !== null
+      ? array_merge( $story_blogs, [ $story_author_id ] )
+      : $story_blogs;
+
+    return $wpdb->get_col( $wpdb->prepare( $sql, ...$args ) );
   }
 }

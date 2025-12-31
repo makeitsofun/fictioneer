@@ -122,17 +122,17 @@ if ( ! wp_doing_ajax() ) {
 // =============================================================================
 
 /**
- * Set Checkmarks for a story via AJAX
+ * AJAX: Set Checkmarks for a story.
  *
  * @since 4.0.0
  */
 
 function fictioneer_ajax_set_checkmark() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_set_checkmark', 30 );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_set_checkmark', 30 );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -148,7 +148,7 @@ function fictioneer_ajax_set_checkmark() {
     wp_send_json_error( array( 'error' => 'Invalid story ID.' ) );
   }
 
-  $story_data = fictioneer_get_story_data( $story_id, false ); // Does not refresh comment count!
+  $story_data = \Fictioneer\Story::get_data( $story_id, false ); // Does not refresh comment count!
 
   // Prepare update
   $update = isset( $_POST['update'] ) ? array_map( 'absint', explode( ' ', sanitize_text_field( $_POST['update'] ) ) ) : [];
@@ -191,17 +191,17 @@ if ( get_option( 'fictioneer_enable_checkmarks' ) ) {
 // =============================================================================
 
 /**
- * Clears Checkmarks for a story via AJAX
+ * AJAX: Clears Checkmarks for a story.
  *
  * @since 5.0.0
  */
 
 function fictioneer_ajax_clear_my_checkmarks() {
   // Rate limit
-  fictioneer_check_rate_limit( 'fictioneer_ajax_clear_my_checkmarks' );
+  \Fictioneer\Utils_Admin::check_rate_limit( 'fictioneer_ajax_clear_my_checkmarks' );
 
   // Setup and validations
-  $user = fictioneer_get_validated_ajax_user( 'nonce', 'fictioneer_clear_checkmarks' );
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user( 'nonce', 'fictioneer_clear_checkmarks' );
 
   if ( ! $user ) {
     wp_send_json_error( array( 'error' => 'Request did not pass validation.' ) );
@@ -224,14 +224,14 @@ if ( get_option( 'fictioneer_enable_checkmarks' ) ) {
 // =============================================================================
 
 /**
- * Sends the HTML for list of finished stories via AJAX
+ * AJAX: Sends the HTML for list of finished stories.
  *
  * @since 4.3.0
  */
 
 function fictioneer_ajax_get_finished_checkmarks_list() {
   // Validations
-  $user = fictioneer_get_validated_ajax_user();
+  $user = \Fictioneer\Utils_Admin::get_validated_ajax_user();
 
   if ( ! is_user_logged_in() ) {
     wp_send_json_error( array( 'error' => 'You must be logged in.' ) );

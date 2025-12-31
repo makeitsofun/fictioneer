@@ -8,8 +8,10 @@
  */
 
 
+use Fictioneer\Utils;
+
 // Setup
-$fonts = fictioneer_get_font_data();
+$fonts = Utils::get_font_data();
 $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
 $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
 
@@ -72,8 +74,10 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
                         continue;
                       }
 
+                      $dir = trailingslashit( $dir );
+
                       foreach ( $files as $file ) {
-                        $path = $dir . DIRECTORY_SEPARATOR . $file;
+                        $path = $dir . $file;
 
                         if ( ! is_file( $path ) ) {
                           continue;
@@ -81,11 +85,14 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
 
                         $extension = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
 
-                        if ( in_array( $extension, $valid_extensions, true ) ) {
-                          $normalized = str_replace( '\\', '/', $path );
-                          $shortened = strstr( $normalized, '/wp-content' );
-                          $font_files[] = $shortened ?: $normalized;
+                        if ( ! in_array( $extension, $valid_extensions, true ) ) {
+                          continue;
                         }
+
+                        $normalized = wp_normalize_path( $path );
+                        $shortened = strstr( $normalized, '/wp-content' );
+
+                        $font_files[] = $shortened ?: $normalized;
                       }
 
                       if ( empty( $font_files ) ) {
@@ -338,7 +345,7 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
                       _ex( 'Family', 'Settings font card.', 'fictioneer' );
                     ?></div>
                     <div class="fictioneer-card__box-content"><?php
-                      echo fictioneer_font_family_value( $family );
+                      echo Utils::get_font_family_value( $family );
 
                       if ( ! empty( $type ) ) {
                         echo ", {$type}";
