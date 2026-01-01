@@ -325,6 +325,8 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
    */
 
   function fictioneer_add_epub_chapters( $dir, $epub_dir, $chapters ) {
+    do_action( 'qm/cease' );
+
     // Setup
     $toc_list = [];
     $ncx_list = [];
@@ -333,10 +335,15 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
     $index = 0;
 
     $templateDoc = new DOMDocument();
-    $templateDoc->loadHTMLFile( $dir . '_build/templates/chapter.html' );
     $templateDoc->preserveWhiteSpace = false;
-    $templateDoc->formatOutput = true;
+    $templateDoc->formatOutput = false;
     $templateDoc->xmlStandalone = false;
+    $templateDoc->loadHTMLFile(
+      $dir . '_build/templates/chapter.html',
+      LIBXML_NONET | LIBXML_COMPACT | LIBXML_NOERROR | LIBXML_NOWARNING
+    );
+
+    libxml_clear_errors();
 
     // Abort if...
     if ( empty( $chapters ) ) {
@@ -345,6 +352,8 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
 
     // Query
     $chapter_objects = fictioneer_query_epub_chapters( $chapters );
+
+    $libxml_prev = libxml_use_internal_errors( true );
 
     // Process chapters
     foreach ( $chapter_objects as $post ) {
@@ -409,12 +418,16 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
         $content = preg_replace( '/data-align="([^"]*)"/', '', $content );
 
         // Create temporary file to continue cleaning up content...
-        libxml_use_internal_errors( true );
         $inner = new DOMDocument();
-        $inner->loadHTML( '<?xml encoding="UTF-8">' . $content );
-        libxml_clear_errors();
         $inner->preserveWhiteSpace = false;
-        $inner->formatOutput = true;
+        $inner->formatOutput = false;
+        $inner->loadHTML(
+          '<?xml encoding="UTF-8">' . $content,
+          LIBXML_NONET | LIBXML_COMPACT | LIBXML_NOERROR | LIBXML_NOWARNING
+        );
+
+        libxml_clear_errors();
+
         $inner_finder = new DOMXpath( $inner );
 
         // Add entire content block to chapter file
@@ -547,6 +560,8 @@ if ( ! function_exists( 'fictioneer_add_epub_chapters' ) ) {
       fwrite( $file, $file_content );
       fclose( $file );
     }
+
+    libxml_use_internal_errors( $libxml_prev );
 
     // Terminate script if no chapter has been added
     if ( $index == 0 ) {

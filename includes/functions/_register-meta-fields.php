@@ -1168,7 +1168,7 @@ function fictioneer_rest_after_chapter_story_change( $post, $request ) {
 
     // Append to new story
     if ( $new_story_id && get_option( 'fictioneer_enable_chapter_appending' ) ) {
-      fictioneer_append_chapter_to_story( $post->ID, $new_story_id );
+      \Fictioneer\Utils_Admin::append_chapter_to_story( $post->ID, $new_story_id );
     }
 
     // Set post parent

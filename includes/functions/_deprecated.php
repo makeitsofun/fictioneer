@@ -719,6 +719,26 @@ function fictioneer_get_font_data() : array {
 // =============================================================================
 
 /**
+ * [Deprecated] Append new chapters to story list.
+ *
+ * @since 5.4.9
+ * @since 5.7.4 - Updated.
+ * @since 5.8.6 - Added $force param and moved function.
+ * @since 5.19.1 - Always append chapter to story.
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::append_chapter_to_story() instead.
+ *
+ * @param int  $post_id   The chapter post ID.
+ * @param int  $story_id  The story post ID.
+ * @param bool $force     Optional. Whether to skip some guard clauses. Default false.
+ */
+
+function fictioneer_append_chapter_to_story( $post_id, $story_id, $force = false ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::append_chapter_to_story' );
+
+  Utils_Admin::append_chapter_to_story( $post_id, $story_id, $force );
+}
+
+/**
  * [Deprecated] Return directory path of the theme cache.
  *
  * @since 5.23.1

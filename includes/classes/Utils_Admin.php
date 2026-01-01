@@ -1543,4 +1543,97 @@ final class Utils_Admin {
 
     return [true, $offenders];
   }
+
+  /**
+   * Append new chapters to story list.
+   *
+   * @since 5.4.9
+   * @since 5.7.4 - Updated.
+   * @since 5.8.6 - Added $force param and moved function.
+   * @since 5.19.1 - Always append chapter to story.
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param int  $post_id   The chapter post ID.
+   * @param int  $story_id  The story post ID.
+   * @param bool $force     Optional. Whether to skip some guard clauses. Default false.
+   */
+
+  public static function append_chapter_to_story( $post_id, $story_id, $force = false ) : void {
+    $allowed_statuses = apply_filters(
+      'fictioneer_filter_append_chapter_to_story_statuses',
+      ['publish', 'future'],
+      $post_id,
+      $story_id,
+      $force
+    );
+
+    // Abort if chapter status is not allowed
+    if ( ! in_array( get_post_status( $post_id ), $allowed_statuses ) ) {
+      return;
+    }
+
+    // Setup
+    $story = get_post( $story_id );
+
+    // Abort if story not found or not a story
+    if ( ! $story || $story->post_type !== 'fcn_story' ) {
+      return;
+    }
+
+    // Setup, continued
+    $chapter_author_id = get_post_field( 'post_author', $post_id );
+    $story_author_id = get_post_field( 'post_author', $story_id );
+    $co_authored_story_ids = Utils_Admin::get_co_authored_story_ids( $chapter_author_id );
+
+    // Abort if the author IDs do not match
+    if (
+      $chapter_author_id != $story_author_id &&
+      ! in_array( $story_id, $co_authored_story_ids ) &&
+      ! $force
+    ) {
+      return;
+    }
+
+    // Get current story chapters
+    $story_chapters = fictioneer_get_story_chapter_ids( $story_id );
+
+    // Append chapter (if not already included) and save to database
+    if ( ! in_array( $post_id, $story_chapters ) ) {
+      $previous_chapters = $story_chapters;
+      $story_chapters[] = $post_id;
+      $story_chapters = array_unique( $story_chapters );
+
+      // Save updated list
+      update_post_meta( $story_id, 'fictioneer_story_chapters', $story_chapters );
+
+      // Remember when chapters have been changed
+      update_post_meta( $story_id, 'fictioneer_chapters_modified', current_time( 'mysql', true ) );
+
+      // Remember when chapters have been added
+      $allowed_statuses = apply_filters(
+        'fictioneer_filter_chapters_added_statuses',
+        ['publish'],
+        $post_id
+      );
+
+      if ( in_array( get_post_status( $post_id ), $allowed_statuses ) ) {
+        if ( ! get_post_meta( $post_id, 'fictioneer_chapter_hidden', true ) ) {
+          update_post_meta( $story_id, 'fictioneer_chapters_added', current_time( 'mysql', true ) );
+        }
+      }
+
+      // Log changes
+      fictioneer_log_story_chapter_changes( $story_id, $story_chapters, $previous_chapters );
+
+      // Clear meta caches to ensure they get refreshed
+      delete_post_meta( $story_id, 'fictioneer_story_data_collection' );
+      delete_post_meta( $story_id, 'fictioneer_story_chapter_index_html' );
+    } else {
+      // Nothing to do
+      return;
+    }
+
+    // Update story post to fire associated actions
+    wp_update_post( array( 'ID' => $story_id ) );
+  }
 }

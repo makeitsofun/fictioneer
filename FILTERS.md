@@ -97,7 +97,7 @@ Filters the array of allowed orderby arguments for WP_Query.
 ---
 
 ### `apply_filters( 'fictioneer_filter_append_chapter_to_story_statuses', $statuses, $post_id, $story_id, $force )`
-Filters the array of chapter statuses that can be auto-appended to a story’s `fictioneer_story_chapters` metadata in the `fictioneer_append_chapter_to_story()` function. By default, the statuses are `['publish', 'future']`.
+Filters the array of chapter statuses that can be auto-appended to a story’s `fictioneer_story_chapters` metadata in the `\Fictioneer/Utils_Admin::append_chapter_to_story()` function. By default, the statuses are `['publish', 'future']`.
 
 **Parameters:**
 * $statuses (array) – Array of chapter statuses.
